@@ -11,9 +11,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, variant }) => {
     <div
       style={{ display: "flex", minHeight: "100vh", justifyContent: "center" }}
     >
-      <Col xs={24} sm={22} md={16}>
-        {children}
-      </Col>
+      <Col xs={24}>{children}</Col>
     </div>
   )
 }

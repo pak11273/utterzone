@@ -1,67 +1,106 @@
-import { Form, Formik } from "formik"
+import { Button, Row } from "antd"
+import { Controller, useForm } from "react-hook-form"
 
-import { InputField } from "../components/InputField"
 import React from "react"
+import { inputField } from "../components"
 
 // import { useRegisterMutation } from "../generated/graphql"
 
 // import { withApollo } from "../utils/withApollo"
 
-// import { toErrorMap } from "../utils/toErrorMap"
-
 interface registerProps {}
 
 export const Register: React.FC<registerProps> = () => {
-  // const router = useRouter();
   // const [register] = useRegisterMutation()
+  const { handleSubmit, control, errors, reset } = useForm()
+
+  const onSubmit = (data: any) => {
+    console.log(data)
+    setTimeout(
+      () =>
+        reset({
+          FirstName: "",
+          UserName: "",
+          email: "",
+        }),
+      1000
+    )
+  }
   return (
-    <Formik
-      initialValues={{ email: "", username: "", password: "" }}
-      onSubmit={() => console.log("hi")}
-      // onSubmit={async (values, { setErrors }) => {
-      //   const response = await register({
-      //     variables: { options: values },
-      //     update: (cache, { data }) => {
-      //       cache.writeQuery<MeQuery>({
-      //         query: MeDocument,
-      //         data: {
-      //           __typename: "Query",
-      //           me: data?.register.user,
-      //         },
-      //       });
-      //     },
-      // });
-      //   if (response.data?.register.errors) {
-      //     setErrors(toErrorMap(response.data.register.errors));
-      //   } else if (response.data?.register.user) {
-      //     // worked
-      //     router.push("/");
-      //   }
-      // }}
-    >
-      {/* {({ isSubmitting }) => ( */}
-      {() => (
-        <Form>
-          <InputField name="username" placeholder="username" label="Username" />
-          <div>
-            <InputField name="email" placeholder="email" label="Email" />
-          </div>
-          <div>
-            <InputField
-              name="password"
-              placeholder="password"
-              label="Password"
-              type="password"
-            />
-          </div>
-          <button
-            type="submit"
-            // isLoading={isSubmitting}
-          >
-            register
-          </button>
-        </Form>
-      )}
-    </Formik>
+    <Row justify="center">
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="input-group">
+          <label className="label">username</label>
+          <Controller
+            as={inputField("UserName")}
+            name="UserName"
+            control={control}
+            defaultValue=""
+            rules={{ required: true }}
+          />
+          {errors.UserName && (
+            <span className="error">This field is required</span>
+          )}
+        </div>
+        <div className="input-group">
+          <label className="label">email</label>
+          <Controller
+            as={inputField("email")}
+            name="email"
+            control={control}
+            defaultValue=""
+            rules={{
+              pattern: /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
+              required: true,
+            }}
+          />
+          {errors.email && (
+            <span className="error">Please add a valid email</span>
+          )}
+        </div>
+        <div className="input-group">
+          <label className="label">password</label>
+          <Controller
+            as={inputField("password")}
+            name="password"
+            control={control}
+            defaultValue=""
+            rules={{
+              required: true,
+            }}
+          />
+          {errors.password && (
+            <span className="error">Password must be at least 8 chars</span>
+          )}
+        </div>
+        <div className="input-group">
+          <label className="label">password confirmation</label>
+          <Controller
+            as={inputField("pwconfirm")}
+            name="pwconfirm"
+            control={control}
+            defaultValue=""
+            rules={{
+              required: true,
+            }}
+          />
+          {errors.password && (
+            <span className="error">Password does not match</span>
+          )}
+        </div>
+        {/* <div className="input-group">
+          <label className="label">Terms & Conditions</label>
+          <Controller
+            as={SwitchField()}
+            name="terms"
+            control={control}
+            defaultValue={true}
+          />
+        </div> */}
+        <Button type="primary" htmlType="submit">
+          Register
+        </Button>
+      </form>
+    </Row>
   )
 }

@@ -129,7 +129,7 @@ export class NavbarMain extends Component {
     return (
       <nav className="menuBar">
         <div className="logo">
-          <Link to="/">logo</Link>
+          <Link to="/">UZ</Link>
         </div>
         <div className="menuCon">
           <div className="leftMenu">

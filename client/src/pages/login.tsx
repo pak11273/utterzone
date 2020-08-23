@@ -5,9 +5,9 @@
 
 import { Button, Row } from "antd"
 import { Controller, useForm } from "react-hook-form"
-import { SwitchField, inputField } from "../components"
 
 import React from "react"
+import { inputField } from "../components"
 
 export const Login = (props: any) => {
   const { handleSubmit, control, errors, reset } = useForm()
@@ -57,7 +57,7 @@ export const Login = (props: any) => {
             <span className="error">Please add a valid email</span>
           )}
         </div>
-        <div className="input-group">
+        {/* <div className="input-group">
           <label className="label">Remember Me</label>
           <Controller
             as={SwitchField()}
@@ -65,7 +65,7 @@ export const Login = (props: any) => {
             control={control}
             defaultValue={true}
           />
-        </div>
+        </div> */}
         <Button type="primary" htmlType="submit">
           Register
         </Button>
