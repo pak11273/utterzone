@@ -1,56 +1,56 @@
 // ref:  https://github.com/Rupinderthind/Ant_design_navbar
 
 import { Button, Drawer } from "antd"
-import React, { Component } from "react"
+import React, { Component, useState } from "react"
 
+import { Hamburger } from "../Buttons"
 import { LeftMenu } from "./_NavBarLeft"
 import { Link } from "react-router-dom"
 import { RightMenu } from "./_NavBarRight"
 
 // import { useLogoutMutation, useMeQuery } from "../generated/graphql"
-export class NavbarMain extends Component {
-  state = {
+export const NavbarMain = () => {
+  const [state, changeState] = useState({
     current: "mail",
     visible: false,
-  }
-  showDrawer = () => {
-    this.setState({
+  })
+
+  const ChangeState = () => {
+    changeState({
+      ...state,
       visible: true,
     })
   }
-  onClose = () => {
-    this.setState({
+  const OnClose = () => {
+    changeState({
+      ...state,
       visible: false,
     })
   }
-  render() {
-    return (
-      <nav className="menuBar">
-        <div className="logo">
-          <Link to="/">UZ</Link>
+  return (
+    <nav className="menuBar">
+      <div className="logo">
+        <Link to="/">UZ</Link>
+      </div>
+      <div className="menuCon">
+        <div className="leftMenu">
+          <LeftMenu />
         </div>
-        <div className="menuCon">
-          <div className="leftMenu">
-            <LeftMenu />
-          </div>
-          <div className="rightMenu">
-            <RightMenu />
-          </div>
-          <Button className="barsMenu" type="primary" onClick={this.showDrawer}>
-            <span className="barsBtn"></span>
-          </Button>
-          <Drawer
-            title="Basic Drawer"
-            placement="right"
-            closable={false}
-            onClose={this.onClose}
-            visible={this.state.visible}
-          >
-            <LeftMenu />
-            <RightMenu />
-          </Drawer>
+        <div className="rightMenu">
+          <RightMenu />
         </div>
-      </nav>
-    )
-  }
+        <Hamburger changeState={ChangeState} />
+        <Drawer
+          title="Basic Drawer"
+          placement="right"
+          closable={false}
+          onClose={OnClose}
+          visible={state.visible}
+        >
+          <LeftMenu />
+          <RightMenu />
+        </Drawer>
+      </div>
+    </nav>
+  )
 }
