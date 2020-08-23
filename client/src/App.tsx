@@ -1,6 +1,6 @@
 import "./less/index.less"
 
-import { Layout, NavbarMain } from "./components"
+import { Layout, MenuMain, NavbarMain } from "./components"
 
 import { ApolloProvider } from "@apollo/client"
 import React from "react"
@@ -14,7 +14,10 @@ const App = () => {
       <Router>
         <Layout>
           <NavbarMain />
-          <div>{routes}</div>
+          <div style={{ display: "flex" }}>
+            <MenuMain />
+            <div style={{ width: "100%", minHeight: "100%" }}>{routes}</div>
+          </div>
         </Layout>
       </Router>
     </ApolloProvider>
