@@ -1,6 +1,4 @@
-import { Col, Row } from "antd"
-
-import { NavbarMain } from "../components"
+import { Col } from "antd"
 import React from "react"
 
 type LayoutVariant = "small" | "regular"

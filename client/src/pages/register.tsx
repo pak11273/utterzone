@@ -2,16 +2,18 @@ import { Form, Formik } from "formik"
 
 import { InputField } from "../components/InputField"
 import React from "react"
-import { useRegisterMutation } from "../generated/graphql"
-import { withApollo } from "../utils/withApollo"
+
+// import { useRegisterMutation } from "../generated/graphql"
+
+// import { withApollo } from "../utils/withApollo"
 
 // import { toErrorMap } from "../utils/toErrorMap"
 
 interface registerProps {}
 
-export const Register: React.FC<registerProps> = ({}) => {
+export const Register: React.FC<registerProps> = () => {
   // const router = useRouter();
-  const [register] = useRegisterMutation()
+  // const [register] = useRegisterMutation()
   return (
     <Formik
       initialValues={{ email: "", username: "", password: "" }}

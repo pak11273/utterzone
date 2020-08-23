@@ -1,12 +1,28 @@
+.input-group {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  margin: 5px;
+}
+.error {
+  color: red;
+  font-weight: bold;
+}
+
+.label {
+  color: black;
+  font-weight: 600;
+}
+
 .menuBar {
-  padding: 0 20px;
   border-bottom: solid 1px #e8e8e8;
-  overflow: auto;
   box-shadow: 0 0 30px #f3f1f1;
+  overflow: auto;
+  padding: 0 20px;
 }
 .logo {
-  width: 150px;
   float: left;
+  width: 150px;
 }
 .logo a {
   display: inline-block;
@@ -15,8 +31,8 @@
   text-transform: capitalize;
 }
 .menuCon {
-  width: calc(100% - 150px);
   float: left;
+  width: calc(100% - 150px);
 }
 .menuCon .ant-menu-item {
   padding: 0px 5px;
@@ -38,33 +54,33 @@
   float: right;
 }
 .barsMenu {
+  background: none;
+  display: none;
   float: right;
   height: 32px;
-  padding: 6px;
   margin-top: 8px;
-  display: none;
-  background: none;
+  padding: 6px;
 }
 .barsBtn {
-  display: block;
-  width: 20px;
-  height: 2px;
   background: #1890ff;
+  display: block;
+  height: 2px;
   position: relative;
+  width: 20px;
 }
 .barsBtn:after,
 .barsBtn:before {
+  background: #1890ff;
   content: attr(x);
-  width: 20px;
+  height: 2px;
+  left: 0;
   position: absolute;
   top: -6px;
-  left: 0;
-  height: 2px;
-  background: #1890ff;
+  width: 20px;
 }
 .barsBtn:after {
-  top: auto;
   bottom: -6px;
+  top: auto;
 }
 .ant-drawer-body {
   padding: 0;
