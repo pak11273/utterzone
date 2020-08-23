@@ -1,6 +1,5 @@
-import React, { useState } from "react"
-
 import { Button } from "antd"
+import React from "react"
 
 interface HamburgerProps {
   changeState: any

@@ -1,8 +1,8 @@
 // ref:  https://github.com/Rupinderthind/Ant_design_navbar
 
-import { Button, Drawer } from "antd"
-import React, { Component, useState } from "react"
+import React, { useState } from "react"
 
+import { Drawer } from "antd"
 import { Hamburger } from "../Buttons"
 import { LeftMenu } from "./_NavBarLeft"
 import { Link } from "react-router-dom"
