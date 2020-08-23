@@ -14,8 +14,7 @@ const App = () => (
     <Router>
       <Layout>
         <NavbarMain />
-        {routes}
-        <Button type="primary">Button</Button>
+        <div style={{ padding: "20px" }}>{routes}</div>
       </Layout>
     </Router>
   </ApolloProvider>
