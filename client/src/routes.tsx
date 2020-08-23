@@ -5,12 +5,8 @@ import React from "react"
 
 export const routes = (
   <Switch>
-    <Route exact path="/">
-      <Home />
-    </Route>
-    <Route exact path="/login">
-      <Login />
-    </Route>
+    <Route exact path="/" component={Home} />
+    <Route exact path="/login" component={Login} />
     <Route path="/register" component={Register} />
   </Switch>
 )
