@@ -1,27 +1,24 @@
-import "./App.css"
+import "./less/index.less"
 
+import { Layout, NavbarMain } from "./components"
+
+import { ApolloProvider } from "@apollo/client"
+import { Button } from "antd"
 import React from "react"
-import logo from "./logo.svg"
+import { BrowserRouter as Router } from "react-router-dom"
+import { client } from "./apollo"
+import { routes } from "./routes"
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  )
-}
+const App = () => (
+  <ApolloProvider client={client}>
+    <Router>
+      <Layout>
+        <NavbarMain />
+        {routes}
+        <Button type="primary">Button</Button>
+      </Layout>
+    </Router>
+  </ApolloProvider>
+)
 
 export default App

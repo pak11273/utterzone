@@ -1,16 +1,19 @@
-import React from "react";
-import { Wrapper, WrapperVariant } from "./Wrapper";
-import { NavBar } from "./NavBar";
+import { Col, Row } from "antd"
 
+import { NavbarMain } from "../components"
+import React from "react"
+
+type LayoutVariant = "small" | "regular"
 interface LayoutProps {
-  variant?: WrapperVariant;
+  variant?: LayoutVariant
 }
 
 export const Layout: React.FC<LayoutProps> = ({ children, variant }) => {
   return (
-    <>
-      <NavBar />
-      <Wrapper variant={variant}>{children}</Wrapper>
-    </>
-  );
-};
+    <div style={{ display: "flex", justifyContent: "center" }}>
+      <Col xs={24} sm={22} md={16}>
+        {children}
+      </Col>
+    </div>
+  )
+}

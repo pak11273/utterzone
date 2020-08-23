@@ -1,35 +1,27 @@
-// import { EditDeletePostbuttons } from "../components/EditDeletePostbuttons"
-
-import { Layout } from "../components/Layout"
 import React from "react"
-import { UpdootSection } from "../components/UpdootSection"
-import { usePostsQuery } from "../generated/graphql"
 import { withApollo } from "../utils/withApollo"
 
-// import { useState } from "react"
-
-
 const Index = () => {
-  const { data, error, loading, fetchMore, variables } = usePostsQuery({
-    variables: {
-      limit: 15,
-      cursor: null,
-    },
-    notifyOnNetworkStatusChange: true,
-  })
+  // const { data, error, loading, fetchMore, variables } = usePostsQuery({
+  //   variables: {
+  //     limit: 15,
+  //     cursor: null,
+  //   },
+  //   notifyOnNetworkStatusChange: true,
+  // })
 
-  if (!loading && !data) {
-    return (
-      <div>
-        <div>you got query failed for some reason</div>
-        <div>{error?.message}</div>
-      </div>
-    )
-  }
+  // if (!loading && !data) {
+  //   return (
+  //     <div>
+  //       <div>you got query failed for some reason</div>
+  //       <div>{error?.message}</div>
+  //     </div>
+  //   )
+  // }
 
   return (
-    <Layout>
-      {!data && loading ? (
+    <>
+      {/* {!data && loading ? (
         <div>loading...</div>
       ) : (
         <div>
@@ -52,13 +44,13 @@ const Index = () => {
                         creatorId={p.creator.id}
                       />
                     </div> */}
-                  </div>
+      {/* </div>
                 </div>
               </div>
             )
           )}
         </div>
-      )}
+      // )}
       {data && data.posts.hasMore ? (
         <div>
           <button
@@ -68,37 +60,36 @@ const Index = () => {
                   limit: variables?.limit,
                   cursor:
                     data.posts.posts[data.posts.posts.length - 1].createdAt,
-                },
-                // updateQuery: (
-                //   previousValue,
-                //   { fetchMoreResult }
-                // ): PostsQuery => {
-                //   if (!fetchMoreResult) {
-                //     return previousValue as PostsQuery;
-                //   }
-
-                //   return {
-                //     __typename: "Query",
-                //     posts: {
-                //       __typename: "PaginatedPosts",
-                //       hasMore: (fetchMoreResult as PostsQuery).posts.hasMore,
-                //       posts: [
-                //         ...(previousValue as PostsQuery).posts.posts,
-                //         ...(fetchMoreResult as PostsQuery).posts.posts,
-                //       ],
-                //     },
-                //   };
-                // },
-              })
-            }}
+                }, 
+       // updateQuery: ( // previousValue, // {fetchMoreResult}
+      // ): PostsQuery =>{" "}
+      // {
+        //   if (!fetchMoreResult) {
+        //     return previousValue as PostsQuery;
+        //   }
+        //   return {
+        //     __typename: "Query",
+        //     posts: {
+        //       __typename: "PaginatedPosts",
+        //       hasMore: (fetchMoreResult as PostsQuery).posts.hasMore,
+        //       posts: [
+        //         ...(previousValue as PostsQuery).posts.posts,
+        //         ...(fetchMoreResult as PostsQuery).posts.posts,
+        //       ],
+        //     },
+        //   };
+        // },
+      }
+      )
+      {/* }}
             // isLoading={loading}
           >
             load more
           </button>
         </div>
-      ) : null}
-    </Layout>
+      ) : null} */}
+    </>
   )
 }
 
-export default withApollo({ ssr: true })(Index)
+export const Home = withApollo({ ssr: true })(Index)
