@@ -43,7 +43,7 @@ export const NavbarMain = () => {
         <Drawer
           title="Basic Drawer"
           placement="right"
-          closable={false}
+          closable={true}
           onClose={OnClose}
           visible={state.visible}
         >
