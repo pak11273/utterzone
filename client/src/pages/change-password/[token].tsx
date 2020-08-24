@@ -32,16 +32,17 @@ const ChangePassword: any = () => {
           //   })
           // },
         })
-        if (response.data?.changePassword.errors) {
-          const errorMap = toErrorMap(response.data.changePassword.errors)
-          if ("token" in errorMap) {
-            setTokenError(errorMap.token)
-          }
-          setErrors(errorMap)
-        } else if (response.data?.changePassword.user) {
-          // worked
-          // router.push("/")
-        }
+        // TODO
+        // if (response.data?.changePassword.errors) {
+        //   const errorMap = toErrorMap(response.data.changePassword.errors)
+        //   if ("token" in errorMap) {
+        //     setTokenError(errorMap.token)
+        //   }
+        //   setErrors(errorMap)
+        // } else if (response.data?.changePassword.user) {
+        //   // worked
+        //   // router.push("/")
+        // }
       }}
     >
       {/* {({ isSubmitting }) => ( */}

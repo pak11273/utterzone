@@ -1,10 +1,12 @@
-import { FieldError } from "../generated/graphql";
+import { FieldError } from "../generated/graphql"
 
-export const toErrorMap = (errors: FieldError[]) => {
-  const errorMap: Record<string, string> = {};
-  errors.forEach(({ field, message }) => {
-    errorMap[field] = message;
-  });
-
-  return errorMap;
-};
+export const toErrorMap = (errors: any) => {
+  const formatted = errors!.map((x: any) => {
+    const obj = <any>{
+      name: x.field,
+      errors: [x.message],
+    }
+    return obj
+  })
+  return formatted
+}

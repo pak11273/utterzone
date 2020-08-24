@@ -3,21 +3,48 @@ import { Controller, useForm } from "react-hook-form"
 
 import { QuestionCircleOutlined } from "@ant-design/icons"
 import React from "react"
+import { toErrorMap } from "../utils/toErrorMap"
+import { useRegisterMutation } from "../generated/graphql"
 
 // const { Option } = Select
-
-// import { useRegisterMutation } from "../generated/graphql"
-// const [register] = useRegisterMutation()
 
 interface registerProps {}
 
 export const Register: React.FC<registerProps> = () => {
-  const { control, errors } = useForm()
-
+  const [register, { loading }] = useRegisterMutation()
   const [form] = Form.useForm()
 
-  const onFinish = (values: any) => {
-    console.log("Received values of form: ", values)
+  const { control, errors } = useForm()
+  console.log("loading: ", loading)
+
+  const onFinish = async (values: any) => {
+    delete values.confirm
+    delete values.agreement
+    if (values) {
+      const response = await register({ variables: { options: values } })
+      console.log(response.data)
+      if (response.data?.register.errors) {
+        const errorMap = toErrorMap(response.data?.register.errors)
+        form.setFields(errorMap)
+      }
+    }
+
+    // example
+    // form.setFields([{ name: "username", errors: ["nah foo!"] }])
+  }
+
+  const onFinishFailed = ({
+    values,
+    errorFields,
+    outOfDate,
+  }: {
+    values: any
+    errorFields: any
+    outOfDate: any
+  }) => {
+    console.log("val: ", values)
+    console.log("errors: ", errorFields)
+    console.log("out: ", outOfDate)
   }
 
   // const [autoCompleteResult, setAutoCompleteResult] = useState([])
@@ -45,6 +72,7 @@ export const Register: React.FC<registerProps> = () => {
           form={form}
           name="register"
           onFinish={onFinish}
+          onFinishFailed={onFinishFailed}
           initialValues={{
             residence: ["zhejiang", "hangzhou", "xihu"],
             prefix: "86",

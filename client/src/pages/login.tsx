@@ -16,6 +16,20 @@ export const Login = (props: any) => {
     console.log("Received values of form: ", values)
   }
 
+  const onFinishFailed = ({
+    values,
+    errorFields,
+    outOfDate,
+  }: {
+    values: any
+    errorFields: any
+    outOfDate: any
+  }) => {
+    console.log("val: ", values)
+    console.log("errors: ", errorFields)
+    console.log("out: ", outOfDate)
+  }
+
   return (
     <section className="logreg_section">
       <div className="logreg_form">
@@ -25,6 +39,7 @@ export const Login = (props: any) => {
           form={form}
           name="register"
           onFinish={onFinish}
+          onFinishFailed={onFinishFailed}
           initialValues={{
             residence: ["zhejiang", "hangzhou", "xihu"],
             prefix: "86",
