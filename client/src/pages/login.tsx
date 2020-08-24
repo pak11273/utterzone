@@ -83,7 +83,7 @@ export const Login = (props: any) => {
               )}
             </div>
           </Form.Item>
-          <Form.Item
+          {/* <Form.Item
             name="rememberme"
             valuePropName="checked"
             rules={[
@@ -102,7 +102,7 @@ export const Login = (props: any) => {
                 defaultValue={true}
               />
             </div>
-          </Form.Item>
+          </Form.Item> */}
           <Form.Item>
             <Button type="primary" htmlType="submit">
               Log In

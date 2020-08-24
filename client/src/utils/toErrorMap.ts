@@ -1,5 +1,3 @@
-import { FieldError } from "../generated/graphql"
-
 export const toErrorMap = (errors: any) => {
   const formatted = errors!.map((x: any) => {
     const obj = <any>{

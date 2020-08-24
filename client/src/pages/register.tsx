@@ -15,7 +15,6 @@ export const Register: React.FC<registerProps> = () => {
   const [form] = Form.useForm()
 
   const { control, errors } = useForm()
-  console.log("loading: ", loading)
 
   const onFinish = async (values: any) => {
     delete values.confirm
@@ -28,9 +27,6 @@ export const Register: React.FC<registerProps> = () => {
         form.setFields(errorMap)
       }
     }
-
-    // example
-    // form.setFields([{ name: "username", errors: ["nah foo!"] }])
   }
 
   const onFinishFailed = ({
@@ -189,11 +185,11 @@ export const Register: React.FC<registerProps> = () => {
             ]}
           >
             <Checkbox>
-              I have read the <a href="/agreement">agreement</a>
+              I have read the <a href="/agreement">Terms & Conditions</a>
             </Checkbox>
           </Form.Item>
           <Form.Item>
-            <Button type="primary" htmlType="submit">
+            <Button type="primary" htmlType="submit" loading={loading}>
               Register
             </Button>
           </Form.Item>
