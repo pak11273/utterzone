@@ -171,28 +171,29 @@ export const Register: React.FC<registerProps> = () => {
               )}
             </div>
           </Form.Item>
-
-          <Form.Item
-            name="agreement"
-            valuePropName="checked"
-            rules={[
-              {
-                validator: (_, value) =>
-                  value
-                    ? Promise.resolve()
-                    : Promise.reject("Should accept agreement"),
-              },
-            ]}
-          >
-            <Checkbox>
-              I have read the <a href="/agreement">Terms & Conditions</a>
-            </Checkbox>
-          </Form.Item>
-          <Form.Item>
-            <Button type="primary" htmlType="submit" loading={loading}>
-              Register
-            </Button>
-          </Form.Item>
+          <div style={{ marginLeft: "6px" }}>
+            <Form.Item
+              name="agreement"
+              valuePropName="checked"
+              rules={[
+                {
+                  validator: (_, value) =>
+                    value
+                      ? Promise.resolve()
+                      : Promise.reject("Should accept agreement"),
+                },
+              ]}
+            >
+              <Checkbox>
+                I have read the <a href="/agreement">Terms & Conditions</a>
+              </Checkbox>
+            </Form.Item>
+            <Form.Item>
+              <Button type="primary" htmlType="submit" loading={loading}>
+                Register
+              </Button>
+            </Form.Item>
+          </div>
         </Form>
       </div>
     </section>
