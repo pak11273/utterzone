@@ -1,17 +1,11 @@
-// import { Form, Formik } from "formik"
-// import { MeDocument, MeQuery, useLoginMutation } from "../generated/graphql"
-// import { InputField } from "../components/InputField"
-// import { toErrorMap } from "../utils/toErrorMap"
-
 import { Button, Row } from "antd"
 import { Controller, useForm } from "react-hook-form"
 
+import { InputField } from "../components"
 import React from "react"
-import { inputField } from "../components"
 
 export const Login = (props: any) => {
   const { handleSubmit, control, errors, reset } = useForm()
-  // const type = ["Student", "Developer", "other"]
 
   const onSubmit = (data: any) => {
     console.log(data)
@@ -31,7 +25,7 @@ export const Login = (props: any) => {
         <div className="input-group">
           <label className="label">username</label>
           <Controller
-            as={inputField("UserName")}
+            as={InputField("UserName")}
             name="UserName"
             control={control}
             defaultValue=""
@@ -44,7 +38,7 @@ export const Login = (props: any) => {
         <div className="input-group">
           <label className="label">email</label>
           <Controller
-            as={inputField("email")}
+            as={InputField("email")}
             name="email"
             control={control}
             defaultValue=""

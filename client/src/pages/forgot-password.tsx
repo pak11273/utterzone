@@ -1,7 +1,7 @@
 import { Form, Formik } from "formik"
 import React, { useState } from "react"
 
-import { InputField } from "../components/InputField"
+import { InputField } from "../components"
 import { useForgotPasswordMutation } from "../generated/graphql"
 import { withApollo } from "../utils/withApollo"
 

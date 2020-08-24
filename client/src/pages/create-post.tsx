@@ -1,6 +1,6 @@
 import { Form, Formik } from "formik"
 
-import { InputField } from "../components/InputField"
+import { InputField } from "../components"
 import { Layout } from "../components/Layout"
 import React from "react"
 import { useCreatePostMutation } from "../generated/graphql"

@@ -1,9 +1,8 @@
-import { SelectField, SwitchField, inputField } from "./Inputs/inputs"
+import { InputField, SelectField, SwitchField } from "./Inputs/Inputs"
 
 import { AdHeader } from "./Ads/AdHeader"
 import { EditDeletePostbuttons } from "./EditDeletePostButtons"
 import { Hamburger } from "./Buttons"
-import { InputField } from "./InputField"
 import { Layout } from "./Layout"
 import { MenuMain } from "./Menus/MenuMain"
 import { NavbarMain } from "./Navbars/NavBarMain"
@@ -14,7 +13,6 @@ export {
   EditDeletePostbuttons,
   Hamburger,
   InputField,
-  inputField,
   MenuMain,
   SelectField,
   SwitchField,

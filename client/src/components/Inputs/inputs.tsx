@@ -4,7 +4,7 @@ import React from "react"
 
 const { Option } = Select
 
-export const inputField = (placeholder: any) => {
+export const InputField = (placeholder: any) => {
   return <Input placeholder={placeholder} />
 }
 
