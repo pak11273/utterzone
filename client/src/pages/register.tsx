@@ -1,11 +1,10 @@
-import { Button, Checkbox, Col, Form, Input, Row, Select, Tooltip } from "antd"
+import { Button, Checkbox, Form, Input, Tooltip } from "antd"
 import { Controller, useForm } from "react-hook-form"
-import React, { useState } from "react"
 
-import { InputField } from "../components"
 import { QuestionCircleOutlined } from "@ant-design/icons"
+import React from "react"
 
-const { Option } = Select
+// const { Option } = Select
 
 // import { useRegisterMutation } from "../generated/graphql"
 // const [register] = useRegisterMutation()
@@ -14,44 +13,12 @@ interface registerProps {}
 
 export const Register: React.FC<registerProps> = () => {
   const { control, errors } = useForm()
-  const formItemLayout = {
-    // labelCol: {
-    //   xs: { span: 24 },
-    //   sm: { span: 8 },
-    // },
-    // wrapperCol: {
-    //   xs: { span: 24 },
-    //   sm: { span: 16 },
-    // },
-  }
-
-  const tailFormItemLayout = {
-    // wrapperCol: {
-    //   xs: {
-    //     span: 24,
-    //     offset: 0,
-    //   },
-    //   sm: {
-    //     span: 16,
-    //     offset: 8,
-    //   },
-    // },
-  }
 
   const [form] = Form.useForm()
 
   const onFinish = (values: any) => {
     console.log("Received values of form: ", values)
   }
-
-  const prefixSelector = (
-    <Form.Item name="prefix" noStyle>
-      <Select style={{ width: 70 }}>
-        <Option value="86">+86</Option>
-        <Option value="87">+87</Option>
-      </Select>
-    </Form.Item>
-  )
 
   // const [autoCompleteResult, setAutoCompleteResult] = useState([])
 
@@ -74,7 +41,6 @@ export const Register: React.FC<registerProps> = () => {
     <section className="logreg_section">
       <div className="logreg_form">
         <Form
-          {...formItemLayout}
           layout="vertical"
           form={form}
           name="register"
@@ -195,7 +161,7 @@ export const Register: React.FC<registerProps> = () => {
             ]}
           >
             <Checkbox>
-              I have read the <a href="">agreement</a>
+              I have read the <a href="/agreement">agreement</a>
             </Checkbox>
           </Form.Item>
           <Form.Item>

@@ -1,5 +1,4 @@
-import { Col, Row } from "antd"
-
+import { Col } from "antd"
 import React from "react"
 
 type LayoutVariant = "small" | "regular"

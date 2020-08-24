@@ -25,7 +25,8 @@
     "wonka": "^4.0.14"
   },
   "scripts": {
-    "//": "react-scripts eject",
+    "generate": "graphql-codegen",
+    "prestart": "yarn generate",
     "start": "craco start",
     "build": "craco build",
     "test": "craco test",

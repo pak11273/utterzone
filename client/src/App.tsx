@@ -6,6 +6,7 @@ import { ApolloProvider } from "@apollo/client"
 import React from "react"
 import { BrowserRouter as Router } from "react-router-dom"
 import { client } from "./apollo"
+import { gql } from "@apollo/client"
 import { routes } from "./routes"
 
 const App = () => {
