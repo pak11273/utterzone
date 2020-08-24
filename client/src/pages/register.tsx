@@ -4,6 +4,7 @@ import { Controller, useForm } from "react-hook-form"
 import { QuestionCircleOutlined } from "@ant-design/icons"
 import React from "react"
 import { toErrorMap } from "../utils/toErrorMap"
+import { useHistory } from "react-router-dom"
 import { useRegisterMutation } from "../generated/graphql"
 
 // const { Option } = Select
@@ -12,6 +13,7 @@ interface registerProps {}
 
 export const Register: React.FC<registerProps> = () => {
   const [register, { loading }] = useRegisterMutation()
+  const history = useHistory()
   const [form] = Form.useForm()
 
   const { control, errors } = useForm()
@@ -21,10 +23,11 @@ export const Register: React.FC<registerProps> = () => {
     delete values.agreement
     if (values) {
       const response = await register({ variables: { options: values } })
-      console.log(response.data)
       if (response.data?.register.errors) {
         const errorMap = toErrorMap(response.data?.register.errors)
         form.setFields(errorMap)
+      } else {
+        history.push("/")
       }
     }
   }
