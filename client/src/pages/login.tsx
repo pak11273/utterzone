@@ -104,7 +104,7 @@ export const Login = (props: any) => {
               />
             </div>
           </Form.Item> */}
-          <Form.Item>
+          <Form.Item style={{ marginLeft: "6px" }}>
             <Button type="primary" htmlType="submit">
               Log In
             </Button>
