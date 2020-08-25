@@ -1,20 +1,44 @@
 import { Button, Form, Input } from "antd"
-import { Controller, useForm } from "react-hook-form"
+import { MeDocument, MeQuery, useLoginMutation } from "../generated/graphql"
 
 import React from "react"
+import { toErrorMap } from "../utils/toErrorMap"
+import { useHistory } from "react-router-dom"
+import { withRouter } from "react-router-dom"
 
 // import { SwitchField } from "../components"
 
 // const { Option } = Select
 const formItemLayout = {}
 
-export const Login = (props: any) => {
-  // const { handleSubmit, control, errors, reset } = useForm()
-  const { control, errors } = useForm()
+const Container = (props: any) => {
+  const [login] = useLoginMutation()
+  const history = useHistory()
   const [form] = Form.useForm()
 
-  const onFinish = (values: any) => {
-    console.log("Received values of form: ", values)
+  const onFinish = async (values: any) => {
+    if (values) {
+      const response = await login({
+        variables: values,
+        update: (cache, { data }) => {
+          cache.writeQuery<MeQuery>({
+            query: MeDocument,
+            data: {
+              __typename: "Query",
+              me: data?.login.user,
+            },
+          })
+          cache.evict({ fieldName: "posts:{}" })
+        },
+      })
+      if (response.data?.login.errors) {
+        const errorMap = toErrorMap(response.data?.login.errors)
+        form.setFields(errorMap)
+      }
+      if (response.data?.login.user) {
+        history.push("/")
+      }
+    }
   }
 
   const onFinishFailed = ({
@@ -48,7 +72,7 @@ export const Login = (props: any) => {
           scrollToFirstError
         >
           <Form.Item
-            name="useremail"
+            name="usernameOrEmail"
             label="Username or E-mail"
             rules={[
               {
@@ -69,20 +93,7 @@ export const Login = (props: any) => {
             name="password"
             rules={[{ required: true, message: "Please input your password!" }]}
           >
-            <div className="input-group">
-              <Controller
-                as={Input.Password}
-                name="password"
-                control={control}
-                defaultValue=""
-                rules={{
-                  required: true,
-                }}
-              />
-              {errors.password && (
-                <span className="error">Password must be at least 8 chars</span>
-              )}
-            </div>
+            <Input.Password />
           </Form.Item>
           {/* <Form.Item
             name="rememberme"
@@ -114,3 +125,5 @@ export const Login = (props: any) => {
     </section>
   )
 }
+
+export const Login = withRouter(Container)

@@ -1,5 +1,4 @@
 import { Button, Checkbox, Form, Input, Tooltip } from "antd"
-import { Controller, useForm } from "react-hook-form"
 
 import { QuestionCircleOutlined } from "@ant-design/icons"
 import React from "react"
@@ -15,8 +14,6 @@ export const Register: React.FC<registerProps> = () => {
   const [register, { loading }] = useRegisterMutation()
   const history = useHistory()
   const [form] = Form.useForm()
-
-  const { control, errors } = useForm()
 
   const onFinish = async (values: any) => {
     delete values.confirm
@@ -121,20 +118,7 @@ export const Register: React.FC<registerProps> = () => {
             name="password"
             rules={[{ required: true, message: "Please input your password!" }]}
           >
-            <div className="input-group">
-              <Controller
-                as={Input.Password}
-                name="password"
-                control={control}
-                defaultValue=""
-                rules={{
-                  required: true,
-                }}
-              />
-              {errors.password && (
-                <span className="error">Password must be at least 8 chars</span>
-              )}
-            </div>
+            <Input.Password />
           </Form.Item>
 
           <Form.Item
@@ -159,20 +143,7 @@ export const Register: React.FC<registerProps> = () => {
               }),
             ]}
           >
-            <div className="input-group">
-              <Controller
-                as={Input.Password}
-                name="confirm"
-                control={control}
-                defaultValue=""
-                rules={{
-                  required: true,
-                }}
-              />
-              {errors.password && (
-                <span className="error">Password must be at least 8 chars</span>
-              )}
-            </div>
+            <Input.Password />
           </Form.Item>
           <div style={{ marginLeft: "6px" }}>
             <Form.Item
