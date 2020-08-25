@@ -163,8 +163,8 @@ export class UserResolver {
         .insert()
         .into(User)
         .values({
-          username: options.username,
-          email: options.email,
+          username: options.username.toLowerCase(),
+          email: options.email.toLowerCase(),
           password: hashedPassword,
         })
         .returning("*")
