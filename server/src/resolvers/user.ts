@@ -19,7 +19,7 @@ import { validateRegister } from "../utils/validateRegister"
 import { sendEmail } from "../utils/sendEmail"
 import { v4 } from "uuid"
 import { getConnection } from "typeorm"
-import { rateLimit } from "../utils/rate-limit"
+import { rateLimit } from "../middleware/rate-limit"
 
 @ObjectType()
 class FieldError {
@@ -207,11 +207,11 @@ export class UserResolver {
   @Mutation(() => UserResponse)
   @UseMiddleware(
     rateLimit({
-      limitAnon: 1,
-      limitUser: 1,
+      limitAnon: 50,
+      limitUser: 50,
       msg:
         "You have entered too many requests.  Please try again in a few hours",
-      time: "min",
+      time: "hour",
       multiplier: 1,
     })
   )

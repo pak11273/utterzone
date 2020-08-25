@@ -32,7 +32,6 @@ export const Login = (props: any) => {
         },
       })
 
-      console.log("log: ", response)
       if (response.data?.login.user === null) {
         setReqs("Too many failed attempts.  Please try again later.")
       }
