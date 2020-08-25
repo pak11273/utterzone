@@ -28,11 +28,25 @@ export const validateRegister = (options: UsernamePasswordInput) => {
     ]
   }
 
-  if (options.password.length <= 2) {
+  if (options.password.length < 8) {
     return [
       {
         field: "password",
-        message: "length must be greater than 2",
+        message: "requires at least 8 characters",
+      },
+    ]
+  }
+
+  if (
+    /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=_*!.]).{8,}$/.test(
+      options.password
+    )
+  ) {
+    return [
+      {
+        field: "password",
+        message:
+          "Must include at least 1 capital letter, 1 number and 1 special char",
       },
     ]
   }
