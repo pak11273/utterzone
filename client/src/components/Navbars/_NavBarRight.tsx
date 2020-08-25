@@ -1,8 +1,8 @@
 import { NavLink, useHistory } from "react-router-dom"
-import React, { useReducer } from "react"
 import { useLogoutMutation, useMeQuery } from "../../generated/graphql"
 
 import { Menu } from "antd"
+import React from "react"
 import { useApolloClient } from "@apollo/client"
 
 interface NavBarProps {}

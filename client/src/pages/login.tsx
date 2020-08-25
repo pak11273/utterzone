@@ -1,9 +1,9 @@
 import { Button, Form, Input } from "antd"
+import { Link, useHistory } from "react-router-dom"
 import { MeDocument, MeQuery, useLoginMutation } from "../generated/graphql"
 
 import React from "react"
 import { toErrorMap } from "../utils/toErrorMap"
-import { useHistory } from "react-router-dom"
 import { withRouter } from "react-router-dom"
 
 // import { SwitchField } from "../components"
@@ -56,8 +56,8 @@ const Container = (props: any) => {
   }
 
   return (
-    <section className="logreg_section">
-      <div className="logreg_form">
+    <section className="userform_section">
+      <div className="user_form">
         <Form
           {...formItemLayout}
           layout="vertical"
@@ -95,29 +95,16 @@ const Container = (props: any) => {
           >
             <Input.Password />
           </Form.Item>
-          {/* <Form.Item
-            name="rememberme"
-            valuePropName="checked"
-            rules={[
-              {
-                validator: (_, value) =>
-                  value ? Promise.resolve() : Promise.reject("Remember Me"),
-              },
-            ]}
-          >
-            <div className="input-group">
-              <label className="label">Remember Me</label>
-              <Controller
-                as={SwitchField()}
-                name="rememberme"
-                control={control}
-                defaultValue={true}
-              />
-            </div>
-          </Form.Item> */}
-          <Form.Item style={{ marginLeft: "6px" }}>
-            <Button type="primary" htmlType="submit">
+          <Form.Item>
+            <Button
+              style={{ margin: "20px 0 0 6px" }}
+              type="primary"
+              htmlType="submit"
+            >
               Log In
+            </Button>
+            <Button type="link" htmlType="button">
+              <Link to="/forgot-password">forgot password?</Link>
             </Button>
           </Form.Item>
         </Form>

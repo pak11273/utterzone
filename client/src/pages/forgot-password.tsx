@@ -1,39 +1,52 @@
-import { Form, Formik } from "formik"
+import { Button, Form, Input } from "antd"
 import React, { useState } from "react"
 
-import { InputField } from "../components"
 import { useForgotPasswordMutation } from "../generated/graphql"
-import { withApollo } from "../utils/withApollo"
 
-const ForgotPassword: React.FC<{}> = ({}) => {
-  const [complete, setComplete] = useState(false)
-  const [forgotPassword] = useForgotPasswordMutation()
+interface forgotPasswordProps {}
+
+export const ForgotPassword: React.FC<forgotPasswordProps> = () => {
+  const [complete, setComplete] = useState("")
+  const [forgotPassword, { loading }] = useForgotPasswordMutation()
+  const [form] = Form.useForm()
+
+  const onFinish = async (values: any) => {
+    const response = await forgotPassword({ variables: values })
+    if (response.data?.forgotPassword) {
+      setComplete("Please check your email")
+    }
+  }
   return (
-    <Formik
-      initialValues={{ email: "" }}
-      onSubmit={async values => {
-        await forgotPassword({ variables: values })
-        setComplete(true)
-      }}
-    >
-      {/* {({ isSubmitting }) => */}
-      {() =>
-        complete ? (
-          <div>if an account with that email exists, we sent you can email</div>
-        ) : (
-          <Form>
-            <InputField
-              name="email"
-              placeholder="email"
-              label="Email"
-              type="email"
-            />
-            <button type="submit">forgot password</button>
-          </Form>
-        )
-      }
-    </Formik>
+    <section className="userform_section">
+      <div className="user_form">
+        <Form layout="vertical" form={form} name="register" onFinish={onFinish}>
+          <Form.Item
+            name="email"
+            label="E-mail"
+            rules={[
+              {
+                type: "email",
+                message: "The input is not valid E-mail!",
+              },
+              {
+                required: true,
+                message: "Please input your E-mail!",
+              },
+            ]}
+          >
+            <Input />
+          </Form.Item>
+          <Button
+            style={{ marginTop: "20px" }}
+            type="primary"
+            htmlType="submit"
+            loading={loading}
+          >
+            forgot password
+          </Button>
+        </Form>
+        <h1>{complete}</h1>
+      </div>
+    </section>
   )
 }
-
-export default withApollo({ ssr: false })(ForgotPassword)

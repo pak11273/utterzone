@@ -115,7 +115,7 @@ export class UserResolver {
     const user = await User.findOne({ where: { email } })
     if (!user) {
       // the email is not in the db
-      return true
+      return false
     }
 
     const token = v4()

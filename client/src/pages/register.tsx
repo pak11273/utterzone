@@ -72,8 +72,8 @@ export const Register: React.FC<registerProps> = () => {
   // }))
 
   return (
-    <section className="logreg_section">
-      <div className="logreg_form">
+    <section className="userform_section">
+      <div className="user_form">
         <Form
           layout="vertical"
           form={form}
