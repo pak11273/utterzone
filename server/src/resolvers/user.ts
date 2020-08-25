@@ -207,11 +207,11 @@ export class UserResolver {
   @Mutation(() => UserResponse)
   @UseMiddleware(
     rateLimit({
-      limitAnon: 100,
-      limitUser: 100,
+      limitAnon: 1,
+      limitUser: 1,
       msg:
         "You have entered too many requests.  Please try again in a few hours",
-      time: "day",
+      time: "min",
       multiplier: 1,
     })
   )
@@ -235,6 +235,7 @@ export class UserResolver {
         ],
       }
     }
+
     const valid = await argon2.verify(user.password, password)
     if (!valid) {
       return {

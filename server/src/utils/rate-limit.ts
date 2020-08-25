@@ -30,17 +30,28 @@ export const rateLimit: ({
   time,
   multiplier = 1,
 }) => async ({ context: { req }, info }, next) => {
-  const isAnon = !req.session!.userId
-  const key = `rate-limit:${info.fieldName}:${
-    isAnon ? req.ip : req.session!.userId
-  }`
+  try {
+    const isAnon = !req.session!.userId
+    const key = `rate-limit:${info.fieldName}:${
+      isAnon ? req.ip : req.session!.userId
+    }`
 
-  const current = await redis.incr(key)
-  if ((isAnon && current > limitAnon) || (!isAnon && current > limitUser)) {
-    throw new Error(msg)
-  } else if (current === 1) {
-    await redis.expire(key, tframe[time] * multiplier)
+    const current = await redis.incr(key)
+    if ((isAnon && current > limitAnon) || (!isAnon && current > limitUser)) {
+      return {
+        data: {
+          [info.fieldName]: {
+            errors: msg,
+          },
+        },
+      }
+    } else if (current === 1) {
+      await redis.expire(key, tframe[time] * multiplier)
+    }
+
+    const result = await next()
+    return result
+  } catch (err) {
+    return err
   }
-
-  return next()
 }

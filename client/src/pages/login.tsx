@@ -1,20 +1,20 @@
 import { Button, Form, Input } from "antd"
 import { Link, useHistory } from "react-router-dom"
 import { MeDocument, MeQuery, useLoginMutation } from "../generated/graphql"
+import React, { useState } from "react"
 
-import React from "react"
 import { toErrorMap } from "../utils/toErrorMap"
-import { withRouter } from "react-router-dom"
 
 // import { SwitchField } from "../components"
 
 // const { Option } = Select
 const formItemLayout = {}
 
-const Container = (props: any) => {
+export const Login = (props: any) => {
   const [login] = useLoginMutation()
   const history = useHistory()
   const [form] = Form.useForm()
+  const [reqs, setReqs] = useState("")
 
   const onFinish = async (values: any) => {
     if (values) {
@@ -31,9 +31,12 @@ const Container = (props: any) => {
           cache.evict({ fieldName: "posts:{}" })
         },
       })
-      if (response) {
-        console.log("hi: ", response)
+
+      console.log("log: ", response)
+      if (response.data?.login.user === null) {
+        setReqs("Too many failed attempts.  Please try again later.")
       }
+
       if (response.data?.login.errors) {
         const errorMap = toErrorMap(response.data?.login.errors)
         form.setFields(errorMap)
@@ -96,9 +99,8 @@ const Container = (props: any) => {
             </Button>
           </Form.Item>
         </Form>
+        <h1 style={{ marginTop: "10px", color: "red" }}>{reqs}</h1>
       </div>
     </section>
   )
 }
-
-export const Login = withRouter(Container)
