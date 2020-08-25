@@ -31,6 +31,9 @@ const Container = (props: any) => {
           cache.evict({ fieldName: "posts:{}" })
         },
       })
+      if (response) {
+        console.log("hi: ", response)
+      }
       if (response.data?.login.errors) {
         const errorMap = toErrorMap(response.data?.login.errors)
         form.setFields(errorMap)
@@ -39,20 +42,6 @@ const Container = (props: any) => {
         history.push("/")
       }
     }
-  }
-
-  const onFinishFailed = ({
-    values,
-    errorFields,
-    outOfDate,
-  }: {
-    values: any
-    errorFields: any
-    outOfDate: any
-  }) => {
-    console.log("val: ", values)
-    console.log("errors: ", errorFields)
-    console.log("out: ", outOfDate)
   }
 
   return (
@@ -64,7 +53,6 @@ const Container = (props: any) => {
           form={form}
           name="register"
           onFinish={onFinish}
-          onFinishFailed={onFinishFailed}
           initialValues={{
             residence: ["zhejiang", "hangzhou", "xihu"],
             prefix: "86",

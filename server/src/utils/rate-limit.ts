@@ -2,34 +2,44 @@ import { MiddlewareFn } from "type-graphql"
 import { MyContext } from "../types"
 import { redis } from "../redis"
 
-const ONE_DAY = 60 * 60 * 24
+const tframe: any = {
+  min: 60,
+  hour: 60 * 60,
+  day: 60 * 60 * 24,
+  week: 60 * 60 * 24 * 7,
+  month: 60 * 60 * 24 * 7 * 4,
+  year: 60 * 60 * 24 * 7 * 4 * 12,
+}
 
-// const span = [
-//   { min: 60 },
-//   { hour: 60 * 60 },
-//   { day: 60 * 60 * 24 },
-//   { week: 60 * 60 * 24 * 7 },
-//   { month: 60 * 60 * 24 * 7 * 4 },
-//   { year: 60 * 60 * 24 * 7 * 4 * 12 },
-// ]
-
-export const rateLimit: (limit?: number) => MiddlewareFn<MyContext> = (
-  limitForAnonUser = 50,
-  limitForUser = 100
-) => async ({ context: { req }, info }, next) => {
+export const rateLimit: ({
+  limitAnon,
+  limitUser,
+  msg,
+  time,
+  multiplier,
+}: {
+  limitAnon: number
+  limitUser: number
+  msg: string
+  time: string
+  multiplier?: number
+}) => MiddlewareFn<MyContext> = ({
+  limitAnon,
+  limitUser,
+  msg,
+  time,
+  multiplier = 1,
+}) => async ({ context: { req }, info }, next) => {
   const isAnon = !req.session!.userId
   const key = `rate-limit:${info.fieldName}:${
     isAnon ? req.ip : req.session!.userId
   }`
 
   const current = await redis.incr(key)
-  if (
-    (isAnon && current > limitForAnonUser) ||
-    (!isAnon && current > limitForUser)
-  ) {
-    throw new Error("you're doing that too much")
+  if ((isAnon && current > limitAnon) || (!isAnon && current > limitUser)) {
+    throw new Error(msg)
   } else if (current === 1) {
-    await redis.expire(key, ONE_DAY)
+    await redis.expire(key, tframe[time] * multiplier)
   }
 
   return next()

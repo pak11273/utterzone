@@ -8,6 +8,7 @@ import {
   Query,
   FieldResolver,
   Root,
+  UseMiddleware,
 } from "type-graphql"
 import { MyContext } from "../types"
 import { User } from "../entities/User"
@@ -18,6 +19,7 @@ import { validateRegister } from "../utils/validateRegister"
 import { sendEmail } from "../utils/sendEmail"
 import { v4 } from "uuid"
 import { getConnection } from "typeorm"
+import { rateLimit } from "../utils/rate-limit"
 
 @ObjectType()
 class FieldError {
@@ -203,6 +205,16 @@ export class UserResolver {
   }
 
   @Mutation(() => UserResponse)
+  @UseMiddleware(
+    rateLimit({
+      limitAnon: 100,
+      limitUser: 100,
+      msg:
+        "You have entered too many requests.  Please try again in a few hours",
+      time: "day",
+      multiplier: 1,
+    })
+  )
   async login(
     @Arg("usernameOrEmail") usernameOrEmail: string,
     @Arg("password") password: string,
