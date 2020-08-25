@@ -1,10 +1,10 @@
 import { Button, Checkbox, Form, Input, Tooltip } from "antd"
+import { MeDocument, MeQuery, useRegisterMutation } from "../generated/graphql"
 
 import { QuestionCircleOutlined } from "@ant-design/icons"
 import React from "react"
 import { toErrorMap } from "../utils/toErrorMap"
 import { useHistory } from "react-router-dom"
-import { useRegisterMutation } from "../generated/graphql"
 
 // const { Option } = Select
 
@@ -19,7 +19,18 @@ export const Register: React.FC<registerProps> = () => {
     delete values.confirm
     delete values.agreement
     if (values) {
-      const response = await register({ variables: { options: values } })
+      const response = await register({
+        variables: { options: values },
+        update: (cache, { data }) => {
+          cache.writeQuery<MeQuery>({
+            query: MeDocument,
+            data: {
+              __typename: "Query",
+              me: data?.register.user,
+            },
+          })
+        },
+      })
       if (response.data?.register.errors) {
         const errorMap = toErrorMap(response.data?.register.errors)
         form.setFields(errorMap)

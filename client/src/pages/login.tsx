@@ -73,7 +73,7 @@ const Container = (props: any) => {
         >
           <Form.Item
             name="usernameOrEmail"
-            label="Username or E-mail"
+            label="E-mail"
             rules={[
               {
                 type: "email",
@@ -81,7 +81,7 @@ const Container = (props: any) => {
               },
               {
                 required: true,
-                message: "Please input your Username or E-mail!",
+                message: "Please input your E-mail!",
               },
             ]}
           >
