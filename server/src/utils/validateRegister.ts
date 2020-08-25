@@ -19,6 +19,15 @@ export const validateRegister = (options: UsernamePasswordInput) => {
     ]
   }
 
+  if (!/^[a-zA-Z0-9_]+$/.test(options.username)) {
+    return [
+      {
+        field: "username",
+        message: "must be alphanumeric only",
+      },
+    ]
+  }
+
   if (options.username.includes("@")) {
     return [
       {
@@ -38,7 +47,7 @@ export const validateRegister = (options: UsernamePasswordInput) => {
   }
 
   if (
-    /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=_*!.]).{8,}$/.test(
+    !/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=_*!.]).{8,}$/.test(
       options.password
     )
   ) {
