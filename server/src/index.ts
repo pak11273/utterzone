@@ -5,11 +5,14 @@ import { redis, redisSession } from "./redis"
 
 import { ApolloServer } from "apollo-server-express"
 import { HelloResolver } from "./resolvers/hello"
+import { Message } from "./entities/Message"
+import { Organization } from "./entities/Organization"
 import { Post } from "./entities/Post"
 import { PostResolver } from "./resolvers/post"
 import { Updoot } from "./entities/Updoot"
 import { User } from "./entities/User"
 import { UserResolver } from "./resolvers/user"
+import { Zone } from "./entities/Zone"
 import { __prod__ } from "./constants"
 import { buildSchema } from "type-graphql"
 import cors from "cors"
@@ -26,7 +29,7 @@ const main = async () => {
     logging: true,
     // synchronize: true,
     migrations: [path.join(__dirname, "./migrations/*")],
-    entities: [Post, User, Updoot],
+    entities: [Message, Organization, Post, User, Updoot, Zone],
   })
   await conn.runMigrations()
 
