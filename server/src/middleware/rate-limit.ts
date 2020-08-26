@@ -41,13 +41,8 @@ export const rateLimit: ({
         : req.headers.origin + ":" + req.session!.userId
     }`
 
-    console.log("key: ", key)
-    console.log("isanon: ", isAnon)
-
     const current = await redis.llen(key)
-    console.log("current: ", current)
     if (isAnon && current >= limitAnon) {
-      console.log("anon!!")
       return {
         data: {
           [info.fieldName]: {
@@ -58,7 +53,6 @@ export const rateLimit: ({
     }
 
     if (!isAnon && current >= limitUser) {
-      console.log("user!!")
       return {
         data: {
           [info.fieldName]: {
