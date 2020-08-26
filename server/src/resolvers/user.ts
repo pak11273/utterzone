@@ -209,7 +209,9 @@ export class UserResolver {
     rateLimit({
       limitAnon: 50,
       limitUser: 1,
-      msg: "You have too many failed attempts.  Please try again in an hour.",
+      msgAnon:
+        "You have too many failed attempts.  Please try again in an hour.",
+      msgUser: "You are already logged in.",
       time: "hour",
       multiplier: 1,
     })

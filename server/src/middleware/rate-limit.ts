@@ -14,19 +14,22 @@ const tframe: any = {
 export const rateLimit: ({
   limitAnon,
   limitUser,
-  msg,
+  msgAnon,
+  msgUser,
   time,
   multiplier,
 }: {
   limitAnon: number
   limitUser: number
-  msg: string
+  msgAnon: string
+  msgUser: string
   time: string
   multiplier?: number
 }) => MiddlewareFn<MyContext> = ({
   limitAnon,
   limitUser,
-  msg,
+  msgAnon,
+  msgUser,
   time,
   multiplier = 1,
 }) => async ({ context: { req }, info }, next) => {
@@ -38,13 +41,28 @@ export const rateLimit: ({
         : req.headers.origin + ":" + req.session!.userId
     }`
 
-    const current = await redis.llen(key)
+    console.log("key: ", key)
+    console.log("isanon: ", isAnon)
 
-    if ((isAnon && current >= limitAnon) || (!isAnon && current >= limitUser)) {
+    const current = await redis.llen(key)
+    console.log("current: ", current)
+    if (isAnon && current >= limitAnon) {
+      console.log("anon!!")
       return {
         data: {
           [info.fieldName]: {
-            errors: msg,
+            errors: msgAnon,
+          },
+        },
+      }
+    }
+
+    if (!isAnon && current >= limitUser) {
+      console.log("user!!")
+      return {
+        data: {
+          [info.fieldName]: {
+            errors: msgUser,
           },
         },
       }
@@ -59,7 +77,6 @@ export const rateLimit: ({
       // await redis.expire(key, tframe[time] * multiplier)
     } else {
       await redis.rpushx(key, key)
-      const hell = await redis.llen(key)
     }
     const result = await next()
     return result

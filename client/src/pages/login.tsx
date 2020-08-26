@@ -33,6 +33,7 @@ export const Login = (props: any) => {
       })
 
       if (response.data?.login.user === null) {
+        //TODO: if uzid cookie exists then  setReqs("You are already logged in.")
         setReqs("Too many failed attempts.  Please try again later.")
       }
 
