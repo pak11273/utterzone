@@ -208,9 +208,8 @@ export class UserResolver {
   @UseMiddleware(
     rateLimit({
       limitAnon: 50,
-      limitUser: 50,
-      msg:
-        "You have entered too many requests.  Please try again in a few hours",
+      limitUser: 1,
+      msg: "You have too many failed attempts.  Please try again in an hour.",
       time: "hour",
       multiplier: 1,
     })

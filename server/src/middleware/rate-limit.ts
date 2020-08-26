@@ -33,11 +33,14 @@ export const rateLimit: ({
   try {
     const isAnon = !req.session!.userId
     const key = `rate-limit:${info.fieldName}:${
-      isAnon ? req.ip : req.session!.userId
+      isAnon
+        ? req.headers.origin
+        : req.headers.origin + ":" + req.session!.userId
     }`
 
-    const current = await redis.incr(key)
-    if ((isAnon && current > limitAnon) || (!isAnon && current > limitUser)) {
+    const current = await redis.llen(key)
+
+    if ((isAnon && current >= limitAnon) || (!isAnon && current >= limitUser)) {
       return {
         data: {
           [info.fieldName]: {
@@ -45,10 +48,19 @@ export const rateLimit: ({
           },
         },
       }
-    } else if (current === 1) {
-      await redis.expire(key, tframe[time] * multiplier)
     }
-
+    const exists = await redis.exists(key)
+    if (!exists) {
+      await redis
+        .multi()
+        .rpush(key, key)
+        .expire(key, tframe[time] * multiplier)
+        .exec()
+      // await redis.expire(key, tframe[time] * multiplier)
+    } else {
+      await redis.rpushx(key, key)
+      const hell = await redis.llen(key)
+    }
     const result = await next()
     return result
   } catch (err) {
