@@ -19,10 +19,6 @@ import { Zone } from "./Zone"
 
 // import { Organization } from "./Organization"
 
-
-
-
-
 @ObjectType()
 @Entity()
 export class User extends BaseEntity {
@@ -49,6 +45,9 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Post, post => post.creator)
   posts: Post[]
+
+  @Column({ nullable: true })
+  ProfileId: number
 
   @OneToOne(() => Profile)
   @JoinColumn()

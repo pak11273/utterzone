@@ -7,7 +7,7 @@ export const routes = (
   <Switch>
     <Route exact path="/" component={Home} />
     <Route exact path="/forgot-password" component={ForgotPassword} />
-    <Route exact path="/zones" component={Zone} />
+    <Route exact path="/zone" component={Zone} />
     <Route exact path="/login" component={Login} />
     <Route path="/register" component={Register} />
   </Switch>

@@ -14,7 +14,7 @@ const App = () => {
       <Router>
         <Layout>
           <NavbarMain />
-          <div style={{ display: "flex" }}>
+          <div style={{ display: "flex", height: "100vh" }}>
             <MenuMain />
             <div style={{ width: "100%", minHeight: "100%" }}>{routes}</div>
           </div>

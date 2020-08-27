@@ -180,7 +180,6 @@ export class UserResolver {
         .execute()
       user = result.raw[0]
     } catch (err) {
-      console.log("err includes: ", err)
       // duplicate username error
       if (err.detail) {
         if (err.detail.includes("user") && err.detail.includes("already")) {

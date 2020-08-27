@@ -17,6 +17,7 @@ export type Query = {
   posts: PaginatedPosts;
   post?: Maybe<Post>;
   me?: Maybe<User>;
+  user: User;
 };
 
 
@@ -28,6 +29,11 @@ export type QueryPostsArgs = {
 
 export type QueryPostArgs = {
   id: Scalars['Int'];
+};
+
+
+export type QueryUserArgs = {
+  id: Scalars['Float'];
 };
 
 export type PaginatedPosts = {

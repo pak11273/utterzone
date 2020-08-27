@@ -27,7 +27,7 @@ export class MenuMain extends React.Component {
         style={{
           backgroundColor: "#001529",
           maxWidth: 256,
-          minHeight: "100vh",
+          minHeight: "100%",
         }}
       >
         <Button
@@ -45,7 +45,7 @@ export class MenuMain extends React.Component {
           )}
         </Button>
         <Menu
-          style={{ height: "100%" }}
+          // style={{ height: "100%" }}
           defaultSelectedKeys={["1"]}
           defaultOpenKeys={["sub1"]}
           mode="inline"
