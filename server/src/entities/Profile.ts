@@ -8,8 +8,6 @@ import {
 } from "typeorm"
 import { Field, ObjectType } from "type-graphql"
 
-import { User } from "./User"
-
 @ObjectType()
 @Entity()
 export class Profile extends BaseEntity {
@@ -19,12 +17,6 @@ export class Profile extends BaseEntity {
 
   @Column()
   avatar: string
-
-  @Column(() => User)
-  following: User[]
-
-  @Column(() => User)
-  followers: User[]
 
   @Column()
   gender: string

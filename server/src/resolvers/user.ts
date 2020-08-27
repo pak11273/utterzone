@@ -60,12 +60,12 @@ export class UserResolver {
     return User.findOne(req.session.userId)
   }
 
-  // @Query(() => User)
-  // async user(@Arg("id") id: number): Promise<User | undefined> {
-  //   const user = await User.findOne(id)
-  //   if (user) user.profile
-  //   return user
-  // }
+  @Query(() => User)
+  async user(@Arg("id") id: number): Promise<User | undefined> {
+    const user = await User.findOne(id)
+    if (user) user.profile
+    return user
+  }
 
   @Mutation(() => UserResponse)
   async changePassword(
@@ -180,27 +180,31 @@ export class UserResolver {
         .execute()
       user = result.raw[0]
     } catch (err) {
+      console.log("err includes: ", err)
       // duplicate username error
-      if (err.detail.includes("user") && err.detail.includes("already")) {
-        return {
-          errors: [
-            {
-              field: "username",
-              message: "username already taken",
-            },
-          ],
+      if (err.detail) {
+        if (err.detail.includes("user") && err.detail.includes("already")) {
+          return {
+            errors: [
+              {
+                field: "username",
+                message: "username already taken",
+              },
+            ],
+          }
+        }
+        if (err.detail.includes("email") && err.detail.includes("already")) {
+          return {
+            errors: [
+              {
+                field: "email",
+                message: "email already taken",
+              },
+            ],
+          }
         }
       }
-      if (err.detail.includes("email") && err.detail.includes("already")) {
-        return {
-          errors: [
-            {
-              field: "email",
-              message: "email already taken",
-            },
-          ],
-        }
-      }
+      return err
     }
 
     // store user id session

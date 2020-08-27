@@ -12,11 +12,16 @@ import {
 import { Field, ObjectType } from "type-graphql"
 
 import { Message } from "./Message"
-import { Organization } from "./Organization"
 import { Post } from "./Post"
 import { Profile } from "./Profile"
 import { Updoot } from "./Updoot"
 import { Zone } from "./Zone"
+
+// import { Organization } from "./Organization"
+
+
+
+
 
 @ObjectType()
 @Entity()
@@ -39,8 +44,8 @@ export class User extends BaseEntity {
   @OneToMany(() => Message, message => message.user)
   messages: Message[]
 
-  @OneToMany(() => Organization, org => org.owner)
-  organizations: Organization[]
+  // @OneToMany(() => Organization, org => org.owner)
+  // organizations: Organization[]
 
   @OneToMany(() => Post, post => post.creator)
   posts: Post[]

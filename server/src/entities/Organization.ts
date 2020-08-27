@@ -2,13 +2,12 @@ import {
   BaseEntity,
   CreateDateColumn,
   Entity,
-  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm"
 import { Field, ObjectType } from "type-graphql"
 
-import { User } from "./User"
+// import { User } from "./User"
 
 @ObjectType()
 @Entity()
@@ -20,9 +19,9 @@ export class Organization extends BaseEntity {
   @Field()
   name: string
 
-  @Field(() => String)
-  @ManyToOne(() => User, user => user.organizations)
-  owner: User
+  // @Field(() => String)
+  // @ManyToOne(() => User, user => user.organizations)
+  // owner: User
 
   @Field()
   type: string

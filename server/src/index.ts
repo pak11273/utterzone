@@ -6,7 +6,6 @@ import { redis, redisSession } from "./redis"
 import { ApolloServer } from "apollo-server-express"
 import { HelloResolver } from "./resolvers/hello"
 import { Message } from "./entities/Message"
-import { Organization } from "./entities/Organization"
 import { Post } from "./entities/Post"
 import { PostResolver } from "./resolvers/post"
 import { Profile } from "./entities/Profile"
@@ -29,9 +28,9 @@ const main = async () => {
     type: "postgres",
     url: process.env.DATABASE_URL,
     logging: true,
-    // synchronize: true,
+    synchronize: true,
     migrations: [path.join(__dirname, "./migrations/*")],
-    entities: [Message, Organization, Profile, Post, User, Updoot, Zone],
+    entities: [Message, Profile, Post, User, Updoot, Zone],
   })
   await conn.runMigrations()
 
