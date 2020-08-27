@@ -9,6 +9,8 @@ import { Message } from "./entities/Message"
 import { Organization } from "./entities/Organization"
 import { Post } from "./entities/Post"
 import { PostResolver } from "./resolvers/post"
+import { Profile } from "./entities/Profile"
+import { ProfileResolver } from "./resolvers/profile"
 import { Updoot } from "./entities/Updoot"
 import { User } from "./entities/User"
 import { UserResolver } from "./resolvers/user"
@@ -29,7 +31,7 @@ const main = async () => {
     logging: true,
     // synchronize: true,
     migrations: [path.join(__dirname, "./migrations/*")],
-    entities: [Message, Organization, Post, User, Updoot, Zone],
+    entities: [Message, Organization, Profile, Post, User, Updoot, Zone],
   })
   await conn.runMigrations()
 
@@ -50,7 +52,7 @@ const main = async () => {
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [HelloResolver, PostResolver, UserResolver],
+      resolvers: [HelloResolver, PostResolver, ProfileResolver, UserResolver],
       validate: false,
     }),
     context: ({ req, res }) => ({

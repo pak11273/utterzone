@@ -3,7 +3,9 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm"
@@ -12,6 +14,7 @@ import { Field, ObjectType } from "type-graphql"
 import { Message } from "./Message"
 import { Organization } from "./Organization"
 import { Post } from "./Post"
+import { Profile } from "./Profile"
 import { Updoot } from "./Updoot"
 import { Zone } from "./Zone"
 
@@ -41,6 +44,10 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Post, post => post.creator)
   posts: Post[]
+
+  @OneToOne(() => Profile)
+  @JoinColumn()
+  profile: Profile
 
   @OneToMany(() => Updoot, updoot => updoot.user)
   updoots: Updoot[]

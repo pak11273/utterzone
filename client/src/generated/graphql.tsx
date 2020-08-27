@@ -55,6 +55,18 @@ export type User = {
   id: Scalars['Float'];
   username: Scalars['String'];
   email: Scalars['String'];
+  zone: Zone;
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
+};
+
+export type Zone = {
+  __typename?: 'Zone';
+  id: Scalars['Float'];
+  name: Scalars['String'];
+  owner: Scalars['String'];
+  description: Scalars['String'];
+  public: Scalars['Boolean'];
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
 };

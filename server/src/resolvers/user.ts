@@ -50,6 +50,23 @@ export class UserResolver {
     return ""
   }
 
+  @Query(() => User, { nullable: true })
+  me(@Ctx() { req }: MyContext) {
+    // you are not logged in
+    if (!req.session.userId) {
+      return null
+    }
+
+    return User.findOne(req.session.userId)
+  }
+
+  // @Query(() => User)
+  // async user(@Arg("id") id: number): Promise<User | undefined> {
+  //   const user = await User.findOne(id)
+  //   if (user) user.profile
+  //   return user
+  // }
+
   @Mutation(() => UserResponse)
   async changePassword(
     @Arg("token") token: string,
@@ -135,16 +152,6 @@ export class UserResolver {
     )
 
     return true
-  }
-
-  @Query(() => User, { nullable: true })
-  me(@Ctx() { req }: MyContext) {
-    // you are not logged in
-    if (!req.session.userId) {
-      return null
-    }
-
-    return User.findOne(req.session.userId)
   }
 
   @Mutation(() => UserResponse)
