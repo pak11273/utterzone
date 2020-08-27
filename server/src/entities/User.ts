@@ -3,7 +3,6 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -45,6 +44,9 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Updoot, updoot => updoot.user)
   updoots: Updoot[]
+
+  @Field()
+  zone: Zone
 
   @Field(() => String)
   @CreateDateColumn()
