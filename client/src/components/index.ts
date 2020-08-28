@@ -3,6 +3,7 @@ import { InputField, SelectField, SwitchField } from "./Inputs/Inputs"
 import { AdHeader } from "./Ads/AdHeader"
 import { Chat } from "./Chat"
 import { EditDeletePostbuttons } from "./EditDeletePostButtons"
+import { Gravatar } from "./Gravatar"
 import { Hamburger } from "./Buttons"
 import { Layout } from "./Layout"
 import { MenuMain } from "./Menus/MenuMain"
@@ -13,6 +14,7 @@ export {
   AdHeader,
   Chat,
   EditDeletePostbuttons,
+  Gravatar,
   Hamburger,
   InputField,
   MenuMain,

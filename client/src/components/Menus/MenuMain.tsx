@@ -45,7 +45,6 @@ export class MenuMain extends React.Component {
           )}
         </Button>
         <Menu
-          // style={{ height: "100%" }}
           defaultSelectedKeys={["1"]}
           defaultOpenKeys={["sub1"]}
           mode="inline"

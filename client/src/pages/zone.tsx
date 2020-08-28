@@ -7,12 +7,12 @@ interface zoneProps {}
 
 export const Zone: React.FC<zoneProps> = () => {
   return (
-    <div style={{ background: "yellow", height: "100%" }}>
-      <Row style={{ background: "yellow" }}>
-        <Col span={12} style={{ background: "green", minHeight: "100%" }}>
+    <div style={{ height: "100%" }}>
+      <Row style={{ height: "100%" }}>
+        <Col span={17} style={{ background: "green", height: "100%" }}>
           <h1>Zone</h1>
         </Col>
-        <Col span={12} style={{ background: "tomato", minHeight: "100%" }}>
+        <Col span={7} style={{ height: "100%" }}>
           <Chat />
         </Col>
       </Row>

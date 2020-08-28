@@ -1,1 +1,2 @@
-declare module "next-apollo";
+declare module "next-apollo"
+declare module "react-avatar"
