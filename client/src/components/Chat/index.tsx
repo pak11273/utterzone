@@ -1,9 +1,9 @@
 import { Button, Input } from "antd"
-import { MoreOutlined, SendOutlined } from "@ant-design/icons"
 import React, { useEffect, useState } from "react"
 
 import { Gravatar } from "../../components"
 import { Message } from "./Message"
+import { SendOutlined } from "@ant-design/icons"
 
 interface indexProps {}
 
@@ -18,10 +18,14 @@ let messageList: messageInterface[] = [
 ]
 
 export const Chat: React.FC<indexProps> = () => {
-  const [messages, setMessage] = useState<messageInterface[]>(messageList)
+  const [messages, setMessages] = useState<messageInterface[]>(messageList)
+  const [message, setMessage] = useState("")
+  const handleMessages = (e: any) => {
+    setMessages([...messages, { msg: message }])
+  }
+
   const handleMessage = (e: any) => {
-    console.log("e: ", e.target)
-    setMessage([...messages, { msg: "hello foo" }])
+    setMessage(e.target.value)
   }
 
   useEffect(() => {
@@ -70,14 +74,20 @@ export const Chat: React.FC<indexProps> = () => {
             width: "90%",
           }}
         >
-          <Input placeholder="Type Here" style={{ margin: "10px" }} />
+          <Input
+            placeholder="Type Here"
+            style={{ margin: "10px" }}
+            onChange={(e: any) => handleMessage(e)}
+          />
           <Button
             type="primary"
             shape="circle"
             icon={<SendOutlined style={{ paddingLeft: "1px" }} />}
             size="small"
             style={{ margin: "14px 10px 0 0" }}
-            onClick={e => handleMessage(e)}
+            value={message}
+            onClick={e => handleMessages(e)}
+            disabled={!message}
           />
         </div>
         <Button
