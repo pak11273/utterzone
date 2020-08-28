@@ -1,44 +1,48 @@
 import { Button, Input } from "antd"
 import { MoreOutlined, SendOutlined } from "@ant-design/icons"
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 
 import { Gravatar } from "../../components"
 import { Message } from "./Message"
 
 interface indexProps {}
 
-const Message2 = () => {
-  return (
-    <>
-      <div className="chat_message">
-        <div className="chat_avatar">
-          <Gravatar />
-        </div>
-        <p>blah!!! Foo!!!kk</p>
-        <MoreOutlined style={{ fontSize: "20px" }} />
-      </div>
-    </>
-  )
+interface messageInterface {
+  msg: string
+  id?: number
+  avatar?: string
 }
 
+let messageList: messageInterface[] = [
+  { msg: "hello", id: 1, avatar: "avatar.jpg" },
+]
+
 export const Chat: React.FC<indexProps> = () => {
+  const [messages, setMessage] = useState<messageInterface[]>(messageList)
+  const handleMessage = (e: any) => {
+    console.log("e: ", e.target)
+    setMessage([...messages, { msg: "hello foo" }])
+  }
+
   useEffect(() => {
-    // ref: https://stackoverflow.com/questions/18614301/keep-overflow-div-scrolled-to-bottom-unless-user-scrolls-up
+    // useState callback: https://stackoverflow.com/questions/54954091/how-to-use-callback-with-usestate-hook-in-react
     var out = document.getElementById("out")
-    console.log("out: ", out)
+    out!.scrollTop = out!.scrollHeight - out!.clientHeight
+  }, [messages])
+
+  useEffect(() => {
+    var out = document.getElementById("out")
+    // scroll to bottom: https://stackoverflow.com/questions/18614301/keep-overflow-div-scrolled-to-bottom-unless-user-scrolls-up
     var c = 0
     var add = setInterval(function () {
-      console.log("scrollheight: ", out!.scrollHeight)
-      console.log("clientheight: ", out!.clientHeight)
-      console.log("scrolltop: ", out!.scrollTop)
       if (out) {
         // allow 1px inaccuracy by adding 1
         var isScrolledToBottom =
           out!.scrollHeight - out!.clientHeight <= out!.scrollTop + 1
-        console.log(out!.scrollHeight - out!.clientHeight, out!.scrollTop + 1)
-        var newElement = document.createElement("div")
-        newElement.innerHTML = (c++).toString()
-        out!.appendChild(newElement)
+        // TODO:auto insert messages for testing, remove later
+        // var newElement = document.createElement("div")
+        // newElement.innerHTML = (c++).toString()
+        // out!.appendChild(newElement)
         // scroll to bottom if isScrolledToBotto
         if (isScrolledToBottom)
           out!.scrollTop = out!.scrollHeight - out!.clientHeight
@@ -53,14 +57,11 @@ export const Chat: React.FC<indexProps> = () => {
     <div className="chat_container">
       <div className="chat_header"> Chat </div>
       <div className="chat_message--container" id="out">
-        <Message2 />
-        {[1, 1, 1].map((x, i) => (
+        {messages.map((msg, i) => (
           <div key={i}>
-            <Message />
+            <Message msg={msg.msg} />
           </div>
         ))}
-        <Message2 />
-        <Message2 />
       </div>
       <div className="chat_message--ctrls">
         <div
@@ -76,6 +77,7 @@ export const Chat: React.FC<indexProps> = () => {
             icon={<SendOutlined style={{ paddingLeft: "1px" }} />}
             size="small"
             style={{ margin: "14px 10px 0 0" }}
+            onClick={e => handleMessage(e)}
           />
         </div>
         <Button

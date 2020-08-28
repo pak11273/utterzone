@@ -10,6 +10,7 @@ import { MenuMain } from "./Menus/MenuMain"
 import { NavbarMain } from "./Navbars/NavBarMain"
 import { UpdootSection } from "./UpdootSection"
 import { Zone } from "./Zone"
+import { ZoneControls } from "./Zone/ZoneControls"
 
 export {
   AdHeader,
@@ -25,4 +26,5 @@ export {
   NavbarMain,
   UpdootSection,
   Zone,
+  ZoneControls,
 }

@@ -1,4 +1,4 @@
-import { Chat, Zone } from "../components"
+import { Chat, Zone, ZoneControls } from "../components"
 import { Col, Row } from "antd"
 
 import React from "react"
@@ -14,12 +14,8 @@ export const PageZone: React.FC<zoneProps> = () => {
           span={17}
           style={{ background: "green", height: "100%", overflow: "scroll" }}
         >
-          <div style={{ minHeight: "600px" }}>
-            <Zone />
-          </div>
-          <div style={{ background: "red", minHeight: "80%" }}>
-            Zone Controls
-          </div>
+          <Zone />
+          <ZoneControls />
         </Col>
         <Col span={7} style={{ height: "100%" }}>
           <Chat />
