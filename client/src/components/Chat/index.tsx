@@ -1,8 +1,9 @@
+import { Button, Input } from "antd"
+import { MoreOutlined, SendOutlined } from "@ant-design/icons"
 import React, { useEffect } from "react"
 
 import { Gravatar } from "../../components"
 import { Message } from "./Message"
-import { MoreOutlined } from "@ant-design/icons"
 
 interface indexProps {}
 
@@ -50,7 +51,7 @@ export const Chat: React.FC<indexProps> = () => {
 
   return (
     <div className="chat_container">
-      <div className="chat_header"> Header </div>
+      <div className="chat_header"> Chat </div>
       <div className="chat_message--container" id="out">
         <Message2 />
         {[1, 1, 1].map((x, i) => (
@@ -60,6 +61,30 @@ export const Chat: React.FC<indexProps> = () => {
         ))}
         <Message2 />
         <Message2 />
+      </div>
+      <div className="chat_message--ctrls">
+        <div
+          style={{
+            display: "flex",
+            width: "90%",
+          }}
+        >
+          <Input placeholder="Type Here" style={{ margin: "10px" }} />
+          <Button
+            type="primary"
+            shape="circle"
+            icon={<SendOutlined style={{ paddingLeft: "1px" }} />}
+            size="small"
+            style={{ margin: "14px 10px 0 0" }}
+          />
+        </div>
+        <Button
+          type="primary"
+          size="middle"
+          style={{ width: "100px", margin: "10px" }}
+        >
+          Send Audio
+        </Button>
       </div>
     </div>
   )

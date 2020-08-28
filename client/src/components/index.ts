@@ -9,6 +9,7 @@ import { Layout } from "./Layout"
 import { MenuMain } from "./Menus/MenuMain"
 import { NavbarMain } from "./Navbars/NavBarMain"
 import { UpdootSection } from "./UpdootSection"
+import { Zone } from "./Zone"
 
 export {
   AdHeader,
@@ -23,4 +24,5 @@ export {
   Layout,
   NavbarMain,
   UpdootSection,
+  Zone,
 }

@@ -1,7 +1,7 @@
 import { ForgotPassword } from "./forgot-password"
 import { Home } from "./home"
 import { Login } from "./login"
+import { PageZone } from "./page-zone"
 import { Register } from "./register"
-import { Zone } from "./zone"
 
-export { ForgotPassword, Home, Login, Register, Zone }
+export { ForgotPassword, Home, Login, Register, PageZone }
