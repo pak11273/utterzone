@@ -32,6 +32,7 @@ export const Chat: React.FC<indexProps> = () => {
     // useState callback: https://stackoverflow.com/questions/54954091/how-to-use-callback-with-usestate-hook-in-react
     var out = document.getElementById("out")
     out!.scrollTop = out!.scrollHeight - out!.clientHeight
+    setMessage("")
   }, [messages])
 
   useEffect(() => {
@@ -78,6 +79,7 @@ export const Chat: React.FC<indexProps> = () => {
             placeholder="Type Here"
             style={{ margin: "10px" }}
             onChange={(e: any) => handleMessage(e)}
+            value={message}
           />
           <Button
             type="primary"
@@ -94,6 +96,7 @@ export const Chat: React.FC<indexProps> = () => {
           type="primary"
           size="middle"
           style={{ width: "100px", margin: "10px" }}
+          onClick={() => alert("audio")}
         >
           Send Audio
         </Button>
