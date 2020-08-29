@@ -1,0 +1,13 @@
+const getZoneQuery = `
+  query GetZone($id: ID!) {
+    zone(id: $id) {
+      id
+      name
+      messages {
+        id
+        content
+        createdAt
+      }
+    }
+  }
+`

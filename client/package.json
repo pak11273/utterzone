@@ -15,6 +15,7 @@
     "@types/react-dom": "^16.9.0",
     "antd": "^4.5.4",
     "craco-less": "^1.17.0",
+    "dotenv": "^8.2.0",
     "formik": "^2.1.5",
     "graphql": "^15.3.0",
     "react": "^16.13.1",

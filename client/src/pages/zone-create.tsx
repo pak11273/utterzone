@@ -1,28 +1,11 @@
 import { Button, Checkbox, Form, Input, Select } from "antd"
 import React, { useState } from "react"
 
-import { Link } from "react-router-dom"
-import { SelectLanguage } from "../components"
+const { Option } = Select
 
 interface ZoneCreateProps {}
-function onChange(value: any) {
-  console.log(`selected ${value}`)
-}
 
-function onBlur() {
-  console.log("blur")
-}
-
-function onFocus() {
-  console.log("focus")
-}
-
-function onSearch(val: string) {
-  console.log("search:", val)
-}
-
-export const PageZoneCreate: React.FC<ZoneCreateProps> = () => {
-  const { Option } = Select
+export const ZoneCreate: React.FC<ZoneCreateProps> = () => {
   const [privateZone, setPrivate] = useState(false)
   const formItemLayout = {}
   // const history = useHistory()
@@ -72,17 +55,17 @@ export const PageZoneCreate: React.FC<ZoneCreateProps> = () => {
               style={{ width: 200 }}
               placeholder="Select a person"
               optionFilterProp="children"
-              onChange={onChange}
-              onFocus={onFocus}
-              onBlur={onBlur}
-              onSearch={onSearch}
               filterOption={(input, option) =>
                 option!.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
               }
             >
-              <Option value="english">English</Option>
-              <Option value="korean">Korean</Option>
-              <Option value="spanish">Spanish</Option>
+              <>
+                {["English", "Korean", "Spanish"].map((lang, i) => (
+                  <Option key={i} value={`${lang}`}>
+                    {lang}
+                  </Option>
+                ))}
+              </>
             </Select>
           </Form.Item>
           <Form.Item
@@ -96,17 +79,17 @@ export const PageZoneCreate: React.FC<ZoneCreateProps> = () => {
               style={{ width: 200 }}
               placeholder="Select a person"
               optionFilterProp="children"
-              onChange={onChange}
-              onFocus={onFocus}
-              onBlur={onBlur}
-              onSearch={onSearch}
               filterOption={(input, option) =>
                 option!.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
               }
             >
-              <Option value="english">English</Option>
-              <Option value="korean">Korean</Option>
-              <Option value="spanish">Spanish</Option>
+              <>
+                {["English", "Korean", "Spanish"].map((lang, i) => (
+                  <Option key={i} value={`${lang}`}>
+                    {lang}
+                  </Option>
+                ))}
+              </>
             </Select>
           </Form.Item>
           <div style={{ display: "flex", justifyContent: "space-evenly" }}>

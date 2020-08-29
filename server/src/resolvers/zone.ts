@@ -8,7 +8,11 @@ import {
   Ctx,
   UseMiddleware,
   ObjectType,
+  Query,
+  // Int,
 } from "type-graphql"
+
+import { chats, messages } from "../db/mock"
 
 import { Zone } from "../entities/Zone"
 import { MyContext } from "../types"
@@ -48,18 +52,43 @@ export class ZoneInput {
 
   @Field()
   password: string
-
   @Field()
   username: string
 }
 
 @Resolver()
 export class ZoneResolver {
-  // @Query(() => Zone, { nullable: true })
-  // async zone(@Arg("id", () => Int) id: number): Promise<Zone | undefined> {
-  //   const zone = await Zone.findOne(id)
-  //   return zone
-  // }
+  @Query(() => Zone)
+  async zone(
+    @Arg("id") id: number,
+    @Ctx() { req }: MyContext
+  ): Promise<Zone | undefined> {
+    console.log(req)
+    const zone = await Zone.findOne(id)
+    return zone
+  }
+
+  @Query()
+  async zones(): Promise<Zone[] | undefined> {
+    const zones = await Zone.find()
+    return zones
+  }
+
+  @Query()
+  async messages(chat: any) {
+    return messages.filter(m => chat.messages.includes(m.id))
+  }
+
+  @Query()
+  async lastMessage(chat: any) {
+    const lastMessage = chat.messages[chat.messages.length - 1]
+    return messages.find(m => m.id === lastMessage)
+  }
+
+  @Query()
+  async chats() {
+    return chats
+  }
 
   @Mutation(() => ZoneResponse)
   @UseMiddleware(isAuth)

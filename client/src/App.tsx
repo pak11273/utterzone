@@ -8,7 +8,10 @@ import { ConfigProvider } from "react-avatar"
 import React from "react"
 import { BrowserRouter as Router } from "react-router-dom"
 import { client } from "./apollo"
+import dotenv from "dotenv"
 import { routes } from "./routes"
+
+dotenv.config()
 
 const cache = new Cache({
   // Keep cached source failures for up to 7 days

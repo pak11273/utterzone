@@ -1,9 +1,10 @@
 import { Button, Input } from "antd"
 import React, { useEffect, useState } from "react"
 
-import { Gravatar } from "../../components"
 import { Message } from "./Message"
 import { SendOutlined } from "@ant-design/icons"
+
+// import { Gravatar } from "../../components"
 
 interface indexProps {}
 
@@ -38,7 +39,7 @@ export const Chat: React.FC<indexProps> = () => {
   useEffect(() => {
     var out = document.getElementById("out")
     // scroll to bottom: https://stackoverflow.com/questions/18614301/keep-overflow-div-scrolled-to-bottom-unless-user-scrolls-up
-    var c = 0
+    // var c = 0
     var add = setInterval(function () {
       if (out) {
         // allow 1px inaccuracy by adding 1
@@ -104,3 +105,20 @@ export const Chat: React.FC<indexProps> = () => {
     </div>
   )
 }
+
+// TODO
+//   return (
+//     <div>
+//       <img src={chat.picture} alt="Profile" />
+//       <div>{chat.name}</div>
+//       <ul>
+//         {chat.messages.map((message) => (
+//           <li key={message.id}>
+//             <div>{message.content}</div>
+//             <div>{message.createdAt}</div>
+//           </li>
+//         ))}
+//       </ul>
+//     </div>
+//   );
+// };
