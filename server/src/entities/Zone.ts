@@ -35,6 +35,9 @@ export class Zone extends BaseEntity {
   @OneToMany(() => Message, message => message.user)
   messages: Message[]
 
+  @Field(() => Message)
+  lastMessage: Message
+
   @Field()
   public: boolean
 

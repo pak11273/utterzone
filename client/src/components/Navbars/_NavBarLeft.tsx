@@ -1,5 +1,6 @@
+import { Link, NavLink } from "react-router-dom"
+
 import { Menu } from "antd"
-import { NavLink } from "react-router-dom"
 import React from "react"
 
 const SubMenu = Menu.SubMenu
@@ -11,13 +12,14 @@ export const LeftMenu: React.FC<NavBarProps> = () => {
   return (
     <Menu mode="horizontal">
       <SubMenu title={<NavLink to="/zone">Zones</NavLink>}>
-        <MenuItemGroup title="Item 1">
-          <Menu.Item key="setting:1">Option 1</Menu.Item>
-          <Menu.Item key="setting:2">Option 2</Menu.Item>
+        <MenuItemGroup title="Zones">
+          <Menu.Item key="setting:1">
+            <Link to="/zone/create">Create a Zone</Link>
+          </Menu.Item>
+          <Menu.Item key="setting:2">Find a Zone</Menu.Item>
         </MenuItemGroup>
-        <MenuItemGroup title="Item 2">
-          <Menu.Item key="setting:3">Option 3</Menu.Item>
-          <Menu.Item key="setting:4">Option 4</Menu.Item>
+        <MenuItemGroup title="Apps">
+          <Menu.Item key="setting:4">Games</Menu.Item>
         </MenuItemGroup>
       </SubMenu>
     </Menu>

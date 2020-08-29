@@ -72,7 +72,18 @@ export type Zone = {
   name: Scalars['String'];
   owner: Scalars['String'];
   description: Scalars['String'];
+  lastMessage: Message;
   public: Scalars['Boolean'];
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
+};
+
+export type Message = {
+  __typename?: 'Message';
+  id: Scalars['Float'];
+  text: Scalars['String'];
+  user: Scalars['String'];
+  zone: Zone;
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
 };
