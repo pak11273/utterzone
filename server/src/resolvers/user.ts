@@ -222,7 +222,7 @@ export class UserResolver {
     resolveTime,
     rateLimit({
       limitAnon: 10,
-      limitUser: 1,
+      limitUser: 0,
       msgAnon: "Too many failed attempts.  Try again in an hour.",
       msgUser: "You are already logged in.",
       time: "hour",

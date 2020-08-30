@@ -44,10 +44,7 @@ export const rateLimit: ({
     }`
 
     const current = await redis.llen(key)
-    console.log("current: ", current)
-    console.log("isanon: ", isAnon)
     if (isAnon && current >= limitAnon) {
-      console.log("info: ", info.fieldName)
       throw new ApolloError(msgAnon)
     }
 
@@ -55,9 +52,9 @@ export const rateLimit: ({
     if (!isAnon && current >= limitUser) {
       throw new ApolloError(msgUser)
     }
+
     const exists = await redis.exists(key)
     if (!exists) {
-      console.log("EXISTS FOO FOO!")
       await redis
         .multi()
         .rpush(key, key)
