@@ -1,5 +1,9 @@
 import { Button, Checkbox, Form, Input, Tooltip } from "antd"
-import { MeDocument, MeQuery, useCreateUserMutation } from "../generated/graphql"
+import {
+  MeDocument,
+  MeQuery,
+  useCreateUserMutation,
+} from "../generated/graphql"
 
 import { ApolloCache } from "@apollo/client"
 import { QuestionCircleOutlined } from "@ant-design/icons"
@@ -20,23 +24,31 @@ export const Register: React.FC<registerProps> = () => {
     delete values.confirm
     delete values.agreement
     if (values) {
-      const response = await register({
-        variables: { options: values },
-        update: (cache , { data }) => {
-          cache.writeQuery<MeQuery>({
-            query: MeDocument,
-            data: {
-              __typename: "Query",
-              me: data?.createUser.user,
-            },
-          })
-        },
-      })
-      if (response.data?.createUser.errors) {
-        const errorMap = toErrorMap(response.data?.createUser.errors)
+      try {
+        const response = await register({
+          variables: { options: values },
+          update: (cache, { data }) => {
+            cache.writeQuery<MeQuery>({
+              query: MeDocument,
+              data: {
+                __typename: "Query",
+                me: data?.createUser.user,
+              },
+            })
+          },
+        })
+        if (response.data?.createUser.errors) {
+          const errorMap = toErrorMap(response.data?.createUser.errors)
+          form.setFields(errorMap)
+        } else {
+          history.push("/")
+        }
+      } catch (err) {
+        const errorMap = toErrorMap([
+          { field: "username", message: err.message },
+        ])
+        console.log("map: ", errorMap)
         form.setFields(errorMap)
-      } else {
-        history.push("/")
       }
     }
   }

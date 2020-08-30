@@ -157,7 +157,17 @@ export class UserResolver {
   }
 
   @Mutation(() => UserResponse)
-  @UseMiddleware(resolveTime)
+  @UseMiddleware(
+    resolveTime,
+    rateLimit({
+      limitAnon: 50,
+      limitUser: 50,
+      msgAnon: "Too many failed attempts.  Try again in an hour.",
+      msgUser: "Too many failed attempts.  Try again in an hour.",
+      time: "hour",
+      multiplier: 1,
+    })
+  )
   async createUser(
     @Arg("options") options: UsernamePasswordInput,
     @Ctx() { req }: MyContext
@@ -221,7 +231,7 @@ export class UserResolver {
   @UseMiddleware(
     resolveTime,
     rateLimit({
-      limitAnon: 10,
+      limitAnon: 50,
       limitUser: 0,
       msgAnon: "Too many failed attempts.  Try again in an hour.",
       msgUser: "You are already logged in.",
