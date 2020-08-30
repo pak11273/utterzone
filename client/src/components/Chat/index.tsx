@@ -50,6 +50,12 @@ export const Chat = ({ chatFetched }: any) => {
     setMessage(e.target.value)
   }
 
+  const handleKeyPress = (e: any) => {
+    if (e.charCode === 13) {
+      handleMessages(e)
+    }
+  }
+
   useEffect(() => {
     // useState callback: https://stackoverflow.com/questions/54954091/how-to-use-callback-with-usestate-hook-in-react
     var out = document.getElementById("out")
@@ -104,6 +110,7 @@ export const Chat = ({ chatFetched }: any) => {
             placeholder="Type Here"
             style={{ margin: "10px" }}
             onChange={(e: any) => handleMessage(e)}
+            onKeyPress={handleKeyPress}
             value={message}
           />
           <Button
