@@ -1,6 +1,6 @@
 import { UsernamePasswordInput } from "../resolvers/UsernamePasswordInput"
 
-export const validateRegister = (options: UsernamePasswordInput) => {
+export const validateCreateUser = (options: UsernamePasswordInput) => {
   //  TODO temporarily disable validations for dev, restore when publishing
   console.log(options) // remove this later
   // if (!options.email.includes("@")) {

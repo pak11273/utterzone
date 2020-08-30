@@ -1,5 +1,6 @@
 import {
   BaseEntity,
+  Column,
   CreateDateColumn,
   Entity,
   OneToMany,
@@ -24,10 +25,19 @@ export class Zone extends BaseEntity {
 
   @Field(() => User)
   @OneToOne(() => User, user => user.zone)
-  owner: User
+  host: User
 
   @OneToMany(() => User, user => user)
-  participants: User[]
+  participants?: User[]
+
+  @Field()
+  learningLanguage?: string
+
+  @Field()
+  nativeLanguage?: string
+
+  @Field()
+  maxParticipants?: number
 
   @Field()
   description: string
@@ -36,16 +46,19 @@ export class Zone extends BaseEntity {
   messages: Message[]
 
   @Field(() => Message)
-  lastMessage: Message
+  lastMessage?: Message
+
+  @Column()
+  password!: string
 
   @Field()
   public: boolean
 
   @Field(() => String)
   @CreateDateColumn()
-  createdAt: Date
+  createdAt?: Date
 
   @Field(() => String)
   @UpdateDateColumn()
-  updatedAt: Date
+  updatedAt?: Date
 }

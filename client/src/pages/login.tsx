@@ -11,38 +11,46 @@ import { toErrorMap } from "../utils/toErrorMap"
 const formItemLayout = {}
 
 export const Login = (props: any) => {
-  const [login] = useLoginMutation()
+  const [login, { error }] = useLoginMutation()
   const history = useHistory()
   const [form] = Form.useForm()
   const [reqs, setReqs] = useState("")
 
   const onFinish = async (values: any) => {
     if (values) {
-      const response = await login({
-        variables: values,
-        update: (cache, { data }) => {
-          cache.writeQuery<MeQuery>({
-            query: MeDocument,
-            data: {
-              __typename: "Query",
-              me: data?.login.user,
-            },
-          })
-          cache.evict({ fieldName: "posts:{}" })
-        },
-      })
+      try {
+        const response = await login({
+          variables: values,
+          update: (cache, { data }) => {
+            cache.writeQuery<MeQuery>({
+              query: MeDocument,
+              data: {
+                __typename: "Query",
+                me: data?.login.user,
+              },
+            })
+            cache.evict({ fieldName: "posts:{}" })
+          },
+        })
+        if (response) {
+          console.log(response)
+          //TODO: if uzid cookie exists then  setReqs("You are already logged in.")
+          // setReqs("Too many failed attempts.  Please try again later.")
+        }
 
-      if (response.data?.login.user === null) {
-        //TODO: if uzid cookie exists then  setReqs("You are already logged in.")
-        setReqs("Too many failed attempts.  Please try again later.")
-      }
-
-      if (response.data?.login.errors) {
-        const errorMap = toErrorMap(response.data?.login.errors)
+        if (response.data?.login.errors) {
+          const errorMap = toErrorMap(response.data?.login.errors)
+          form.setFields(errorMap)
+        }
+        if (response.data?.login.user) {
+          history.push("/")
+        }
+      } catch (err) {
+        const errorMap = toErrorMap([
+          { field: "usernameOrEmail", message: err.message },
+        ])
+        console.log("map: ", errorMap)
         form.setFields(errorMap)
-      }
-      if (response.data?.login.user) {
-        history.push("/")
       }
     }
   }

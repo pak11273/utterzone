@@ -1,3 +1,4 @@
+import { ApolloError } from "apollo-server-express"
 import { MiddlewareFn } from "type-graphql"
 import { MyContext } from "../types"
 import { redis } from "../redis"
@@ -34,6 +35,7 @@ export const rateLimit: ({
   multiplier = 1,
 }) => async ({ context: { req }, info }, next) => {
   try {
+    // no session = anon user
     const isAnon = !req.session!.userId
     const key = `rate-limit:${info.fieldName}:${
       isAnon
@@ -42,27 +44,20 @@ export const rateLimit: ({
     }`
 
     const current = await redis.llen(key)
+    console.log("current: ", current)
+    console.log("isanon: ", isAnon)
     if (isAnon && current >= limitAnon) {
-      return {
-        data: {
-          [info.fieldName]: {
-            errors: msgAnon,
-          },
-        },
-      }
+      console.log("info: ", info.fieldName)
+      throw new ApolloError(msgAnon)
     }
 
+    // logged in user rate limit
     if (!isAnon && current >= limitUser) {
-      return {
-        data: {
-          [info.fieldName]: {
-            errors: msgUser,
-          },
-        },
-      }
+      throw new ApolloError(msgUser)
     }
     const exists = await redis.exists(key)
     if (!exists) {
+      console.log("EXISTS FOO FOO!")
       await redis
         .multi()
         .rpush(key, key)

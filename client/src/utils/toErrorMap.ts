@@ -1,5 +1,5 @@
 export const toErrorMap = (errors: any) => {
-  const formatted = errors!.map((x: any) => {
+  const formatted = errors.map((x: any) => {
     const obj = {
       name: x.field,
       errors: [x.message],

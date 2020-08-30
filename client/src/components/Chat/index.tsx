@@ -42,8 +42,8 @@ export const Chat = ({ chatFetched }: any) => {
       ...chat,
       messages: chat!.messages,
     }
-    console.log("new chat: ", newChat)
     setChat(newChat)
+
   }
 
   const handleMessage = (e: any) => {
@@ -107,12 +107,13 @@ export const Chat = ({ chatFetched }: any) => {
           }}
         >
           <Input
+            className="chat_message--input"
+            id="chat_message--input"
             placeholder="Type Here"
-            style={{ margin: "10px" }}
             onChange={(e: any) => handleMessage(e)}
             onKeyPress={handleKeyPress}
             value={message}
-          />
+          ></Input>
           <Button
             type="primary"
             shape="circle"

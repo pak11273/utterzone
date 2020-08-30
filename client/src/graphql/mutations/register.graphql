@@ -1,5 +1,5 @@
-mutation Register($options: UsernamePasswordInput!) {
-  register(options: $options) {
+mutation CreateUser($options: UsernamePasswordInput!) {
+  createUser(options: $options) {
     ...RegularUserResponse
   }
 }

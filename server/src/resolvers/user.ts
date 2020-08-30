@@ -15,11 +15,13 @@ import { User } from "../entities/User"
 import argon2 from "argon2"
 import { COOKIE_NAME, FORGET_PASSWORD_PREFIX } from "../constants"
 import { UsernamePasswordInput } from "./UsernamePasswordInput"
-import { validateRegister } from "../utils/validateRegister"
+import { validateCreateUser } from "../utils/validateCreateUser"
 import { sendEmail } from "../utils/sendEmail"
 import { v4 } from "uuid"
 import { getConnection } from "typeorm"
-import { rateLimit } from "../middleware/rate-limit"
+import { rateLimit, resolveTime } from "../middleware"
+import { ApolloError } from "apollo-server-express"
+import { __prod__ } from "../constants"
 
 @ObjectType()
 class FieldError {
@@ -155,11 +157,12 @@ export class UserResolver {
   }
 
   @Mutation(() => UserResponse)
-  async register(
+  @UseMiddleware(resolveTime)
+  async createUser(
     @Arg("options") options: UsernamePasswordInput,
     @Ctx() { req }: MyContext
   ): Promise<UserResponse> {
-    const errors = validateRegister(options)
+    const errors = validateCreateUser(options)
     if (errors) {
       return { errors }
     }
@@ -216,11 +219,11 @@ export class UserResolver {
 
   @Mutation(() => UserResponse)
   @UseMiddleware(
+    resolveTime,
     rateLimit({
-      limitAnon: 50,
+      limitAnon: 10,
       limitUser: 1,
-      msgAnon:
-        "You have too many failed attempts.  Please try again in an hour.",
+      msgAnon: "Too many failed attempts.  Try again in an hour.",
       msgUser: "You are already logged in.",
       time: "hour",
       multiplier: 1,
@@ -236,18 +239,13 @@ export class UserResolver {
         ? { where: { email: usernameOrEmail } }
         : { where: { username: usernameOrEmail } }
     )
+
     if (!user) {
-      return {
-        errors: [
-          {
-            field: "usernameOrEmail",
-            message: "that username doesn't exist",
-          },
-        ],
-      }
+      throw new ApolloError("That user doesn't exist")
     }
 
     const valid = await argon2.verify(user.password, password)
+
     if (!valid) {
       return {
         errors: [
@@ -267,6 +265,7 @@ export class UserResolver {
   }
 
   @Mutation(() => Boolean)
+  @UseMiddleware(resolveTime)
   logout(@Ctx() { req, res }: MyContext) {
     return new Promise(resolve =>
       req.session.destroy(err => {

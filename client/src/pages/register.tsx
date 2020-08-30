@@ -1,6 +1,7 @@
 import { Button, Checkbox, Form, Input, Tooltip } from "antd"
-import { MeDocument, MeQuery, useRegisterMutation } from "../generated/graphql"
+import { MeDocument, MeQuery, useCreateUserMutation } from "../generated/graphql"
 
+import { ApolloCache } from "@apollo/client"
 import { QuestionCircleOutlined } from "@ant-design/icons"
 import React from "react"
 import { toErrorMap } from "../utils/toErrorMap"
@@ -11,7 +12,7 @@ import { useHistory } from "react-router-dom"
 interface registerProps {}
 
 export const Register: React.FC<registerProps> = () => {
-  const [register, { loading }] = useRegisterMutation()
+  const [register, { loading }] = useCreateUserMutation()
   const history = useHistory()
   const [form] = Form.useForm()
 
@@ -21,18 +22,18 @@ export const Register: React.FC<registerProps> = () => {
     if (values) {
       const response = await register({
         variables: { options: values },
-        update: (cache, { data }) => {
+        update: (cache , { data }) => {
           cache.writeQuery<MeQuery>({
             query: MeDocument,
             data: {
               __typename: "Query",
-              me: data?.register.user,
+              me: data?.createUser.user,
             },
           })
         },
       })
-      if (response.data?.register.errors) {
-        const errorMap = toErrorMap(response.data?.register.errors)
+      if (response.data?.createUser.errors) {
+        const errorMap = toErrorMap(response.data?.createUser.errors)
         form.setFields(errorMap)
       } else {
         history.push("/")
