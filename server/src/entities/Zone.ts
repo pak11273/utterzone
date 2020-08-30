@@ -22,7 +22,7 @@ export class Zone extends BaseEntity {
   @Field()
   name: string
 
-  @Field(() => String)
+  @Field(() => User)
   @OneToOne(() => User, user => user.zone)
   owner: User
 

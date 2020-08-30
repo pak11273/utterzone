@@ -6,23 +6,44 @@ import { SendOutlined } from "@ant-design/icons"
 
 // import { Gravatar } from "../../components"
 
-interface indexProps {}
+interface indexProps {
+  chat?: object
+}
 
 interface messageInterface {
-  msg: string
-  id?: number
+  id: number | string
+  name: string
+  message: string
   avatar?: string
 }
 
-let messageList: messageInterface[] = [
-  { msg: "hello", id: 1, avatar: "avatar.jpg" },
-]
+interface chatInterface {
+  id: number
+  name: string
+  messages: Array<messageInterface>
+}
 
-export const Chat: React.FC<indexProps> = () => {
-  const [messages, setMessages] = useState<messageInterface[]>(messageList)
+type chatResult = chatInterface | null
+
+export const Chat = ({ chatFetched }: any) => {
+  const [chat, setChat] = useState<chatResult | any>({ messages: [] })
   const [message, setMessage] = useState("")
+
+  useEffect(() => {
+    if (chatFetched) {
+      setChat(chatFetched)
+    }
+  }, [chatFetched])
+
   const handleMessages = (e: any) => {
-    setMessages([...messages, { msg: message }])
+    chat!.messages.push({ id: chat.id, name: chat.name, message })
+
+    let newChat = {
+      ...chat,
+      messages: chat!.messages,
+    }
+    console.log("new chat: ", newChat)
+    setChat(newChat)
   }
 
   const handleMessage = (e: any) => {
@@ -34,7 +55,7 @@ export const Chat: React.FC<indexProps> = () => {
     var out = document.getElementById("out")
     out!.scrollTop = out!.scrollHeight - out!.clientHeight
     setMessage("")
-  }, [messages])
+  }, [chat])
 
   useEffect(() => {
     var out = document.getElementById("out")
@@ -63,11 +84,14 @@ export const Chat: React.FC<indexProps> = () => {
     <div className="chat_container">
       <div className="chat_header"> Chat </div>
       <div className="chat_message--container" id="out">
-        {messages.map((msg, i) => (
-          <div key={i}>
-            <Message msg={msg.msg} />
-          </div>
-        ))}
+        {chat
+          ? chat.messages.map((user: any, i: number) => (
+              <div key={i}>
+                <div>{user.name}</div>
+                <Message msg={user.message} />
+              </div>
+            ))
+          : null}
       </div>
       <div className="chat_message--ctrls">
         <div
@@ -105,20 +129,3 @@ export const Chat: React.FC<indexProps> = () => {
     </div>
   )
 }
-
-// TODO
-//   return (
-//     <div>
-//       <img src={chat.picture} alt="Profile" />
-//       <div>{chat.name}</div>
-//       <ul>
-//         {chat.messages.map((message) => (
-//           <li key={message.id}>
-//             <div>{message.content}</div>
-//             <div>{message.createdAt}</div>
-//           </li>
-//         ))}
-//       </ul>
-//     </div>
-//   );
-// };

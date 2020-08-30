@@ -1,13 +1,6 @@
-const getZoneQuery = `
-  query GetZone($id: ID!) {
-    zone(id: $id) {
-      id
-      name
-      messages {
-        id
-        content
-        createdAt
-      }
-    }
+query Zone($id: Float!) {
+  zone(id: $id) {
+    id
+    name
   }
-`
+}

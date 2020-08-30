@@ -1,6 +1,5 @@
 import {
   Mutation,
-  // Query,
   Resolver,
   InputType,
   Field,
@@ -12,12 +11,14 @@ import {
   // Int,
 } from "type-graphql"
 
-import { chats, messages } from "../db/mock"
+import { messages } from "../db/mock"
 
 import { Zone } from "../entities/Zone"
 import { MyContext } from "../types"
 import { isAuth } from "../middleware/isAuth"
 import { validateZone } from "../utils/validateZone"
+import { Message } from "../entities/Message"
+// import { User } from "../entities/User"
 // import { MixinFieldError } from "../shared/mixins/MixinFieldError"
 
 @ObjectType()
@@ -58,36 +59,31 @@ export class ZoneInput {
 
 @Resolver()
 export class ZoneResolver {
-  @Query(() => Zone)
+  @Query(() => Zone, { nullable: true })
   async zone(
     @Arg("id") id: number,
     @Ctx() { req }: MyContext
   ): Promise<Zone | undefined> {
-    console.log(req)
+    console.log("sessionid: ", req.sessionID)
     const zone = await Zone.findOne(id)
     return zone
   }
 
-  @Query()
+  @Query(() => [Zone])
   async zones(): Promise<Zone[] | undefined> {
     const zones = await Zone.find()
     return zones
   }
 
-  @Query()
-  async messages(chat: any) {
-    return messages.filter(m => chat.messages.includes(m.id))
+  @Query(() => Message)
+  async messages(zone: any) {
+    return messages.filter(m => zone.messages.includes(m.id))
   }
 
-  @Query()
-  async lastMessage(chat: any) {
-    const lastMessage = chat.messages[chat.messages.length - 1]
+  @Query(() => Message)
+  async lastMessage(zone: any) {
+    const lastMessage = zone.messages[zone.messages.length - 1]
     return messages.find(m => m.id === lastMessage)
-  }
-
-  @Query()
-  async chats() {
-    return chats
   }
 
   @Mutation(() => ZoneResponse)

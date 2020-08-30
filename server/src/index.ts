@@ -14,6 +14,7 @@ import { Updoot } from "./entities/Updoot"
 import { User } from "./entities/User"
 import { UserResolver } from "./resolvers/user"
 import { Zone } from "./entities/Zone"
+import { ZoneResolver } from "./resolvers/zone"
 import { __prod__ } from "./constants"
 import { buildSchema } from "type-graphql"
 import cors from "cors"
@@ -51,7 +52,13 @@ const main = async () => {
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [HelloResolver, PostResolver, ProfileResolver, UserResolver],
+      resolvers: [
+        HelloResolver,
+        PostResolver,
+        ProfileResolver,
+        UserResolver,
+        ZoneResolver,
+      ],
       validate: false,
     }),
     context: ({ req, res }) => ({

@@ -23,7 +23,7 @@ export const messages = [
   },
 ]
 
-export const chats = [
+export const zones = [
   {
     id: "1",
     name: "Ethan Gonzalez",

@@ -19,7 +19,7 @@ export class Message extends BaseEntity {
   id!: number
 
   @Field()
-  text: string
+  message: string
 
   @Field(() => String)
   @ManyToOne(() => User, user => user.messages)

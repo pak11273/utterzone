@@ -18,6 +18,10 @@ export type Query = {
   post?: Maybe<Post>;
   me?: Maybe<User>;
   user: User;
+  zone?: Maybe<Zone>;
+  zones: Array<Zone>;
+  messages: Message;
+  lastMessage: Message;
 };
 
 
@@ -33,6 +37,11 @@ export type QueryPostArgs = {
 
 
 export type QueryUserArgs = {
+  id: Scalars['Float'];
+};
+
+
+export type QueryZoneArgs = {
   id: Scalars['Float'];
 };
 
@@ -70,7 +79,7 @@ export type Zone = {
   __typename?: 'Zone';
   id: Scalars['Float'];
   name: Scalars['String'];
-  owner: Scalars['String'];
+  owner: User;
   description: Scalars['String'];
   lastMessage: Message;
   public: Scalars['Boolean'];
@@ -99,6 +108,7 @@ export type Mutation = {
   register: UserResponse;
   login: UserResponse;
   logout: Scalars['Boolean'];
+  createZone: ZoneResponse;
 };
 
 
@@ -146,6 +156,11 @@ export type MutationLoginArgs = {
   usernameOrEmail: Scalars['String'];
 };
 
+
+export type MutationCreateZoneArgs = {
+  input: ZoneInput;
+};
+
 export type PostInput = {
   title: Scalars['String'];
   text: Scalars['String'];
@@ -167,6 +182,27 @@ export type UsernamePasswordInput = {
   email: Scalars['String'];
   username: Scalars['String'];
   password: Scalars['String'];
+};
+
+export type ZoneResponse = {
+  __typename?: 'ZoneResponse';
+  errors?: Maybe<Array<FieldErrors>>;
+  zone?: Maybe<Zone>;
+};
+
+export type FieldErrors = {
+  __typename?: 'FieldErrors';
+  field: Scalars['String'];
+  message: Scalars['String'];
+};
+
+export type ZoneInput = {
+  id: Scalars['Float'];
+  name: Scalars['String'];
+  description: Scalars['String'];
+  public: Scalars['Boolean'];
+  password: Scalars['String'];
+  username: Scalars['String'];
 };
 
 export type PostSnippetFragment = (
@@ -351,6 +387,19 @@ export type PostsQuery = (
       & PostSnippetFragment
     )> }
   ) }
+);
+
+export type ZoneQueryVariables = Exact<{
+  id: Scalars['Float'];
+}>;
+
+
+export type ZoneQuery = (
+  { __typename?: 'Query' }
+  & { zone?: Maybe<(
+    { __typename?: 'Zone' }
+    & Pick<Zone, 'id' | 'name'>
+  )> }
 );
 
 export const PostSnippetFragmentDoc = gql`
@@ -796,3 +845,37 @@ export function usePostsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Post
 export type PostsQueryHookResult = ReturnType<typeof usePostsQuery>;
 export type PostsLazyQueryHookResult = ReturnType<typeof usePostsLazyQuery>;
 export type PostsQueryResult = Apollo.QueryResult<PostsQuery, PostsQueryVariables>;
+export const ZoneDocument = gql`
+    query Zone($id: Float!) {
+  zone(id: $id) {
+    id
+    name
+  }
+}
+    `;
+
+/**
+ * __useZoneQuery__
+ *
+ * To run a query within a React component, call `useZoneQuery` and pass it any options that fit your needs.
+ * When your component renders, `useZoneQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useZoneQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useZoneQuery(baseOptions?: Apollo.QueryHookOptions<ZoneQuery, ZoneQueryVariables>) {
+        return Apollo.useQuery<ZoneQuery, ZoneQueryVariables>(ZoneDocument, baseOptions);
+      }
+export function useZoneLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ZoneQuery, ZoneQueryVariables>) {
+          return Apollo.useLazyQuery<ZoneQuery, ZoneQueryVariables>(ZoneDocument, baseOptions);
+        }
+export type ZoneQueryHookResult = ReturnType<typeof useZoneQuery>;
+export type ZoneLazyQueryHookResult = ReturnType<typeof useZoneLazyQuery>;
+export type ZoneQueryResult = Apollo.QueryResult<ZoneQuery, ZoneQueryVariables>;
