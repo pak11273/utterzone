@@ -1,9 +1,23 @@
 // no-scrollbar: https://stackoverflow.com/questions/16670931/hide-scroll-bar-but-while-still-being-able-to-scroll
-.zone-content {
+
+.video_screen {
+  display: block;
+}
+.zone_content {
+  background: @lightGray;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: scroll;
   overflow-x: hidden;
   overflow-y: scroll;
 }
 
-.zone-content::-webkit-scrollbar {
+.zone_controls {
+  background-color: @darkGray;
+  min-height: 170px;
+}
+
+.zone_content::-webkit-scrollbar {
   width: 0;
 }

@@ -31,9 +31,9 @@ export const Chat = ({ chatFetched }: any) => {
 
   useEffect(() => {
     if (chatFetched) {
-      setChat(chatFetched)
+      setChat({ ...chat, ...chatFetched })
     }
-  }, [chatFetched])
+  }, [chat, chatFetched])
 
   const handleMessages = (e: any) => {
     chat!.messages.push({ id: chat.id, name: chat.name, message })
@@ -43,10 +43,10 @@ export const Chat = ({ chatFetched }: any) => {
       messages: chat!.messages,
     }
     setChat(newChat)
-
   }
 
   const handleMessage = (e: any) => {
+    console.log("chat typeing: ", chat)
     setMessage(e.target.value)
   }
 
@@ -90,7 +90,7 @@ export const Chat = ({ chatFetched }: any) => {
     <div className="chat_container">
       <div className="chat_header"> Chat </div>
       <div className="chat_message--container" id="out">
-        {chat
+        {chat.messages
           ? chat.messages.map((user: any, i: number) => (
               <div key={i}>
                 <div>{user.name}</div>

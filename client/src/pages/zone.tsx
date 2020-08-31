@@ -35,37 +35,22 @@ export const Zone: any = () => {
   let { id } = useParams()
   console.log("id: ", id)
   console.log("data: ", data)
+  if (!data || !data.zone) {
+    console.log("no zone loaded!")
+  }
 
   useEffect(() => {
-    setChat(
-      !data ? null : data
-      // {
-      //   id: "1",
-      //   name: "hello",
-      //   messages: [
-      //     {
-      //       id: "1",
-      //       name: "barney",
-      //       message: "hello there foo foo!",
-      //       createdAt: new Date(),
-      //     },
-      //   ],
-      // }
-    )
-  }, [data])
+    setChat(!data ? null : data)
+  }, [])
   if (loading) return "Loading..."
   if (error) return `Error! ${error.message}`
 
   return (
     <div style={{ height: "100%" }}>
       <Row style={{ height: "100%" }}>
-        <Col
-          className="zone-content"
-          span={17}
-          style={{ background: "green", height: "100%", overflow: "scroll" }}
-        >
+        <Col className="zone_content" span={17}>
           <ZoneMain />
-          <ZoneControls />
+          {"ifyouarethehost" ? <ZoneControls /> : null}
         </Col>
         <Col span={7} style={{ height: "100%" }}>
           <Chat chatFetched={!chat ? undefined : chat} />

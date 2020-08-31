@@ -75,7 +75,7 @@ export class ZoneResolver {
     @Arg("id") id: number,
     @Ctx() { req }: MyContext
   ): Promise<Zone | undefined> {
-    console.log("sessionid: ", req.sessionID)
+    console.log("zone.ts:78 ", req)
     const zone = await Zone.findOne(id)
     return zone
   }

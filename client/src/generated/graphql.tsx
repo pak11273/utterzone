@@ -189,10 +189,10 @@ export type UsernamePasswordInput = {
 
 export type ZoneInput = {
   name: Scalars['String'];
-  description: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
   public: Scalars['Boolean'];
   mature: Scalars['Boolean'];
-  password: Scalars['String'];
+  password?: Maybe<Scalars['String']>;
   learningLanguage: Scalars['String'];
   nativeLanguage: Scalars['String'];
   maxParticipants: Scalars['Float'];
@@ -264,7 +264,7 @@ export type CreateZoneMutation = (
   { __typename?: 'Mutation' }
   & { createZone: (
     { __typename?: 'Zone' }
-    & Pick<Zone, 'id'>
+    & Pick<Zone, 'id' | 'hostId' | 'name'>
   ) }
 );
 
@@ -521,6 +521,8 @@ export const CreateZoneDocument = gql`
     mutation CreateZone($input: ZoneInput!) {
   createZone(input: $input) {
     id
+    hostId
+    name
   }
 }
     `;
