@@ -1,4 +1,4 @@
-import { Chat, ZoneControls, ZoneMain } from "../components"
+import { Chat, Notebook, ZoneControls, ZoneMain } from "../components"
 import { Col, Row } from "antd"
 import React, { useEffect, useState } from "react"
 
@@ -48,11 +48,12 @@ export const Zone: any = () => {
   return (
     <div style={{ height: "100%" }}>
       <Row style={{ height: "100%" }}>
-        <Col className="zone_content" span={17}>
+        <Col className="zone_content" xs={24} md={17}>
           <ZoneMain />
           {"ifyouarethehost" ? <ZoneControls /> : null}
+          <Notebook />
         </Col>
-        <Col span={7} style={{ height: "100%" }}>
+        <Col xs={24} md={7} style={{ height: "100%" }}>
           <Chat chatFetched={!chat ? undefined : chat} />
         </Col>
       </Row>

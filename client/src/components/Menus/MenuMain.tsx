@@ -1,12 +1,16 @@
 import {
-  AppstoreOutlined,
-  MailOutlined,
-  MenuFoldOutlined,
-  MenuUnfoldOutlined,
+  DesktopOutlined,
+  FileOutlined,
+  PieChartOutlined,
+  TeamOutlined,
+  UserOutlined,
 } from "@ant-design/icons"
-import { Button, Menu } from "antd"
+import { Layout, Menu } from "antd"
 
+import { Gravatar } from "../Gravatar"
 import React from "react"
+
+const { Sider } = Layout
 
 const { SubMenu } = Menu
 
@@ -15,60 +19,57 @@ export class MenuMain extends React.Component {
     collapsed: false,
   }
 
-  toggleCollapsed = () => {
-    this.setState({
-      collapsed: !this.state.collapsed,
-    })
+  onCollapse = (collapsed: any) => {
+    this.setState({ collapsed })
   }
 
   render() {
     return (
-      <div
-        style={{
-          backgroundColor: "#001529",
-          maxWidth: 256,
-          minHeight: "100%",
-        }}
+      <Sider
+        collapsible
+        collapsed={this.state.collapsed}
+        onCollapse={this.onCollapse}
+        collapsedWidth={40}
+        className="main_menu--sider"
+        style={{ height: "100vh", overflow: "scroll" }}
       >
-        <Button
-          type="primary"
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            margin: "0 auto",
-          }}
-          onClick={this.toggleCollapsed}
-        >
-          {React.createElement(
-            this.state.collapsed ? MenuUnfoldOutlined : MenuFoldOutlined
-          )}
-        </Button>
-        <Menu
-          defaultSelectedKeys={["1"]}
-          defaultOpenKeys={["sub1"]}
-          mode="inline"
-          theme="dark"
-          inlineCollapsed={this.state.collapsed}
-        >
-          <SubMenu key="sub1" icon={<MailOutlined />} title="Contacts">
-            <Menu.Item key="7">Fred</Menu.Item>
-            <Menu.Item key="8">Jed</Menu.Item>
+        <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline">
+          <SubMenu key="sub1" icon={<UserOutlined />} title="Contacts">
+            <Menu.Item key="3">Jed</Menu.Item>
+            <Menu.Item key="4">Clem</Menu.Item>
           </SubMenu>
           <SubMenu
             key="sub2"
-            icon={<AppstoreOutlined />}
-            title="Navigation Two"
-          >
-            <Menu.Item key="9">Option 9</Menu.Item>
-            <Menu.Item key="10">Option 10</Menu.Item>
-            <SubMenu key="sub3" title="Submenu">
-              <Menu.Item key="11">Option 11</Menu.Item>
-              <Menu.Item key="12">Option 12</Menu.Item>
+            icon={<TeamOutlined />}
+            title="Participants"
+          ></SubMenu>
+          {[
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+          ].map(x => (
+            <SubMenu key={`${x}`} icon={<Gravatar />} title="username">
+              <div>text</div>
             </SubMenu>
-          </SubMenu>
+          ))}
         </Menu>
-      </div>
+      </Sider>
     )
   }
 }

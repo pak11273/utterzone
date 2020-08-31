@@ -8,6 +8,7 @@ import { Hamburger } from "./Buttons"
 import { Layout } from "./Layout"
 import { MenuMain } from "./Menus/MenuMain"
 import { NavbarMain } from "./Navbars/NavBarMain"
+import { Notebook } from "./Notebook"
 import { UpdootSection } from "./UpdootSection"
 import { ZoneControls } from "./Zone/ZoneControls"
 import { ZoneMain } from "./Zone/ZoneMain"
@@ -20,6 +21,7 @@ export {
   Hamburger,
   InputField,
   MenuMain,
+  Notebook,
   SelectField,
   SwitchField,
   Layout,
