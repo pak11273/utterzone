@@ -56,8 +56,8 @@ export class User extends BaseEntity {
   @OneToMany(() => Updoot, updoot => updoot.user)
   updoots: Updoot[]
 
-  @Field(() => Zone)
-  zone: Zone
+  @Field(() => [Zone])
+  zones: Zone[]
 
   @Field(() => String)
   @CreateDateColumn()

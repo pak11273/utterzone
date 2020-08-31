@@ -2,7 +2,6 @@ import {
   Field,
   InputType,
   Resolver,
-  ObjectType,
   Query,
   Arg,
   Ctx,
@@ -15,32 +14,32 @@ import { Zone } from "../entities/Zone"
 import { Message } from "../entities/Message"
 import { MyContext } from "../types"
 
-
 import argon2 from "argon2"
-import { getConnection } from "typeorm"
+// import { getConnection } from "typeorm"
 import { isAuth } from "../middleware/isAuth"
 import { messages } from "../db/mock"
 import { validateZone } from "../utils/validateZone"
+import { ApolloError } from "apollo-server-express"
 
 // import { User } from "../entities/User"
 
 // import { MixinFieldError } from "../shared/mixins/MixinFieldError"
 
-@ObjectType()
-class FieldErrors {
-  @Field()
-  field: string
-  @Field()
-  message: string
-}
+// @ObjectType()
+// class FieldErrors {
+//   @Field()
+//   field: string
+//   @Field()
+//   message: string
+// }
 
-@ObjectType()
-class ZoneResponse {
-  @Field(() => [FieldErrors], { nullable: true })
-  errors?: FieldErrors[]
-  @Field(() => Zone, { nullable: true })
-  zone?: Zone
-}
+// @ObjectType()
+// class ZoneResponse {
+//   @Field(() => [FieldErrors], { nullable: true })
+//   errors?: FieldErrors[]
+//   @Field(() => Zone, { nullable: true })
+//   zone?: Zone
+// }
 
 @InputType()
 export class ZoneInput {
@@ -69,7 +68,7 @@ export class ZoneInput {
   maxParticipants: number
 }
 
-@Resolver() 
+@Resolver()
 export class ZoneResolver {
   @Query(() => Zone, { nullable: true })
   async zone(
@@ -98,74 +97,34 @@ export class ZoneResolver {
     return messages.find(m => m.id === lastMessage)
   }
 
-  @Mutation(() => ZoneResponse)
+  @Mutation(() => Zone)
   @UseMiddleware(isAuth)
   async createZone(
     @Arg("input") input: ZoneInput,
     @Ctx() { req }: MyContext
-  ): Promise<ZoneResponse> {
+  ): Promise<Zone> {
     const errors = validateZone(input)
     if (errors) {
-      return { errors }
-    }
-    const hashedPassword = await argon2.hash(input.password)
-    try {
-      const result = await getConnection()
-        .createQueryBuilder()
-        .insert()
-        .into(Zone)
-        .values({
-        // lastMessage: input.lastMessage, 
-        learningLanguage: input.learningLanguage,
-        nativeLanguage: input.nativeLanguage,
-        maxParticipants: input.maxParticipants ,
-          name: input.name.toLowerCase(),
-          description: input.description,
-          password: hashedPassword,
-          public: input.public
-        })
-        .returning("*")
-        .execute()
-
-      return result.raw[0]
-
-    } catch (err) {
-      // duplicate username error
-      if (err.detail) {
-        if (err.detail.includes("user") && err.detail.includes("already")) {
-          return {
-            errors: [
-              {
-                field: "username",
-                message: "username already taken",
-              },
-            ],
-          }
-        }
-        if (err.detail.includes("email") && err.detail.includes("already")) {
-          return {
-            errors: [
-              {
-                field: "email",
-                message: "email already taken",
-              },
-            ],
-          }
-        }
+      {
+        errors
       }
-      return err
     }
-    // if id exists then return duplicate error
-    // if user.id doesn't exist then return error
-    // create a new zone record
-    //   return await Zone.create({
-    //     ...input,
-    //     hostId: req.session.user.id,
-    //   }).save()
-    // } catch (err) {
-    //   console.log(err)
-    // return err
-    console.log(req)
-    return {}
- }
+    if (input.public) {
+      const hashedPassword = await argon2.hash(input.password)
+      input.password = hashedPassword
+    }
+
+    const zone = await Zone.create({
+      ...input,
+      hostId: req.session.userId,
+    }).save()
+    // TODO: validations
+
+    if (!zone) {
+      throw new ApolloError("There was an error.  Zone not created.")
+    }
+
+    console.log(zone)
+    return zone
+  }
 }

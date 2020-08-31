@@ -169,15 +169,15 @@ export class UserResolver {
     })
   )
   async createUser(
-    @Arg("options") options: UsernamePasswordInput,
+    @Arg("input") input: UsernamePasswordInput,
     @Ctx() { req }: MyContext
   ): Promise<UserResponse> {
-    const errors = validateCreateUser(options)
+    const errors = validateCreateUser(input)
     if (errors) {
       return { errors }
     }
 
-    const hashedPassword = await argon2.hash(options.password)
+    const hashedPassword = await argon2.hash(input.password)
     let user
     try {
       const result = await getConnection()
@@ -185,8 +185,8 @@ export class UserResolver {
         .insert()
         .into(User)
         .values({
-          username: options.username.toLowerCase(),
-          email: options.email.toLowerCase(),
+          username: input.username.toLowerCase(),
+          email: input.email.toLowerCase(),
           password: hashedPassword,
         })
         .returning("*")

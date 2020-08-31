@@ -3,8 +3,8 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToOne,
   OneToMany,
-  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm"
@@ -23,8 +23,12 @@ export class Zone extends BaseEntity {
   @Field()
   name: string
 
+  @Field()
+  @Column()
+  hostId: number
+
   @Field(() => User)
-  @OneToOne(() => User, user => user.zone)
+  @ManyToOne(() => User, user => user.zones)
   host: User
 
   @OneToMany(() => User, user => user)
