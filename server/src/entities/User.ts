@@ -56,7 +56,7 @@ export class User extends BaseEntity {
   @OneToMany(() => Updoot, updoot => updoot.user)
   updoots: Updoot[]
 
-  @Field(() => [Zone])
+  @OneToMany(_type => Zone, zone => zone.host)
   zones: Zone[]
 
   @Field(() => String)

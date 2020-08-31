@@ -44,9 +44,6 @@ import { ApolloError } from "apollo-server-express"
 @InputType()
 export class ZoneInput {
   @Field()
-  id: number
-
-  @Field()
   name: string
 
   @Field()
@@ -113,7 +110,7 @@ export class ZoneResolver {
       const hashedPassword = await argon2.hash(input.password)
       input.password = hashedPassword
     }
-
+    console.log("input: ", input)
     const zone = await Zone.create({
       ...input,
       hostId: req.session.userId,

@@ -21,41 +21,46 @@ export class Zone extends BaseEntity {
   id!: number
 
   @Field()
+  @Column()
   name: string
 
   @Field()
   @Column()
   hostId: number
 
-  @Field(() => User)
-  @ManyToOne(() => User, user => user.zones)
+  @ManyToOne(_type => User, user => user.zones)
   host: User
 
   @OneToMany(() => User, user => user)
-  participants?: User[]
+  participants: User[]
 
   @Field()
+  @Column()
   learningLanguage?: string
 
   @Field()
+  @Column()
   nativeLanguage?: string
 
   @Field()
+  @Column()
   maxParticipants?: number
 
   @Field()
+  @Column()
   description: string
 
   @OneToMany(() => Message, message => message.user)
   messages: Message[]
 
-  @Field(() => Message)
-  lastMessage?: Message
+  @Field(_type => Message)
+  lastMessage: Message
 
   @Column()
   password!: string
 
   @Field()
+  @Column()
   public: boolean
 
   @Field(() => String)
