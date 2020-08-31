@@ -70,7 +70,6 @@ export type User = {
   id: Scalars['Float'];
   username: Scalars['String'];
   email: Scalars['String'];
-  zone: Zone;
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
 };
@@ -79,13 +78,14 @@ export type Zone = {
   __typename?: 'Zone';
   id: Scalars['Float'];
   name: Scalars['String'];
-  host: User;
+  hostId: Scalars['Float'];
   learningLanguage: Scalars['String'];
   nativeLanguage: Scalars['String'];
   maxParticipants: Scalars['Float'];
   description: Scalars['String'];
   lastMessage: Message;
   public: Scalars['Boolean'];
+  mature: Scalars['Boolean'];
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
 };
@@ -111,7 +111,7 @@ export type Mutation = {
   createUser: UserResponse;
   login: UserResponse;
   logout: Scalars['Boolean'];
-  createZone: ZoneResponse;
+  createZone: Zone;
 };
 
 
@@ -150,7 +150,7 @@ export type MutationForgotPasswordArgs = {
 
 
 export type MutationCreateUserArgs = {
-  options: UsernamePasswordInput;
+  input: UsernamePasswordInput;
 };
 
 
@@ -187,23 +187,11 @@ export type UsernamePasswordInput = {
   password: Scalars['String'];
 };
 
-export type ZoneResponse = {
-  __typename?: 'ZoneResponse';
-  errors?: Maybe<Array<FieldErrors>>;
-  zone?: Maybe<Zone>;
-};
-
-export type FieldErrors = {
-  __typename?: 'FieldErrors';
-  field: Scalars['String'];
-  message: Scalars['String'];
-};
-
 export type ZoneInput = {
-  id: Scalars['Float'];
   name: Scalars['String'];
   description: Scalars['String'];
   public: Scalars['Boolean'];
+  mature: Scalars['Boolean'];
   password: Scalars['String'];
   learningLanguage: Scalars['String'];
   nativeLanguage: Scalars['String'];
@@ -267,6 +255,19 @@ export type CreatePostMutation = (
   ) }
 );
 
+export type CreateZoneMutationVariables = Exact<{
+  input: ZoneInput;
+}>;
+
+
+export type CreateZoneMutation = (
+  { __typename?: 'Mutation' }
+  & { createZone: (
+    { __typename?: 'Zone' }
+    & Pick<Zone, 'id'>
+  ) }
+);
+
 export type DeletePostMutationVariables = Exact<{
   id: Scalars['Int'];
 }>;
@@ -310,7 +311,7 @@ export type LogoutMutation = (
 );
 
 export type CreateUserMutationVariables = Exact<{
-  options: UsernamePasswordInput;
+  input: UsernamePasswordInput;
 }>;
 
 
@@ -516,6 +517,38 @@ export function useCreatePostMutation(baseOptions?: Apollo.MutationHookOptions<C
 export type CreatePostMutationHookResult = ReturnType<typeof useCreatePostMutation>;
 export type CreatePostMutationResult = Apollo.MutationResult<CreatePostMutation>;
 export type CreatePostMutationOptions = Apollo.BaseMutationOptions<CreatePostMutation, CreatePostMutationVariables>;
+export const CreateZoneDocument = gql`
+    mutation CreateZone($input: ZoneInput!) {
+  createZone(input: $input) {
+    id
+  }
+}
+    `;
+export type CreateZoneMutationFn = Apollo.MutationFunction<CreateZoneMutation, CreateZoneMutationVariables>;
+
+/**
+ * __useCreateZoneMutation__
+ *
+ * To run a mutation, you first call `useCreateZoneMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateZoneMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createZoneMutation, { data, loading, error }] = useCreateZoneMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateZoneMutation(baseOptions?: Apollo.MutationHookOptions<CreateZoneMutation, CreateZoneMutationVariables>) {
+        return Apollo.useMutation<CreateZoneMutation, CreateZoneMutationVariables>(CreateZoneDocument, baseOptions);
+      }
+export type CreateZoneMutationHookResult = ReturnType<typeof useCreateZoneMutation>;
+export type CreateZoneMutationResult = Apollo.MutationResult<CreateZoneMutation>;
+export type CreateZoneMutationOptions = Apollo.BaseMutationOptions<CreateZoneMutation, CreateZoneMutationVariables>;
 export const DeletePostDocument = gql`
     mutation DeletePost($id: Int!) {
   deletePost(id: $id)
@@ -639,8 +672,8 @@ export type LogoutMutationHookResult = ReturnType<typeof useLogoutMutation>;
 export type LogoutMutationResult = Apollo.MutationResult<LogoutMutation>;
 export type LogoutMutationOptions = Apollo.BaseMutationOptions<LogoutMutation, LogoutMutationVariables>;
 export const CreateUserDocument = gql`
-    mutation CreateUser($options: UsernamePasswordInput!) {
-  createUser(options: $options) {
+    mutation CreateUser($input: UsernamePasswordInput!) {
+  createUser(input: $input) {
     ...RegularUserResponse
   }
 }
@@ -660,7 +693,7 @@ export type CreateUserMutationFn = Apollo.MutationFunction<CreateUserMutation, C
  * @example
  * const [createUserMutation, { data, loading, error }] = useCreateUserMutation({
  *   variables: {
- *      options: // value for 'options'
+ *      input: // value for 'input'
  *   },
  * });
  */

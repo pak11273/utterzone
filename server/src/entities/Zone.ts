@@ -63,6 +63,10 @@ export class Zone extends BaseEntity {
   @Column()
   public: boolean
 
+  @Field()
+  @Column()
+  mature: boolean
+
   @Field(() => String)
   @CreateDateColumn()
   createdAt?: Date

@@ -5,7 +5,6 @@ import {
   useCreateUserMutation,
 } from "../generated/graphql"
 
-import { ApolloCache } from "@apollo/client"
 import { QuestionCircleOutlined } from "@ant-design/icons"
 import React from "react"
 import { toErrorMap } from "../utils/toErrorMap"
@@ -26,7 +25,7 @@ export const Register: React.FC<registerProps> = () => {
     if (values) {
       try {
         const response = await register({
-          variables: { options: values },
+          variables: { input: values },
           update: (cache, { data }) => {
             cache.writeQuery<MeQuery>({
               query: MeDocument,
@@ -38,12 +37,14 @@ export const Register: React.FC<registerProps> = () => {
           },
         })
         if (response.data?.createUser.errors) {
+          console.log("hi")
           const errorMap = toErrorMap(response.data?.createUser.errors)
           form.setFields(errorMap)
         } else {
           history.push("/")
         }
       } catch (err) {
+        console.log("err err err: ", err)
         const errorMap = toErrorMap([
           { field: "username", message: err.message },
         ])

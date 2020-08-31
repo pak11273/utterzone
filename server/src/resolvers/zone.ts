@@ -18,7 +18,7 @@ import argon2 from "argon2"
 // import { getConnection } from "typeorm"
 import { isAuth } from "../middleware/isAuth"
 import { messages } from "../db/mock"
-import { validateZone } from "../utils/validateZone"
+// import { validateZone } from "../utils/validateZone"
 import { ApolloError } from "apollo-server-express"
 
 // import { User } from "../entities/User"
@@ -46,13 +46,16 @@ export class ZoneInput {
   @Field()
   name: string
 
-  @Field()
+  @Field({ nullable: true })
   description: string
 
   @Field()
   public: boolean
 
   @Field()
+  mature: boolean
+
+  @Field({ nullable: true })
   password: string
 
   @Field()
@@ -100,22 +103,22 @@ export class ZoneResolver {
     @Arg("input") input: ZoneInput,
     @Ctx() { req }: MyContext
   ): Promise<Zone> {
-    const errors = validateZone(input)
-    if (errors) {
-      {
-        errors
-      }
-    }
+    // const errors = validateZone(input)
+    // if (errors) {
+    //   {
+    //     errors
+    //   }
+    // }
     if (input.public) {
       const hashedPassword = await argon2.hash(input.password)
       input.password = hashedPassword
     }
-    console.log("input: ", input)
     const zone = await Zone.create({
       ...input,
       hostId: req.session.userId,
     }).save()
     // TODO: validations
+    console.log("zone: ", zone)
 
     if (!zone) {
       throw new ApolloError("There was an error.  Zone not created.")

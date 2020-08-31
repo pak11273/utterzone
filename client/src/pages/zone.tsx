@@ -52,7 +52,7 @@ export const Zone: any = () => {
       //   ],
       // }
     )
-  }, [])
+  }, [data])
   if (loading) return "Loading..."
   if (error) return `Error! ${error.message}`
 

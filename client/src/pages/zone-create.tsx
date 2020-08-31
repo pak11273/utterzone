@@ -1,19 +1,50 @@
 import { Button, Checkbox, Form, Input, Select } from "antd"
 import React, { useState } from "react"
 
+import { toErrorMap } from "../utils/toErrorMap"
+import { useCreateZoneMutation } from "../generated/graphql"
+import { useHistory } from "react-router-dom"
+
 const { Option } = Select
 
 interface ZoneCreateProps {}
 
 export const ZoneCreate: React.FC<ZoneCreateProps> = () => {
+  const history = useHistory()
   const [privateZone, setPrivate] = useState(false)
+  const [zone, { loading, error }] = useCreateZoneMutation()
   const formItemLayout = {}
-  // const history = useHistory()
   const [form] = Form.useForm()
 
   const onFinish = async (values: any) => {
     if (values) {
+      values = {
+        ...values,
+        password: "xyz",
+        maxParticipants: 36.0,
+        description: "test",
+        public: true,
+        mature: true,
+      }
       console.log("values: ", values)
+      try {
+        const response = await zone({
+          variables: { input: values },
+        })
+        if (error) {
+          console.log("ERROR CITY: ", error)
+        }
+        console.log("response: ", response)
+        if (response.data?.createZone) {
+          // history.push(`/zone/${response.hostId}/${response.id}`)
+          history.push("/zone/hello/there")
+        } else {
+          const errorMap = toErrorMap(response.data?.createZone)
+          form.setFields(errorMap)
+        }
+      } catch (err) {
+        console.log(err)
+      }
     }
   }
   return (
@@ -26,10 +57,6 @@ export const ZoneCreate: React.FC<ZoneCreateProps> = () => {
           form={form}
           name="register"
           onFinish={onFinish}
-          initialValues={{
-            residence: ["zhejiang", "hangzhou", "xihu"],
-            prefix: "86",
-          }}
           scrollToFirstError
         >
           <Form.Item
@@ -97,7 +124,7 @@ export const ZoneCreate: React.FC<ZoneCreateProps> = () => {
               <Checkbox>18+</Checkbox>
             </Form.Item>
 
-            <Form.Item name="private" valuePropName="Private">
+            <Form.Item name="public" valuePropName="Private">
               <Checkbox onChange={() => setPrivate(!privateZone)}>
                 Private
               </Checkbox>
@@ -148,6 +175,7 @@ export const ZoneCreate: React.FC<ZoneCreateProps> = () => {
               style={{ margin: "20px 0 0 6px" }}
               type="primary"
               htmlType="submit"
+              loading={loading}
             >
               Create Zone
             </Button>

@@ -1,8 +1,8 @@
 import { Button, Form, Input } from "antd"
 import { Link, useHistory } from "react-router-dom"
 import { MeDocument, MeQuery, useLoginMutation } from "../generated/graphql"
-import React, { useState } from "react"
 
+import React from "react"
 import { toErrorMap } from "../utils/toErrorMap"
 
 // import { SwitchField } from "../components"
@@ -11,10 +11,9 @@ import { toErrorMap } from "../utils/toErrorMap"
 const formItemLayout = {}
 
 export const Login = (props: any) => {
-  const [login, { error }] = useLoginMutation()
+  const [login] = useLoginMutation()
   const history = useHistory()
   const [form] = Form.useForm()
-  const [reqs, setReqs] = useState("")
 
   const onFinish = async (values: any) => {
     if (values) {
@@ -34,8 +33,7 @@ export const Login = (props: any) => {
         })
         if (response) {
           console.log(response)
-          //TODO: if uzid cookie exists then  setReqs("You are already logged in.")
-          // setReqs("Too many failed attempts.  Please try again later.")
+          //TODO: if uzid cookie exists then  set("You are already logged in.")
         }
 
         if (response.data?.login.errors) {
@@ -107,7 +105,6 @@ export const Login = (props: any) => {
             </Button>
           </Form.Item>
         </Form>
-        <h1 style={{ marginTop: "10px", color: "red" }}>{reqs}</h1>
       </div>
     </section>
   )
