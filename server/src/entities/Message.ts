@@ -1,5 +1,6 @@
 import {
   BaseEntity,
+  Column,
   CreateDateColumn,
   Entity,
   ManyToOne,
@@ -8,7 +9,6 @@ import {
 } from "typeorm"
 import { Field, ObjectType } from "type-graphql"
 
-import { User } from "./User"
 import { Zone } from "./Zone"
 
 @ObjectType()
@@ -19,14 +19,21 @@ export class Message extends BaseEntity {
   id!: number
 
   @Field()
-  message: string
+  @Column()
+  content: string
 
-  @Field(() => String)
-  @ManyToOne(() => User, user => user.messages)
-  user: User
+  @Field({ nullable: true })
+  @Column()
+  username: string
+  // @Field(() => String)
+  // @ManyToOne(() => User, user => user.messages)
+  // user: User
 
-  @Field()
-  zone: Zone
+  // @Field()
+  // zoneId: number
+
+  @ManyToOne(() => Zone, zone => zone.messages)
+  zone: number
 
   @Field(() => String)
   @CreateDateColumn()

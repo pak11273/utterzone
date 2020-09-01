@@ -50,7 +50,7 @@ export class Zone extends BaseEntity {
   @Column()
   description: string
 
-  @OneToMany(() => Message, message => message.user)
+  @OneToMany(() => Message, message => message.zone)
   messages: Message[]
 
   @Field(_type => Message)

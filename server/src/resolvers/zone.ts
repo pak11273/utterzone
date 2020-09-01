@@ -7,6 +7,13 @@ import {
   Ctx,
   Mutation,
   UseMiddleware,
+  ID,
+  PubSub,
+  Subscription,
+  ArgsType,
+  Publisher,
+  ResolverFilterData,
+  Root,
 } from "type-graphql"
 
 import { Zone } from "../entities/Zone"
@@ -40,6 +47,17 @@ import { ApolloError } from "apollo-server-express"
 //   @Field(() => Zone, { nullable: true })
 //   zone?: Zone
 // }
+@InputType()
+export class MessageInput implements Partial<Message> {
+  @Field(_type => ID)
+  zoneId: string
+
+  @Field({ nullable: true })
+  username?: string
+
+  @Field()
+  content: string
+}
 
 @InputType()
 export class ZoneInput {
@@ -68,6 +86,22 @@ export class ZoneInput {
   maxParticipants: number
 }
 
+enum Topic {
+  NewMessage = "NEW_MESSAGE",
+  NewZone = "NEW_ZONE",
+}
+interface NewMessagePayload {
+  zoneId: string
+  dateString: string // limitation of Redis payload serialization
+  content: string
+  username?: string
+}
+
+@ArgsType()
+export class NewMessagesArgs {
+  @Field(_type => ID)
+  zoneId: string
+}
 @Resolver()
 export class ZoneResolver {
   @Query(() => Zone, { nullable: true })
@@ -126,5 +160,58 @@ export class ZoneResolver {
 
     console.log(zone)
     return zone
+  }
+
+  // TODO: messages
+
+  @Mutation(_returns => Boolean)
+  async addNewMessage(
+    @Arg("message") input: MessageInput,
+    @PubSub(Topic.NewMessage)
+    notifyAboutNewMessage: Publisher<NewMessagePayload>
+  ): Promise<boolean> {
+    const zone: any = await Zone.findOne(input.zoneId)
+    if (!zone) {
+      throw new ApolloError("No zone found with this id")
+    }
+
+    const message: Message | any = {
+      content: input.content,
+      username: input.username,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    }
+
+    console.log("zone: ", zone)
+
+    // zone.messages.push(message)
+
+    await notifyAboutNewMessage({
+      content: message.content,
+      username: message.username,
+      dateString: message.createdAt.toISOString(),
+      zoneId: input.zoneId,
+    })
+    return true
+  }
+
+  @Subscription(_returns => Message, {
+    topics: Topic.NewMessage,
+    filter: ({
+      payload,
+      args,
+    }: ResolverFilterData<NewMessagePayload, NewMessagesArgs>) => {
+      return payload.zoneId === args.zoneId
+    },
+  })
+  newMessages(
+    @Root() newMessage: NewMessagePayload
+    // @Args() { zoneId }: NewMessagesArgs
+  ): Message | any {
+    return {
+      content: newMessage.content,
+      createdAt: new Date(newMessage.dateString), // limitation of Redis payload serialization
+      username: newMessage.username,
+    }
   }
 }

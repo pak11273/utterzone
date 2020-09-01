@@ -13,7 +13,7 @@ import {
 import { MyContext } from "../types"
 import { User } from "../entities/User"
 import argon2 from "argon2"
-import { COOKIE_NAME, FORGET_PASSWORD_PREFIX } from "../constants"
+import { COOKIE_NAME, FORGET_PASSWORD_PREFIX, USER_PREFIX } from "../constants"
 import { UsernamePasswordInput } from "./UsernamePasswordInput"
 import { validateCreateUser } from "../utils/validateCreateUser"
 import { sendEmail } from "../utils/sendEmail"
@@ -40,6 +40,20 @@ class UserResponse {
   user?: User
 }
 
+const addUserToRedis = (redis: any, req: any, user: User) => {
+  redis.hmset(USER_PREFIX + req.session.id, {
+    id: user.id,
+    username: user.username,
+    followers: user.followers,
+    following: user.following,
+    posts: 0,
+  })
+}
+
+const removeUserFromRedis = async (redis: any, id: any) => {
+  await redis.del(USER_PREFIX + id)
+}
+
 @Resolver(User)
 export class UserResolver {
   @FieldResolver(() => String)
@@ -53,11 +67,18 @@ export class UserResolver {
   }
 
   @Query(() => User, { nullable: true })
-  me(@Ctx() { req }: MyContext) {
+  async me(@Ctx() { req }: MyContext) {
     // you are not logged in
     if (!req.session.userId) {
       return null
     }
+
+    // await redis.set(
+    //   FORGET_PASSWORD_PREFIX + token,
+    //   user.id,
+    //   "ex",
+    //   1000 * 60 * 60 * 24 * 3
+    // ) // 3 days
 
     return User.findOne(req.session.userId)
   }
@@ -170,7 +191,7 @@ export class UserResolver {
   )
   async createUser(
     @Arg("input") input: UsernamePasswordInput,
-    @Ctx() { req }: MyContext
+    @Ctx() { redis, req }: MyContext
   ): Promise<UserResponse> {
     const errors = validateCreateUser(input)
     if (errors) {
@@ -219,9 +240,8 @@ export class UserResolver {
       return err
     }
 
-    // store user id session
-    // this will set a cookie on the user
-    // keep them logged in
+    addUserToRedis(redis, req, user)
+
     req.session.userId = user.id
 
     return { user }
@@ -242,7 +262,7 @@ export class UserResolver {
   async login(
     @Arg("usernameOrEmail") usernameOrEmail: string,
     @Arg("password") password: string,
-    @Ctx() { req }: MyContext
+    @Ctx() { redis, req }: MyContext
   ): Promise<UserResponse> {
     const user = await User.findOne(
       usernameOrEmail.includes("@")
@@ -269,6 +289,8 @@ export class UserResolver {
 
     req.session.userId = user.id
 
+    addUserToRedis(redis, req, user)
+
     return {
       user,
     }
@@ -276,7 +298,9 @@ export class UserResolver {
 
   @Mutation(() => Boolean)
   @UseMiddleware(resolveTime)
-  logout(@Ctx() { req, res }: MyContext) {
+  async logout(@Ctx() { redis, req, res }: MyContext) {
+    await removeUserFromRedis(redis, req.session.id)
+
     return new Promise(resolve =>
       req.session.destroy(err => {
         res.clearCookie(COOKIE_NAME)

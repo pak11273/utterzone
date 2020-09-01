@@ -70,6 +70,8 @@ export type User = {
   id: Scalars['Float'];
   username: Scalars['String'];
   email: Scalars['String'];
+  followers: Scalars['Float'];
+  following: Scalars['Float'];
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
 };
@@ -93,9 +95,8 @@ export type Zone = {
 export type Message = {
   __typename?: 'Message';
   id: Scalars['Float'];
-  message: Scalars['String'];
-  user: Scalars['String'];
-  zone: Zone;
+  content: Scalars['String'];
+  username?: Maybe<Scalars['String']>;
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
 };
@@ -112,6 +113,7 @@ export type Mutation = {
   login: UserResponse;
   logout: Scalars['Boolean'];
   createZone: Zone;
+  addNewMessage: Scalars['Boolean'];
 };
 
 
@@ -164,6 +166,11 @@ export type MutationCreateZoneArgs = {
   input: ZoneInput;
 };
 
+
+export type MutationAddNewMessageArgs = {
+  message: MessageInput;
+};
+
 export type PostInput = {
   title: Scalars['String'];
   text: Scalars['String'];
@@ -196,6 +203,17 @@ export type ZoneInput = {
   learningLanguage: Scalars['String'];
   nativeLanguage: Scalars['String'];
   maxParticipants: Scalars['Float'];
+};
+
+export type MessageInput = {
+  zoneId: Scalars['ID'];
+  username?: Maybe<Scalars['String']>;
+  content: Scalars['String'];
+};
+
+export type Subscription = {
+  __typename?: 'Subscription';
+  newMessages: Message;
 };
 
 export type PostSnippetFragment = (

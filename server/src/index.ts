@@ -1,7 +1,7 @@
 import "reflect-metadata"
 import "dotenv-safe/config"
 
-import { redis, redisSession } from "./redis"
+import { pubSub, redis, redisSession } from "./redis"
 
 import { ApolloServer } from "apollo-server-express"
 import { HelloResolver } from "./resolvers/hello"
@@ -60,6 +60,7 @@ const main = async () => {
         ZoneResolver,
       ],
       validate: false,
+      pubSub, // provide redis-based instance of PubSub
     }),
     context: ({ req, res }) => ({
       req,

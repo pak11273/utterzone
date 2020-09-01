@@ -11,11 +11,12 @@ import {
 } from "typeorm"
 import { Field, ObjectType } from "type-graphql"
 
-import { Message } from "./Message"
 import { Post } from "./Post"
 import { Profile } from "./Profile"
 import { Updoot } from "./Updoot"
 import { Zone } from "./Zone"
+
+// import { Message } from "./Message"
 
 // import { Organization } from "./Organization"
 
@@ -37,8 +38,8 @@ export class User extends BaseEntity {
   @Column()
   password!: string
 
-  @OneToMany(() => Message, message => message.user)
-  messages: Message[]
+  // @OneToMany(() => Message, message => message.user)
+  // messages: Message[]
 
   // @OneToMany(() => Organization, org => org.owner)
   // organizations: Organization[]
@@ -58,6 +59,14 @@ export class User extends BaseEntity {
 
   @OneToMany(_type => Zone, zone => zone.host)
   zones: Zone[]
+
+  @Field()
+  @Column({ nullable: true })
+  followers: number = 0
+
+  @Field()
+  @Column({ nullable: true })
+  following: number = 0
 
   @Field(() => String)
   @CreateDateColumn()

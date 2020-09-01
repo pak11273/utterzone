@@ -1,94 +1,117 @@
-import { useEffect, useRef } from 'react';
+import ChatsList, { getChatsQuery } from "./ChatsList"
+import {
+  cleanup,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from "@testing-library/react"
 
-import { ChatQueryMessage } from './index';
-import React from 'react';
-import ReactDOM from 'react-dom';
-import moment from 'moment';
-import styled from 'styled-components';
+import { ApolloProvider } from "@apollo/react-hooks"
+import React from "react"
+import ReactDOM from "react-dom"
+import { createBrowserHistory } from "history"
+import { mockApolloClient } from "../../test-helpers"
 
-const Container = styled.div`
-  display: block;
-  flex: 2;
-  overflow-y: overlay;
-  padding: 0 15px;
-`;
+describe("ChatsList", () => {
+  afterEach(() => {
+    cleanup()
 
-const MessageItem = styled.div`
-  float: right;
-  background-color: #dcf8c6;
-  display: inline-block;
-  position: relative;
-  max-width: 100%;
-  border-radius: 7px;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
-  margin-top: 10px;
-  margin-bottom: 10px;
-  clear: both;
+    delete window.location
+    window = Object.create(window)
+    Object.defineProperty(window, "location", {
+      value: {
+        href: "/",
+      },
+      writable: true,
+    })
+  })
 
-  &::after {
-    content: '';
-    display: table;
-    clear: both;
-  }
+  it("renders fetched chats data", async () => {
+    const client = mockApolloClient([
+      {
+        request: { query: getChatsQuery },
+        result: {
+          data: {
+            chats: [
+              {
+                __typename: "Chat",
+                id: 1,
+                name: "Foo Bar",
+                picture: "https://localhost:4000/picture.jpg",
+                lastMessage: {
+                  __typename: "Message",
+                  id: 1,
+                  content: "Hello",
+                  createdAt: new Date("1 Jan 2019 GMT"),
+                },
+              },
+            ],
+          },
+        },
+      },
+    ])
 
-  &::before {
-    background-image: url(/assets/message-mine.png);
-    content: '';
-    position: absolute;
-    bottom: 3px;
-    width: 12px;
-    height: 19px;
-    right: -11px;
-    background-position: 50% 50%;
-    background-repeat: no-repeat;
-    background-size: contain;
-  }
-`;
+    const history = createBrowserHistory()
 
-const Contents = styled.div`
-  padding: 5px 7px;
-  word-wrap: break-word;
+    {
+      const { container, getByTestId } = render(
+        <ApolloProvider client={client}>
+          <ChatsList history={history} />
+        </ApolloProvider>
+      )
 
-  &::after {
-    content: ' \\00a0\\00a0\\00a0\\00a0\\00a0\\00a0\\00a0\\00a0\\00a0\\00a0\\00a0\\00a0\\00a0\\00a0\\00a0\\00a0\\00a0\\00a0\\00a0';
-    display: inline;
-  }
-`;
+      await waitFor(() => screen.getByTestId("name"))
 
-const Timestamp = styled.div`
-  position: absolute;
-  bottom: 2px;
-  right: 7px;
-  color: gray;
-  font-size: 12px;
-`;
+      expect(getByTestId("name")).toHaveTextContent("Foo Bar")
+      expect(getByTestId("picture")).toHaveAttribute(
+        "src",
+        "https://localhost:4000/picture.jpg"
+      )
+      expect(getByTestId("content")).toHaveTextContent("Hello")
+      expect(getByTestId("date")).toHaveTextContent("00:00")
+    }
+  })
 
-interface MessagesListProps {
-  messages: Array<ChatQueryMessage>;
-}
+  it("should navigate to the target chat room on chat item click", async () => {
+    const client = mockApolloClient([
+      {
+        request: { query: getChatsQuery },
+        result: {
+          data: {
+            chats: [
+              {
+                __typename: "Chat",
+                id: 1,
+                name: "Foo Bar",
+                picture: "https://localhost:4000/picture.jpg",
+                lastMessage: {
+                  __typename: "Message",
+                  id: 1,
+                  content: "Hello",
+                  createdAt: new Date("1 Jan 2019 GMT"),
+                },
+              },
+            ],
+          },
+        },
+      },
+    ])
 
-const MessagesList: React.FC<MessagesListProps> = ({ messages }) => {
-  const selfRef = useRef(null);
+    const history = createBrowserHistory()
 
-  useEffect(() => {
-    if (!selfRef.current) return;
+    {
+      const { container, getByTestId } = render(
+        <ApolloProvider client={client}>
+          <ChatsList history={history} />
+        </ApolloProvider>
+      )
 
-    const selfDOMNode = ReactDOM.findDOMNode(selfRef.current) as HTMLElement;
-    selfDOMNode.scrollTop = Number.MAX_SAFE_INTEGER;
-  }, [messages.length]);
+      await waitFor(() => screen.getByTestId("chat"))
 
-  return (
-    <Container ref={selfRef}>
-      {messages.map((message: any) => (
-        <MessageItem data-testid="message-item" key={message.id}>
-          <Contents data-testid="message-content">{message.content}</Contents>
-          <Timestamp data-testid="message-date">
-            {moment(message.createdAt).format('HH:mm')}
-          </Timestamp>
-        </MessageItem>
-      ))}
-    </Container>
-  );
-};
+      fireEvent.click(getByTestId("chat"))
 
-export default MessagesList;
+      await waitFor(() => expect(history.location.pathname).toEqual("/chats/1"))
+    }
+  })
+})

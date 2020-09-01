@@ -1,6 +1,7 @@
 import { COOKIE_NAME, __prod__ } from "./constants"
 
 import Redis from "ioredis"
+import { RedisPubSub } from "graphql-redis-subscriptions"
 import connectRedis from "connect-redis"
 import session from "express-session"
 
@@ -23,4 +24,9 @@ export const redisSession = session({
   saveUninitialized: false,
   secret: process.env.SESSION_SECRET,
   resave: false,
+})
+// create Redis-based pub-sub
+export const pubSub = new RedisPubSub({
+  publisher: redis,
+  subscriber: redis,
 })
