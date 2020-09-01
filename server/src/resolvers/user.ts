@@ -291,7 +291,6 @@ export class UserResolver {
   @Mutation(() => Boolean)
   @UseMiddleware(resolveTime)
   async logout(@Ctx() { redis, req, res }: MyContext) {
-    console.log("user session name: ", req.session.username)
     await removeUserFromRedis(redis, req.session.username)
 
     return new Promise(resolve =>

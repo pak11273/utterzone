@@ -39,7 +39,7 @@ export const Zone: any = () => {
     console.log("no zone loaded!")
   }
 
-  useEffect(() => {
+  useEffect((data?: any) => {
     setChat(!data ? null : data)
   }, [])
   if (loading) return "Loading..."

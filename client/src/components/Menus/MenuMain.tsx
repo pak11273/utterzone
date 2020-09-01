@@ -1,11 +1,8 @@
+import { Layout, Menu } from "antd"
 import {
-  DesktopOutlined,
-  FileOutlined,
-  PieChartOutlined,
   TeamOutlined,
   UserOutlined,
 } from "@ant-design/icons"
-import { Layout, Menu } from "antd"
 
 import { Gravatar } from "../Gravatar"
 import React from "react"

@@ -34,8 +34,8 @@ export const ZoneCreate: React.FC<ZoneCreateProps> = () => {
         if (error) {
           console.log("ERROR CITY: ", error)
         }
-        console.log("response: ", response)
         if (response.data?.createZone) {
+          console.log("response: ", response)
           // history.push(`/zone/${response.hostId}/${response.id}`)
           history.push("/zone/hello/there")
         } else {
