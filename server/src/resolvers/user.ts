@@ -40,18 +40,14 @@ class UserResponse {
   user?: User
 }
 
-const addUserToRedis = (redis: any, req: any, user: User) => {
-  redis.hmset(USER_PREFIX + req.session.id, {
-    id: user.id,
-    username: user.username,
-    followers: user.followers,
-    following: user.following,
-    posts: 0,
+const addUserToOnlineStatus = (redis: any, user: string) => {
+  redis.hset(USER_PREFIX, {
+    [user]: 1,
   })
 }
 
-const removeUserFromRedis = async (redis: any, id: any) => {
-  await redis.del(USER_PREFIX + id)
+const removeUserFromRedis = async (redis: any, username: any) => {
+  await redis.hdel(USER_PREFIX, username)
 }
 
 @Resolver(User)
@@ -72,13 +68,6 @@ export class UserResolver {
     if (!req.session.userId) {
       return null
     }
-
-    // await redis.set(
-    //   FORGET_PASSWORD_PREFIX + token,
-    //   user.id,
-    //   "ex",
-    //   1000 * 60 * 60 * 24 * 3
-    // ) // 3 days
 
     return User.findOne(req.session.userId)
   }
@@ -145,6 +134,7 @@ export class UserResolver {
 
     // log in user after change password
     req.session.userId = user.id
+    req.session.userName = user.username
 
     return { user }
   }
@@ -240,9 +230,10 @@ export class UserResolver {
       return err
     }
 
-    addUserToRedis(redis, req, user)
+    addUserToOnlineStatus(redis, user.username)
 
     req.session.userId = user.id
+    req.session.userName = user.username
 
     return { user }
   }
@@ -288,8 +279,9 @@ export class UserResolver {
     }
 
     req.session.userId = user.id
+    req.session.username = user.username
 
-    addUserToRedis(redis, req, user)
+    addUserToOnlineStatus(redis, user.username)
 
     return {
       user,
@@ -299,7 +291,8 @@ export class UserResolver {
   @Mutation(() => Boolean)
   @UseMiddleware(resolveTime)
   async logout(@Ctx() { redis, req, res }: MyContext) {
-    await removeUserFromRedis(redis, req.session.id)
+    console.log("user session name: ", req.session.username)
+    await removeUserFromRedis(redis, req.session.username)
 
     return new Promise(resolve =>
       req.session.destroy(err => {

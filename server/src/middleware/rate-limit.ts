@@ -44,14 +44,21 @@ export const rateLimit: ({
     }`
 
     const current = await redis.llen(key)
+    console.log("anon: ", isAnon)
+    console.log("current: ", current)
+
     if (isAnon && current >= limitAnon) {
+      console.log("THIS SHOULD NOT HAPEN!for anon")
       throw new ApolloError(msgAnon)
     }
 
     // logged in user rate limit
     if (!isAnon && current >= limitUser) {
+      console.log("THIS SHOULD NOT HAPEN!for user")
       throw new ApolloError(msgUser)
     }
+
+    // check if logged in from another browser (may have 0 cookies)
 
     const exists = await redis.exists(key)
     if (!exists) {
