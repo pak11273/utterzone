@@ -9,6 +9,8 @@ import {
   FieldResolver,
   Root,
   UseMiddleware,
+  Subscription,
+  Args,
 } from "type-graphql"
 import { MyContext } from "../types"
 import { User } from "../entities/User"
@@ -40,6 +42,12 @@ class UserResponse {
   user?: User
 }
 
+@ObjectType()
+class UserStatus {
+  @Field()
+  status: String
+}
+
 const addUserToOnlineStatus = (redis: any, user: string) => {
   redis.hset(USER_PREFIX, {
     [user]: 1,
@@ -48,6 +56,10 @@ const addUserToOnlineStatus = (redis: any, user: string) => {
 
 const removeUserFromRedis = async (redis: any, username: any) => {
   await redis.hdel(USER_PREFIX, username)
+}
+
+class UserStatusPayload {
+  status: string
 }
 
 @Resolver(User)
@@ -305,5 +317,18 @@ export class UserResolver {
         resolve(true)
       })
     )
+  }
+
+  @Subscription({
+    topics: ({ context }) => context.session.username,
+  })
+  userStatus(
+    @Root() userStatusPayload: UserStatusPayload,
+    @Arg("status") status: string
+  ): UserStatus {
+    return {
+      ...userStatusPayload,
+      status,
+    }
   }
 }

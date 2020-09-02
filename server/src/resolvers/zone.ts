@@ -16,6 +16,9 @@ import {
   Root,
 } from "type-graphql"
 
+import { ZONE_PREFIX } from "../constants"
+import { v4 } from "uuid"
+
 import { Zone } from "../entities/Zone"
 
 import { Message } from "../entities/Message"
@@ -107,9 +110,8 @@ export class ZoneResolver {
   @Query(() => Zone, { nullable: true })
   async zone(
     @Arg("id") id: number,
-    @Ctx() { req }: MyContext
+    @Ctx() {}: MyContext
   ): Promise<Zone | undefined> {
-    console.log("zone.ts:78 ", req)
     const zone = await Zone.findOne(id)
     return zone
   }
@@ -135,7 +137,7 @@ export class ZoneResolver {
   @UseMiddleware(isAuth)
   async createZone(
     @Arg("input") input: ZoneInput,
-    @Ctx() { req }: MyContext
+    @Ctx() { redis, req }: MyContext
   ): Promise<Zone> {
     // const errors = validateZone(input)
     // if (errors) {
@@ -147,19 +149,31 @@ export class ZoneResolver {
       const hashedPassword = await argon2.hash(input.password)
       input.password = hashedPassword
     }
-    const zone = await Zone.create({
-      ...input,
+
+    let token = v4()
+    let amendedInput: any = {
+      id: 0,
+      name: input.name,
+      premium: false,
+      maxParticipants: input.maxParticipants,
+      totalParticipants: 0,
       hostId: req.session.userId,
-    }).save()
+      zoneId: token,
+      password: input.password,
+      app: "youglish",
+    }
+    // redis.hmset(ZONE_PREFIX, amendedInput)
+    let zone = await redis.hmset(ZONE_PREFIX + token, {
+      ...amendedInput,
+    })
+
     // TODO: validations
-    console.log("zone: ", zone)
 
     if (!zone) {
       throw new ApolloError("There was an error.  Zone not created.")
     }
 
-    console.log(zone)
-    return zone
+    return amendedInput
   }
 
   // TODO: messages
@@ -181,8 +195,6 @@ export class ZoneResolver {
       createdAt: new Date(),
       updatedAt: new Date(),
     }
-
-    console.log("zone: ", zone)
 
     // zone.messages.push(message)
 

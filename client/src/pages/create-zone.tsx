@@ -7,9 +7,9 @@ import { useHistory } from "react-router-dom"
 
 const { Option } = Select
 
-interface ZoneCreateProps {}
+interface CreateZoneProps {}
 
-export const ZoneCreate: React.FC<ZoneCreateProps> = () => {
+export const CreateZone: React.FC<CreateZoneProps> = () => {
   const history = useHistory()
   const [privateZone, setPrivate] = useState(false)
   const [zone, { loading, error }] = useCreateZoneMutation()
@@ -26,18 +26,17 @@ export const ZoneCreate: React.FC<ZoneCreateProps> = () => {
         public: true,
         mature: true,
       }
-      console.log("values: ", values)
       try {
         const response = await zone({
           variables: { input: values },
         })
         if (error) {
-          console.log("ERROR CITY: ", error)
+          console.log("ERROR: ", error)
         }
         if (response.data?.createZone) {
-          console.log("response: ", response)
-          // history.push(`/zone/${response.hostId}/${response.id}`)
-          history.push("/zone/hello/there")
+          history.push(
+            `/zone/${response.data.createZone.hostId}/${response.data.createZone.id}`
+          )
         } else {
           const errorMap = toErrorMap(response.data?.createZone)
           form.setFields(errorMap)

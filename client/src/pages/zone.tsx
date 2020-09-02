@@ -3,8 +3,10 @@ import { Col, Row } from "antd"
 import React, { useEffect, useState } from "react"
 
 import { loader } from "graphql.macro"
-import { useParams } from "react-router-dom"
 import { useQuery } from "@apollo/client"
+
+// import { useParams } from "react-router-dom"
+
 
 const ZONE_QUERY = loader("../graphql/queries/zone.graphql")
 interface ZoneQueryMessage {
@@ -32,9 +34,7 @@ export const Zone: any = () => {
   const { loading, error, data } = useQuery(ZONE_QUERY, {
     variables: { id: 1 },
   })
-  let { id } = useParams()
-  console.log("id: ", id)
-  console.log("data: ", data)
+  // let { id } = useParams()
   if (!data || !data.zone) {
     console.log("no zone loaded!")
   }
