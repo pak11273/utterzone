@@ -2,7 +2,9 @@
 
 // import { Form } from "antd"
 
-import React from "react"
+import { Avatar, Button, Card } from "antd"
+import { Col, Row } from "antd"
+import React, { useState } from "react"
 
 // import { useHistory } from "react-router-dom"
 
@@ -10,6 +12,8 @@ import React from "react"
 // import { toErrorMap } from "../utils/toErrorMap"
 
 interface zonesProps {}
+
+const { Meta } = Card
 
 export const Zones: React.FC<zonesProps> = () => {
   // const history = useHistory()
@@ -54,10 +58,47 @@ export const Zones: React.FC<zonesProps> = () => {
   //   console.log("out: ", outOfDate)
   // }
 
+  const [loading, setLoading] = useState(false)
+
   return (
     <section className="userform_section">
-      <div className="user_form">
-        <h1 style={{ textAlign: "center" }}>Zones</h1>
+      <div className="zones_container">
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+          }}
+        >
+          <h1 style={{ textAlign: "center" }}>Filters</h1>
+          <Row gutter={[24, 32]}>
+            <Col xs={24}>I speak: English</Col>
+            <Col xs={24}>Learning: Korean</Col>
+            <Col xs={24}>Participants: High to Low</Col>
+            <Col xs={24}>App: Youtube</Col>
+            <Col xs={24}>Mature Zone</Col>
+          </Row>
+          <Button size="small" type="primary" style={{ width: "100px" }}>
+            Select
+          </Button>
+        </div>
+        <Row gutter={[24, 32]}>
+          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13].map((x, i) => {
+            return (
+              <Col key={i} xs={24} sm={18} md={12} lg={6} xl={4}>
+                <Card style={{ marginTop: 16 }} loading={loading}>
+                  <Meta
+                    avatar={
+                      <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
+                    }
+                    title="Card title"
+                    description="This is the description"
+                  />
+                </Card>
+              </Col>
+            )
+          })}
+        </Row>
       </div>
     </section>
   )
