@@ -24,11 +24,11 @@ export class NotificationResolver {
 
   @Mutation(_returns => Boolean)
   async pubSubMutation(
-    @PubSub() pubSub: PubSubEngine,
+    @PubSub() pubsub: PubSubEngine,
     @Arg("message", { nullable: true }) message?: string
   ): Promise<boolean> {
     const payload: NotificationPayload = { id: ++this.autoIncrement, message }
-    await pubSub.publish("NOTIFICATIONS", payload)
+    await pubsub.publish("NOTIFICATIONS", payload)
     return true
   }
 
@@ -62,12 +62,13 @@ export class NotificationResolver {
 
   @Mutation(_returns => Boolean)
   async pubSubMutationToDynamicTopic(
-    @PubSub() pubSub: PubSubEngine,
-    @Arg("topic") topic: string,
+    @PubSub() pubsub: PubSubEngine,
+    @Arg("topic")
+    topic: string,
     @Arg("message", { nullable: true }) message?: string
   ): Promise<boolean> {
     const payload: NotificationPayload = { id: ++this.autoIncrement, message }
-    await pubSub.publish(topic, payload)
+    await pubsub.publish(topic, payload)
     return true
   }
 
