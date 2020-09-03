@@ -10,7 +10,7 @@ import {
   Root,
   UseMiddleware,
   Subscription,
-  Args,
+  // Args,
 } from "type-graphql"
 import { MyContext } from "../types"
 import { User } from "../entities/User"
