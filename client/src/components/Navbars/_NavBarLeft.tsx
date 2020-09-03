@@ -13,11 +13,11 @@ export const LeftMenu: React.FC<NavBarProps> = () => {
     <Menu mode="horizontal">
       <SubMenu title={<NavLink to="/zones">Zones</NavLink>}>
         <MenuItemGroup title="Zones">
-          <Menu.Item key="setting:1">
-            <Link to="/zone/create">Create a Zone</Link>
-          </Menu.Item>
           <Menu.Item key="setting:2">
             <Link to="/zones">Find a Zone</Link>
+          </Menu.Item>
+          <Menu.Item key="setting:1">
+            <Link to="/zone/create">Create a Zone</Link>
           </Menu.Item>
         </MenuItemGroup>
         <MenuItemGroup title="Apps">

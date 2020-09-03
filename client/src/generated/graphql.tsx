@@ -9,11 +9,14 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  /** The javascript `Date` as string. Type represents date and time as the ISO Date string. */
+  DateTime: any;
 };
 
 export type Query = {
   __typename?: 'Query';
   hello: Scalars['String'];
+  currentDate: Scalars['DateTime'];
   posts: PaginatedPosts;
   post?: Maybe<Post>;
   me?: Maybe<User>;
@@ -44,6 +47,7 @@ export type QueryUserArgs = {
 export type QueryZoneArgs = {
   id: Scalars['Float'];
 };
+
 
 export type PaginatedPosts = {
   __typename?: 'PaginatedPosts';
@@ -103,6 +107,9 @@ export type Message = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  pubSubMutation: Scalars['Boolean'];
+  publisherMutation: Scalars['Boolean'];
+  pubSubMutationToDynamicTopic: Scalars['Boolean'];
   vote: Scalars['Boolean'];
   createPost: Post;
   updatePost?: Maybe<Post>;
@@ -114,6 +121,22 @@ export type Mutation = {
   logout: Scalars['Boolean'];
   createZone: Zone;
   addNewMessage: Scalars['Boolean'];
+};
+
+
+export type MutationPubSubMutationArgs = {
+  message?: Maybe<Scalars['String']>;
+};
+
+
+export type MutationPublisherMutationArgs = {
+  message?: Maybe<Scalars['String']>;
+};
+
+
+export type MutationPubSubMutationToDynamicTopicArgs = {
+  message?: Maybe<Scalars['String']>;
+  topic: Scalars['String'];
 };
 
 
@@ -213,7 +236,33 @@ export type MessageInput = {
 
 export type Subscription = {
   __typename?: 'Subscription';
+  normalSubscription: Notification;
+  subscriptionWithFilter: Notification;
+  subscriptionWithFilterToDynamicTopic: Notification;
+  userStatus: UserStatus;
   newMessages: Message;
+};
+
+
+export type SubscriptionSubscriptionWithFilterToDynamicTopicArgs = {
+  topic: Scalars['String'];
+};
+
+
+export type SubscriptionUserStatusArgs = {
+  status: Scalars['String'];
+};
+
+export type Notification = {
+  __typename?: 'Notification';
+  id: Scalars['ID'];
+  message?: Maybe<Scalars['String']>;
+  date: Scalars['DateTime'];
+};
+
+export type UserStatus = {
+  __typename?: 'UserStatus';
+  status: Scalars['String'];
 };
 
 export type PostSnippetFragment = (

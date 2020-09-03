@@ -9,9 +9,11 @@ import {
   Subscription,
   Root,
   ResolverFilterData,
+  UseMiddleware,
 } from "type-graphql"
 
 import { Notification, NotificationPayload } from "../entities/Notification"
+import { resolveTime } from "../middleware/resolveTime"
 
 @Resolver()
 export class NotificationResolver {
@@ -61,8 +63,10 @@ export class NotificationResolver {
   // dynamic topic
 
   @Mutation(_returns => Boolean)
+  @UseMiddleware(resolveTime)
   async pubSubMutationToDynamicTopic(
-    @PubSub() pubsub: PubSubEngine,
+    @PubSub()
+    pubsub: PubSubEngine,
     @Arg("topic")
     topic: string,
     @Arg("message", { nullable: true }) message?: string
