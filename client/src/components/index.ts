@@ -10,6 +10,7 @@ import { MenuMain } from "./Menus/MenuMain"
 import { NavbarMain } from "./Navbars/NavBarMain"
 import { Notebook } from "./Notebook"
 import { UpdootSection } from "./UpdootSection"
+import { ZoneCard } from "./Cards/ZoneCard"
 import { ZoneControls } from "./Zone/ZoneControls"
 import { ZoneMain } from "./Zone/ZoneMain"
 
@@ -27,6 +28,7 @@ export {
   Layout,
   NavbarMain,
   UpdootSection,
+  ZoneCard,
   ZoneMain,
   ZoneControls,
 }

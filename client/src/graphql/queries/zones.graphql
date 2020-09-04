@@ -1,0 +1,11 @@
+query Zones {
+  zones {
+    id
+    app
+    hostId
+    description
+    name
+    mature
+    zoneId
+  }
+}

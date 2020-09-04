@@ -20,6 +20,7 @@ export const CreateZone: React.FC<CreateZoneProps> = () => {
     if (values) {
       values = {
         ...values,
+        name: "blah blah",
         password: "xyz",
         maxParticipants: 36.0,
         description: "test",

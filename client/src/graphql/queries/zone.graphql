@@ -1,6 +1,5 @@
 query Zone($id: Float!) {
   zone(id: $id) {
     id
-    name
   }
 }

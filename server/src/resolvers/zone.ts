@@ -65,6 +65,9 @@ export class MessageInput implements Partial<Message> {
 @InputType()
 export class ZoneInput {
   @Field()
+  app: string
+
+  @Field()
   name: string
 
   @Field({ nullable: true })
@@ -75,6 +78,9 @@ export class ZoneInput {
 
   @Field()
   mature: boolean
+
+  @Field()
+  premium: boolean
 
   @Field({ nullable: true })
   password: string
@@ -116,10 +122,26 @@ export class ZoneResolver {
     return zone
   }
 
-  @Query(() => [Zone])
-  async zones(): Promise<Zone[] | undefined> {
-    const zones = await Zone.find()
-    return zones
+  @Query(_type => [Zone])
+  async zones(@Ctx() { redis }: MyContext): Promise<any | undefined> {
+    try {
+      let zones = []
+      const result = await redis.scan(0, "match", "zone:*")
+
+      for (let i = 0; i < result[1].length; i++) {
+        let zone: any = await redis.hgetall(result[1][i] as KeyType)
+        zone.premium = zone.premium === "true"
+        zone.mature = zone.mature === "true"
+        zone.public = zone.public === "true"
+        zones.push(zone)
+      }
+
+      console.log("zones: ", zones)
+      return zones
+    } catch (err) {
+      console.log("error: ", err)
+      throw new ApolloError(err)
+    }
   }
 
   @Query(() => Message)
@@ -145,24 +167,27 @@ export class ZoneResolver {
     //     errors
     //   }
     // }
+
     if (input.public) {
-      const hashedPassword = await argon2.hash(input.password)
+      const hashedPassword = await argon2.hash("narcotics") // TODO: make dynamic
       input.password = hashedPassword
     }
 
     let token = v4()
     let amendedInput: any = {
       id: 0,
+      app: "youglish",
       name: input.name,
       premium: false,
+      mature: true,
+      public: true,
       maxParticipants: input.maxParticipants,
       totalParticipants: 0,
       hostId: req.session.userId,
       zoneId: token,
       password: input.password,
-      app: "youglish",
     }
-    // redis.hmset(ZONE_PREFIX, amendedInput)
+
     let zone = await redis.hmset(ZONE_PREFIX + token, {
       ...amendedInput,
     })
@@ -172,6 +197,7 @@ export class ZoneResolver {
     if (!zone) {
       throw new ApolloError("There was an error.  Zone not created.")
     }
+    console.log("amend: ", amendedInput)
 
     return amendedInput
   }

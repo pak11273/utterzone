@@ -1,6 +1,5 @@
 import {
   BaseEntity,
-  Column,
   CreateDateColumn,
   Entity,
   ManyToOne,
@@ -16,17 +15,21 @@ import { User } from "./User"
 @ObjectType()
 @Entity()
 export class Zone extends BaseEntity {
-  @Field()
+  @Field({ nullable: true })
   @PrimaryGeneratedColumn()
   id!: number
 
   @Field()
-  @Column()
   name: string
 
+  @Field({ nullable: true })
+  app: string
+
   @Field()
-  @Column()
   hostId: number
+
+  @Field()
+  zoneId: string
 
   @ManyToOne(_type => User, user => user.zones)
   host: User
@@ -35,19 +38,15 @@ export class Zone extends BaseEntity {
   participants: User[]
 
   @Field()
-  @Column()
   learningLanguage?: string
 
   @Field()
-  @Column()
   nativeLanguage?: string
 
   @Field()
-  @Column()
   maxParticipants?: number
 
-  @Field()
-  @Column()
+  @Field({ nullable: true })
   description: string
 
   @OneToMany(() => Message, message => message.zone)
@@ -56,16 +55,17 @@ export class Zone extends BaseEntity {
   @Field(_type => Message)
   lastMessage: Message
 
-  @Column()
+  @Field()
   password!: string
 
   @Field()
-  @Column()
   public: boolean
 
   @Field()
-  @Column()
   mature: boolean
+
+  @Field()
+  premium: boolean
 
   @Field(() => String)
   @CreateDateColumn()

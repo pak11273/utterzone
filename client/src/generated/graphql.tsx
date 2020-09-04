@@ -82,16 +82,19 @@ export type User = {
 
 export type Zone = {
   __typename?: 'Zone';
-  id: Scalars['Float'];
+  id?: Maybe<Scalars['Float']>;
   name: Scalars['String'];
+  app: Scalars['String'];
   hostId: Scalars['Float'];
+  zoneId: Scalars['String'];
   learningLanguage: Scalars['String'];
   nativeLanguage: Scalars['String'];
   maxParticipants: Scalars['Float'];
-  description: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
   lastMessage: Message;
+  password: Scalars['String'];
   public: Scalars['Boolean'];
-  mature: Scalars['Boolean'];
+  premium: Scalars['Boolean'];
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
 };
@@ -221,7 +224,6 @@ export type ZoneInput = {
   name: Scalars['String'];
   description?: Maybe<Scalars['String']>;
   public: Scalars['Boolean'];
-  mature: Scalars['Boolean'];
   password?: Maybe<Scalars['String']>;
   learningLanguage: Scalars['String'];
   nativeLanguage: Scalars['String'];
@@ -331,7 +333,7 @@ export type CreateZoneMutation = (
   { __typename?: 'Mutation' }
   & { createZone: (
     { __typename?: 'Zone' }
-    & Pick<Zone, 'id' | 'hostId' | 'name'>
+    & Pick<Zone, 'id' | 'hostId'>
   ) }
 );
 
@@ -471,7 +473,18 @@ export type ZoneQuery = (
   { __typename?: 'Query' }
   & { zone?: Maybe<(
     { __typename?: 'Zone' }
-    & Pick<Zone, 'id' | 'name'>
+    & Pick<Zone, 'id'>
+  )> }
+);
+
+export type ZonesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ZonesQuery = (
+  { __typename?: 'Query' }
+  & { zones: Array<(
+    { __typename?: 'Zone' }
+    & Pick<Zone, 'id' | 'app' | 'hostId' | 'description' | 'name' | 'zoneId'>
   )> }
 );
 
@@ -589,7 +602,6 @@ export const CreateZoneDocument = gql`
   createZone(input: $input) {
     id
     hostId
-    name
   }
 }
     `;
@@ -956,7 +968,6 @@ export const ZoneDocument = gql`
     query Zone($id: Float!) {
   zone(id: $id) {
     id
-    name
   }
 }
     `;
@@ -986,3 +997,40 @@ export function useZoneLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ZoneQ
 export type ZoneQueryHookResult = ReturnType<typeof useZoneQuery>;
 export type ZoneLazyQueryHookResult = ReturnType<typeof useZoneLazyQuery>;
 export type ZoneQueryResult = Apollo.QueryResult<ZoneQuery, ZoneQueryVariables>;
+export const ZonesDocument = gql`
+    query Zones {
+  zones {
+    id
+    app
+    hostId
+    description
+    name
+    zoneId
+  }
+}
+    `;
+
+/**
+ * __useZonesQuery__
+ *
+ * To run a query within a React component, call `useZonesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useZonesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useZonesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useZonesQuery(baseOptions?: Apollo.QueryHookOptions<ZonesQuery, ZonesQueryVariables>) {
+        return Apollo.useQuery<ZonesQuery, ZonesQueryVariables>(ZonesDocument, baseOptions);
+      }
+export function useZonesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ZonesQuery, ZonesQueryVariables>) {
+          return Apollo.useLazyQuery<ZonesQuery, ZonesQueryVariables>(ZonesDocument, baseOptions);
+        }
+export type ZonesQueryHookResult = ReturnType<typeof useZonesQuery>;
+export type ZonesLazyQueryHookResult = ReturnType<typeof useZonesLazyQuery>;
+export type ZonesQueryResult = Apollo.QueryResult<ZonesQuery, ZonesQueryVariables>;
