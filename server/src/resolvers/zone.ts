@@ -102,9 +102,8 @@ export class ZoneResolver {
   }
 
   @Query(_type => [Zone])
-  async zones(@Ctx() { redis }: MyContext): Promise<any | undefined> {
+  async zones(@Ctx() {}: MyContext): Promise<any | undefined> {
     try {
-      boohh
     } catch (err) {
       console.log("error: ", err)
       throw new ApolloError(err)
@@ -216,6 +215,8 @@ export class ZoneResolver {
       payload,
       args,
     }: ResolverFilterData<NewCommentPayload, NewCommentsArgs>) => {
+      console.log("args: ", args)
+      console.log("payload: ", payload)
       return payload.recipeId === args.recipeId
     },
   })
@@ -225,12 +226,9 @@ export class ZoneResolver {
   ): Comment {
     console.log("recipeId: ", recipeId)
     return {
-      // content: newComment.content!,
-      content: "foofoo",
-      // date: new Date(newComment.dateString), // limitation of Redis payload serialization
-      date: new Date(),
-      // nickname: newComment.nickname,
-      nickname: "boohoo",
+      content: newComment.content!,
+      date: new Date(newComment.dateString), // limitation of Redis payload serialization
+      nickname: newComment.nickname,
     }
   }
 }

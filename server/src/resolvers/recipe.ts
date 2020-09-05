@@ -69,7 +69,7 @@ export class RecipeResolver {
   ): Comment {
     console.log("recipeId: ", recipeId)
     return {
-      content: newComment.content,
+      content: newComment.content!,
       date: new Date(newComment.dateString), // limitation of Redis payload serialization
       nickname: newComment.nickname,
     }

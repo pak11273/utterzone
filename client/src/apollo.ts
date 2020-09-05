@@ -1,10 +1,12 @@
-import { ApolloClient, HttpLink, InMemoryCache, split } from "@apollo/client"
-
+import { ApolloClient } from "@apollo/client/core/ApolloClient"
+import { HttpLink } from "@apollo/client/link/http/HttpLink"
+import { InMemoryCache } from "@apollo/client/cache/inmemory/inMemoryCache"
 import { WebSocketLink } from "@apollo/client/link/ws"
 import { getMainDefinition } from "@apollo/client/utilities"
+import { split } from "@apollo/client/link/core/split"
 
 const httpLink = new HttpLink({
-  uri: "http://localhost:3000/graphql",
+  uri: "http://localhost:5000/graphql",
 })
 
 const wsLink = new WebSocketLink({
@@ -35,7 +37,7 @@ const splitLink = split(
 )
 
 export const client = new ApolloClient({
-  splitLink,
+  link: splitLink,
   // uri: "http://localhost:5000/graphql",
   cache: new InMemoryCache(),
   credentials: "include",

@@ -1,6 +1,7 @@
 import { Button, Checkbox, Form, Input, Select } from "antd"
 import React, { useState } from "react"
 
+import { gql } from "graphql.macro"
 import { useCreateZoneSubscriptionSubscription } from "../generated/graphql"
 import { useHistory } from "react-router-dom"
 
@@ -10,19 +11,32 @@ const { Option } = Select
 
 interface CreateZoneProps {}
 
+const createZoneSubscription = gql`
+  subscription createZoneSubscription($recipeId: ID!) {
+    createZoneSubscription(recipeId: "2") {
+      nickname
+      content
+      date
+    }
+  }
+`
+
 export const CreateZone: React.FC<CreateZoneProps> = () => {
   const history = useHistory()
   const [privateZone, setPrivate] = useState(false)
   const { data, loading, error } = useCreateZoneSubscriptionSubscription({
-    variables: { recipeId: "e" },
+    variables: { recipeId: "2" },
   })
   const formItemLayout = {}
   const [form] = Form.useForm()
   try {
-    console.log("data :", data)
-    console.log("loading :", loading)
     if (error) {
       console.log("ERROR: ", error)
+    }
+    if (data) {
+      history.push(
+        `/zone/${data?.createZoneSubscription}/${data?.createZoneSubscription}`
+      )
     }
     // if (data) {
     //   history.push(
