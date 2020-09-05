@@ -1,3 +1,4 @@
+// import { resolveTime } from "../middleware/resolveTime"
 import {
   Field,
   InputType,
@@ -14,15 +15,22 @@ import {
   Publisher,
   ResolverFilterData,
   Root,
+  Args,
 } from "type-graphql"
 
 import { ZONE_PREFIX } from "../constants"
 import { v4 } from "uuid"
-
+// import { ZoneEvent, ZonePayload } from "../entities/Zone"
+import { Comment } from "../entities/Comment"
+import { NewCommentPayload } from "../shared/interfaces/newComment.interface"
+import { NewCommentsArgs } from "../shared/args/recipe.resolver.args"
+import { Recipe } from "../entities/recipe"
 import { Zone } from "../entities/Zone"
 
 import { Message } from "../entities/Message"
 import { MyContext } from "../types"
+import { Topic } from "../types/Topic"
+import { sampleRecipes } from "../data/recipe.samples"
 
 import argon2 from "argon2"
 // import { getConnection } from "typeorm"
@@ -30,6 +38,8 @@ import { isAuth } from "../middleware/isAuth"
 import { messages } from "../db/mock"
 // import { validateZone } from "../utils/validateZone"
 import { ApolloError } from "apollo-server-express"
+import { ZoneInput } from "../shared/inputs/zone.input"
+import { CommentInput } from "../shared/inputs/comment.input"
 
 // import { User } from "../entities/User"
 
@@ -62,49 +72,16 @@ export class MessageInput implements Partial<Message> {
   content: string
 }
 
-@InputType()
-export class ZoneInput {
-  @Field()
-  app: string
-
-  @Field()
-  name: string
-
-  @Field({ nullable: true })
-  description: string
-
-  @Field()
-  public: boolean
-
-  @Field()
-  mature: boolean
-
-  @Field()
-  premium: boolean
-
-  @Field({ nullable: true })
-  password: string
-
-  @Field()
-  learningLanguage: string
-
-  @Field()
-  nativeLanguage: string
-
-  @Field()
-  maxParticipants: number
-}
-
-enum Topic {
-  NewMessage = "NEW_MESSAGE",
-  NewZone = "NEW_ZONE",
-}
-interface NewMessagePayload {
-  zoneId: string
-  dateString: string // limitation of Redis payload serialization
-  content: string
-  username?: string
-}
+// enum Topic {
+//   NewMessage = "NEW_MESSAGE",
+//   NewZone = "NEW_ZONE",
+// }
+// interface NewMessagePayload {
+//   zoneId: string
+//   dateString: string // limitation of Redis payload serialization
+//   content: string
+//   username?: string
+// }
 
 @ArgsType()
 export class NewMessagesArgs {
@@ -113,6 +90,8 @@ export class NewMessagesArgs {
 }
 @Resolver()
 export class ZoneResolver {
+  private readonly recipes: Recipe[] = sampleRecipes.slice()
+  // private autoIncrement = 0
   @Query(() => Zone, { nullable: true })
   async zone(
     @Arg("id") id: number,
@@ -125,19 +104,7 @@ export class ZoneResolver {
   @Query(_type => [Zone])
   async zones(@Ctx() { redis }: MyContext): Promise<any | undefined> {
     try {
-      let zones = []
-      const result = await redis.scan(0, "match", "zone:*")
-
-      for (let i = 0; i < result[1].length; i++) {
-        let zone: any = await redis.hgetall(result[1][i] as KeyType)
-        zone.premium = zone.premium === "true"
-        zone.mature = zone.mature === "true"
-        zone.public = zone.public === "true"
-        zones.push(zone)
-      }
-
-      console.log("zones: ", zones)
-      return zones
+      boohh
     } catch (err) {
       console.log("error: ", err)
       throw new ApolloError(err)
@@ -204,52 +171,66 @@ export class ZoneResolver {
 
   // TODO: messages
 
+  // @Mutation(_returns => Boolean)
+  // @UseMiddleware(resolveTime)
+  // async createZoneMessageMutation(
+  //   @PubSub()
+  //   @Ctx()
+  //   { redis }: MyContext,
+  //   @Arg("topic")
+  //   topic: string,
+  //   @Arg("message", { nullable: true }) message: string
+  // ): Promise<boolean> {
+  //   await redis.publish(topic, message)
+  //   return true
+  // }
+
   @Mutation(_returns => Boolean)
-  async addNewMessage(
-    @Arg("message") input: MessageInput,
+  async createZoneMessageMutation(
+    @Arg("message") input: CommentInput,
     @PubSub(Topic.NewMessage)
-    notifyAboutNewMessage: Publisher<NewMessagePayload>
+    notifyAboutNewComment: Publisher<NewCommentPayload>
   ): Promise<boolean> {
-    const zone: any = await Zone.findOne(input.zoneId)
-    if (!zone) {
-      throw new ApolloError("No zone found with this id")
+    const recipe = this.recipes.find(r => r.id === input.recipeId)
+    if (!recipe) {
+      return false
     }
-
-    const message: Message | any = {
+    const comment: Comment = {
       content: input.content,
-      username: input.username,
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      nickname: input.nickname,
+      date: new Date(),
     }
-
-    // zone.messages.push(message)
-
-    await notifyAboutNewMessage({
-      content: message.content,
-      username: message.username,
-      dateString: message.createdAt.toISOString(),
-      zoneId: input.zoneId,
+    recipe.comments.push(comment)
+    await notifyAboutNewComment({
+      content: comment.content,
+      nickname: comment.nickname,
+      dateString: comment.date.toISOString(),
+      recipeId: input.recipeId,
     })
     return true
   }
 
-  @Subscription(_returns => Message, {
+  @Subscription(_returns => Comment, {
     topics: Topic.NewMessage,
     filter: ({
       payload,
       args,
-    }: ResolverFilterData<NewMessagePayload, NewMessagesArgs>) => {
-      return payload.zoneId === args.zoneId
+    }: ResolverFilterData<NewCommentPayload, NewCommentsArgs>) => {
+      return payload.recipeId === args.recipeId
     },
   })
-  newMessages(
-    @Root() newMessage: NewMessagePayload
-    // @Args() { zoneId }: NewMessagesArgs
-  ): Message | any {
+  createZoneSubscription(
+    @Root() newComment: NewCommentPayload,
+    @Args() { recipeId }: NewCommentsArgs
+  ): Comment {
+    console.log("recipeId: ", recipeId)
     return {
-      content: newMessage.content,
-      createdAt: new Date(newMessage.dateString), // limitation of Redis payload serialization
-      username: newMessage.username,
+      // content: newComment.content!,
+      content: "foofoo",
+      // date: new Date(newComment.dateString), // limitation of Redis payload serialization
+      date: new Date(),
+      // nickname: newComment.nickname,
+      nickname: "boohoo",
     }
   }
 }

@@ -19,6 +19,7 @@ export type Query = {
   currentDate: Scalars['DateTime'];
   posts: PaginatedPosts;
   post?: Maybe<Post>;
+  recipe?: Maybe<Recipe>;
   me?: Maybe<User>;
   user: User;
   zone?: Maybe<Zone>;
@@ -36,6 +37,11 @@ export type QueryPostsArgs = {
 
 export type QueryPostArgs = {
   id: Scalars['Int'];
+};
+
+
+export type QueryRecipeArgs = {
+  id: Scalars['ID'];
 };
 
 
@@ -80,11 +86,26 @@ export type User = {
   updatedAt: Scalars['String'];
 };
 
+export type Recipe = {
+  __typename?: 'Recipe';
+  id: Scalars['ID'];
+  title: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
+  comments: Array<Comment>;
+};
+
+export type Comment = {
+  __typename?: 'Comment';
+  nickname?: Maybe<Scalars['String']>;
+  content: Scalars['String'];
+  date: Scalars['DateTime'];
+};
+
 export type Zone = {
   __typename?: 'Zone';
   id?: Maybe<Scalars['Float']>;
   name: Scalars['String'];
-  app: Scalars['String'];
+  app?: Maybe<Scalars['String']>;
   hostId: Scalars['Float'];
   zoneId: Scalars['String'];
   learningLanguage: Scalars['String'];
@@ -94,6 +115,7 @@ export type Zone = {
   lastMessage: Message;
   password: Scalars['String'];
   public: Scalars['Boolean'];
+  mature: Scalars['Boolean'];
   premium: Scalars['Boolean'];
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
@@ -117,13 +139,14 @@ export type Mutation = {
   createPost: Post;
   updatePost?: Maybe<Post>;
   deletePost: Scalars['Boolean'];
+  addNewComment: Scalars['Boolean'];
   changePassword: UserResponse;
   forgotPassword: Scalars['Boolean'];
   createUser: UserResponse;
   login: UserResponse;
   logout: Scalars['Boolean'];
   createZone: Zone;
-  addNewMessage: Scalars['Boolean'];
+  createZoneMessageMutation: Scalars['Boolean'];
 };
 
 
@@ -166,6 +189,11 @@ export type MutationDeletePostArgs = {
 };
 
 
+export type MutationAddNewCommentArgs = {
+  comment: CommentInput;
+};
+
+
 export type MutationChangePasswordArgs = {
   newPassword: Scalars['String'];
   token: Scalars['String'];
@@ -193,13 +221,19 @@ export type MutationCreateZoneArgs = {
 };
 
 
-export type MutationAddNewMessageArgs = {
-  message: MessageInput;
+export type MutationCreateZoneMessageMutationArgs = {
+  message: CommentInput;
 };
 
 export type PostInput = {
   title: Scalars['String'];
   text: Scalars['String'];
+};
+
+export type CommentInput = {
+  recipeId: Scalars['ID'];
+  nickname?: Maybe<Scalars['String']>;
+  content: Scalars['String'];
 };
 
 export type UserResponse = {
@@ -222,18 +256,19 @@ export type UsernamePasswordInput = {
 
 export type ZoneInput = {
   name: Scalars['String'];
-  description?: Maybe<Scalars['String']>;
-  public: Scalars['Boolean'];
-  password?: Maybe<Scalars['String']>;
+  username: Scalars['String'];
+  password: Scalars['String'];
+  app?: Maybe<Scalars['String']>;
+  hostId: Scalars['Float'];
+  zoneId: Scalars['String'];
+  participants: Scalars['Float'];
   learningLanguage: Scalars['String'];
   nativeLanguage: Scalars['String'];
   maxParticipants: Scalars['Float'];
-};
-
-export type MessageInput = {
-  zoneId: Scalars['ID'];
-  username?: Maybe<Scalars['String']>;
-  content: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
+  public: Scalars['Boolean'];
+  mature: Scalars['Boolean'];
+  premium: Scalars['Boolean'];
 };
 
 export type Subscription = {
@@ -241,8 +276,9 @@ export type Subscription = {
   normalSubscription: Notification;
   subscriptionWithFilter: Notification;
   subscriptionWithFilterToDynamicTopic: Notification;
+  newComments: Comment;
   userStatus: UserStatus;
-  newMessages: Message;
+  createZoneSubscription: Comment;
 };
 
 
@@ -251,8 +287,18 @@ export type SubscriptionSubscriptionWithFilterToDynamicTopicArgs = {
 };
 
 
+export type SubscriptionNewCommentsArgs = {
+  recipeId: Scalars['ID'];
+};
+
+
 export type SubscriptionUserStatusArgs = {
   status: Scalars['String'];
+};
+
+
+export type SubscriptionCreateZoneSubscriptionArgs = {
+  recipeId: Scalars['ID'];
 };
 
 export type Notification = {
@@ -484,8 +530,21 @@ export type ZonesQuery = (
   { __typename?: 'Query' }
   & { zones: Array<(
     { __typename?: 'Zone' }
-    & Pick<Zone, 'id' | 'app' | 'hostId' | 'description' | 'name' | 'zoneId'>
+    & Pick<Zone, 'id' | 'app' | 'hostId' | 'description' | 'name' | 'mature' | 'zoneId'>
   )> }
+);
+
+export type CreateZoneSubscriptionSubscriptionVariables = Exact<{
+  recipeId: Scalars['ID'];
+}>;
+
+
+export type CreateZoneSubscriptionSubscription = (
+  { __typename?: 'Subscription' }
+  & { createZoneSubscription: (
+    { __typename?: 'Comment' }
+    & Pick<Comment, 'nickname' | 'content' | 'date'>
+  ) }
 );
 
 export const PostSnippetFragmentDoc = gql`
@@ -1005,6 +1064,7 @@ export const ZonesDocument = gql`
     hostId
     description
     name
+    mature
     zoneId
   }
 }
@@ -1034,3 +1094,34 @@ export function useZonesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Zone
 export type ZonesQueryHookResult = ReturnType<typeof useZonesQuery>;
 export type ZonesLazyQueryHookResult = ReturnType<typeof useZonesLazyQuery>;
 export type ZonesQueryResult = Apollo.QueryResult<ZonesQuery, ZonesQueryVariables>;
+export const CreateZoneSubscriptionDocument = gql`
+    subscription createZoneSubscription($recipeId: ID!) {
+  createZoneSubscription(recipeId: $recipeId) {
+    nickname
+    content
+    date
+  }
+}
+    `;
+
+/**
+ * __useCreateZoneSubscriptionSubscription__
+ *
+ * To run a query within a React component, call `useCreateZoneSubscriptionSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useCreateZoneSubscriptionSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCreateZoneSubscriptionSubscription({
+ *   variables: {
+ *      recipeId: // value for 'recipeId'
+ *   },
+ * });
+ */
+export function useCreateZoneSubscriptionSubscription(baseOptions?: Apollo.SubscriptionHookOptions<CreateZoneSubscriptionSubscription, CreateZoneSubscriptionSubscriptionVariables>) {
+        return Apollo.useSubscription<CreateZoneSubscriptionSubscription, CreateZoneSubscriptionSubscriptionVariables>(CreateZoneSubscriptionDocument, baseOptions);
+      }
+export type CreateZoneSubscriptionSubscriptionHookResult = ReturnType<typeof useCreateZoneSubscriptionSubscription>;
+export type CreateZoneSubscriptionSubscriptionResult = Apollo.SubscriptionResult<CreateZoneSubscriptionSubscription>;

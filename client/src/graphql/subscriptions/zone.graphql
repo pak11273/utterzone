@@ -1,0 +1,6 @@
+# subscription {
+#   subscriptionDynamicZoneTopic(topic: String) {
+#     id
+#     message
+#   }
+# }

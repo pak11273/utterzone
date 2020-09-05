@@ -4,9 +4,10 @@
 import "reflect-metadata"
 import "dotenv-safe/config"
 
-import { redis, redisSession } from "./redis"
+import { pubSub, redis, redisSession } from "./redis"
 
 import { ApolloServer } from "apollo-server-express"
+import { Comment } from "./entities/Comment"
 import { HelloResolver } from "./resolvers/hello"
 import { Message } from "./entities/Message"
 import { Notification } from "./entities/Notification"
@@ -15,6 +16,8 @@ import { Post } from "./entities/Post"
 import { PostResolver } from "./resolvers/post"
 import { Profile } from "./entities/Profile"
 import { ProfileResolver } from "./resolvers/profile"
+import { Recipe } from "./entities/Recipe"
+import { RecipeResolver } from "./resolvers/recipe"
 import { Updoot } from "./entities/Updoot"
 import { User } from "./entities/User"
 import { UserResolver } from "./resolvers/user"
@@ -30,6 +33,8 @@ import express from "express"
 import http from "http"
 import path from "path"
 
+// import { pubSub, redis, redisSession } from "./redis"
+
 const main = async () => {
   const conn = await createConnection({
     type: "postgres",
@@ -37,7 +42,17 @@ const main = async () => {
     logging: false,
     synchronize: true,
     migrations: [path.join(__dirname, "./migrations/*")],
-    entities: [Message, Notification, Profile, Post, User, Updoot, Zone],
+    entities: [
+      Comment,
+      Message,
+      Notification,
+      Profile,
+      Post,
+      Recipe,
+      User,
+      Updoot,
+      Zone,
+    ],
   })
   await conn.runMigrations()
 
@@ -63,11 +78,12 @@ const main = async () => {
         NotificationResolver,
         PostResolver,
         ProfileResolver,
+        RecipeResolver,
         UserResolver,
         ZoneResolver,
       ],
       validate: false,
-      // pubSub, // provide redis-based instance of PubSub
+      pubSub, // provide redis-based instance of PubSub
     }),
     context: ({ req, res }) => ({
       req,

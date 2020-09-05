@@ -1,9 +1,10 @@
 import { Button, Checkbox, Form, Input, Select } from "antd"
 import React, { useState } from "react"
 
-import { toErrorMap } from "../utils/toErrorMap"
-import { useCreateZoneMutation } from "../generated/graphql"
+import { useCreateZoneSubscriptionSubscription } from "../generated/graphql"
 import { useHistory } from "react-router-dom"
+
+// import { toErrorMap } from "../utils/toErrorMap"
 
 const { Option } = Select
 
@@ -12,9 +13,29 @@ interface CreateZoneProps {}
 export const CreateZone: React.FC<CreateZoneProps> = () => {
   const history = useHistory()
   const [privateZone, setPrivate] = useState(false)
-  const [zone, { loading, error }] = useCreateZoneMutation()
+  const { data, loading, error } = useCreateZoneSubscriptionSubscription({
+    variables: { recipeId: "e" },
+  })
   const formItemLayout = {}
   const [form] = Form.useForm()
+  try {
+    console.log("data :", data)
+    console.log("loading :", loading)
+    if (error) {
+      console.log("ERROR: ", error)
+    }
+    // if (data) {
+    //   history.push(
+    //     `/zone/${data.createZoneSubscription}/${data.createZoneSubscription}`
+    //   )
+    // }
+    // } else {
+    //   const errorMap = toErrorMap(data?.createZoneSubscription)
+    //   form.setFields(errorMap)
+    // }
+  } catch (err) {
+    console.log(err)
+  }
 
   const onFinish = async (values: any) => {
     if (values) {
@@ -24,26 +45,9 @@ export const CreateZone: React.FC<CreateZoneProps> = () => {
         password: "xyz",
         maxParticipants: 36.0,
         description: "test",
+        premium: false,
         public: true,
         mature: true,
-      }
-      try {
-        const response = await zone({
-          variables: { input: values },
-        })
-        if (error) {
-          console.log("ERROR: ", error)
-        }
-        if (response.data?.createZone) {
-          history.push(
-            `/zone/${response.data.createZone.hostId}/${response.data.createZone.id}`
-          )
-        } else {
-          const errorMap = toErrorMap(response.data?.createZone)
-          form.setFields(errorMap)
-        }
-      } catch (err) {
-        console.log(err)
       }
     }
   }

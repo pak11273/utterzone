@@ -1,4 +1,4 @@
-import { UsernamePasswordInput } from "../resolvers/UsernamePasswordInput"
+import { UsernamePasswordInput } from "../shared/inputs/UsernamePasswordInput"
 
 export const validateCreateUser = (options: UsernamePasswordInput) => {
   //  TODO temporarily disable validations for dev, restore when publishing

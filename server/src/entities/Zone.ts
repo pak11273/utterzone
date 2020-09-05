@@ -7,7 +7,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm"
-import { Field, ObjectType } from "type-graphql"
+import { Field, ID, ObjectType } from "type-graphql"
 
 import { Message } from "./Message"
 import { User } from "./User"
@@ -74,4 +74,20 @@ export class Zone extends BaseEntity {
   @Field(() => String)
   @UpdateDateColumn()
   updatedAt?: Date
+}
+
+@ObjectType()
+export class ZoneEvent {
+  @Field(_type => ID)
+  id: number
+
+  @Field({ nullable: true })
+  message?: string
+
+  @Field(_type => Date)
+  date: Date
+}
+export interface ZonePayload {
+  id: number
+  message?: string
 }

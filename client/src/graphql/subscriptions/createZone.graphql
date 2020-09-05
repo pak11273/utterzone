@@ -1,0 +1,7 @@
+subscription createZoneSubscription($recipeId: ID!) {
+  createZoneSubscription(recipeId: $recipeId) {
+    nickname
+    content
+    date
+  }
+}

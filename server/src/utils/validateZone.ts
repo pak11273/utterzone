@@ -1,4 +1,4 @@
-import { ZoneInput } from "../resolvers/zone"
+import { ZoneInput } from "../shared/inputs/zone.input"
 
 export const validateZone = (options: ZoneInput) => {
   // TODO: restore in prod

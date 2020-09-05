@@ -5,8 +5,16 @@ import { RedisPubSub } from "graphql-redis-subscriptions"
 import connectRedis from "connect-redis"
 import session from "express-session"
 
-export const redis = new Redis(process.env.REDIS_URL)
+export const redis = new Redis(
+  process.env.REDIS_URL + ":" + process.env.REDIS_PORT
+)
 export const RedisStore = connectRedis(session)
+
+const options: Redis.RedisOptions = {
+  host: process.env.REDIS_URL,
+  port: +process.env.REDIS_PORT!,
+  retryStrategy: times => Math.max(times * 100, 3000),
+}
 
 export const redisSession = session({
   name: COOKIE_NAME,
@@ -27,6 +35,6 @@ export const redisSession = session({
 })
 // create Redis-based pub-sub
 export const pubSub = new RedisPubSub({
-  publisher: redis,
-  subscriber: redis,
+  publisher: new Redis(options),
+  subscriber: new Redis(options),
 })
