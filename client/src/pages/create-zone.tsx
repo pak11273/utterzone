@@ -1,8 +1,7 @@
 import { Button, Checkbox, Form, Input, Select } from "antd"
 import React, { useState } from "react"
+import { gql, useQuery } from "@apollo/client"
 
-import { gql } from "graphql.macro"
-import { useCreateZoneSubscriptionSubscription } from "../generated/graphql"
 import { useHistory } from "react-router-dom"
 
 // import { toErrorMap } from "../utils/toErrorMap"
@@ -11,60 +10,41 @@ const { Option } = Select
 
 interface CreateZoneProps {}
 
-const createZoneSubscription = gql`
-  subscription createZoneSubscription($recipeId: ID!) {
-    createZoneSubscription(recipeId: "2") {
-      nickname
-      content
-      date
-    }
-  }
-`
+// const ME = gql`
+//   query {
+//     me @client {
+//       id
+//       username
+//     }
+//   }
+// `
 
 export const CreateZone: React.FC<CreateZoneProps> = () => {
+  // const { data } = useQuery(ME, {})
   const history = useHistory()
   const [privateZone, setPrivate] = useState(false)
-  const { data, loading, error } = useCreateZoneSubscriptionSubscription({
-    variables: { recipeId: "2" },
-  })
-  const formItemLayout = {}
-  const [form] = Form.useForm()
-  try {
-    if (error) {
-      console.log("ERROR: ", error)
-    }
-    if (data) {
-      history.push(
-        `/zone/${data?.createZoneSubscription}/${data?.createZoneSubscription}`
-      )
-    }
-    // if (data) {
-    //   history.push(
-    //     `/zone/${data.createZoneSubscription}/${data.createZoneSubscription}`
-    //   )
-    // }
-    // } else {
-    //   const errorMap = toErrorMap(data?.createZoneSubscription)
-    //   form.setFields(errorMap)
-    // }
-  } catch (err) {
-    console.log(err)
-  }
+  const [values, setValues] = useState({} as any)
+  // console.log("me: ", data?.me?.id)
 
   const onFinish = async (values: any) => {
     if (values) {
-      values = {
+      setValues({
         ...values,
-        name: "blah blah",
+        name: values.name,
         password: "xyz",
         maxParticipants: 36.0,
         description: "test",
         premium: false,
         public: true,
         mature: true,
-      }
+      })
     }
+    history.push("/zone/thing/foo")
   }
+
+  const formItemLayout = {}
+  const [form] = Form.useForm()
+
   return (
     <section className="userform_section">
       <div className="user_form">
@@ -193,7 +173,7 @@ export const CreateZone: React.FC<CreateZoneProps> = () => {
               style={{ margin: "20px 0 0 6px" }}
               type="primary"
               htmlType="submit"
-              loading={loading}
+              // loading={loading}
             >
               Create Zone
             </Button>

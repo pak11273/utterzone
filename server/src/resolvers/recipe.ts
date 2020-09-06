@@ -35,7 +35,7 @@ export class RecipeResolver {
     @PubSub(Topic.NewComment)
     notifyAboutNewComment: Publisher<NewCommentPayload>
   ): Promise<boolean> {
-    const recipe = this.recipes.find(r => r.id === input.recipeId)
+    const recipe = this.recipes.find(r => r.id === input.name)
     if (!recipe) {
       return false
     }
@@ -49,7 +49,7 @@ export class RecipeResolver {
       content: comment.content,
       nickname: comment.nickname,
       dateString: comment.date.toISOString(),
-      recipeId: input.recipeId,
+      name: input.name,
     })
     return true
   }
@@ -60,14 +60,14 @@ export class RecipeResolver {
       payload,
       args,
     }: ResolverFilterData<NewCommentPayload, NewCommentsArgs>) => {
-      return payload.recipeId === args.recipeId
+      return payload.name === args.name
     },
   })
   newComments(
     @Root() newComment: NewCommentPayload,
-    @Args() { recipeId }: NewCommentsArgs
+    @Args() { name }: NewCommentsArgs
   ): Comment {
-    console.log("recipeId: ", recipeId)
+    console.log("name: ", name)
     return {
       content: newComment.content!,
       date: new Date(newComment.dateString), // limitation of Redis payload serialization

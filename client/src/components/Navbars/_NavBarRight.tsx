@@ -15,6 +15,8 @@ export const RightMenu: React.FC<NavBarProps> = (props: any) => {
   const handleLogout = async () => {
     await logout()
     await client.resetStore()
+    //TODO: also destroy the subscription socket
+    // see: https://github.com/apollographql/apollo-client/issues/2774
     history.push("/login")
   }
 

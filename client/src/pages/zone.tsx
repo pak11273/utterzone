@@ -3,10 +3,12 @@ import { Col, Row } from "antd"
 import React, { useEffect, useState } from "react"
 
 import { loader } from "graphql.macro"
-import { useQuery } from "@apollo/client"
+import { useCreateZoneSubscriptionSubscription } from "../generated/graphql"
+import { useParams } from "react-router-dom"
+
+// import { useQuery } from "@apollo/client"
 
 // import { useParams } from "react-router-dom"
-
 
 const ZONE_QUERY = loader("../graphql/queries/zone.graphql")
 interface ZoneQueryMessage {
@@ -31,19 +33,34 @@ type OptionalZoneQueryResult = ZoneQueryResult | null
 // export const Zone: React.FC<zoneProps> = ({ id }) => {
 export const Zone: any = () => {
   const [chat, setChat] = useState<OptionalZoneQueryResult>(null)
-  const { loading, error, data } = useQuery(ZONE_QUERY, {
-    variables: { id: 1 },
-  })
+  // const { loading, error, data } = useQuery(ZONE_QUERY, {
+  //   variables: { id: 1 },
+  // })
   // let { id } = useParams()
-  if (!data || !data.zone) {
-    console.log("no zone loaded!")
-  }
+  // if (!data || !data.zone) {
+  //   console.log("no zone loaded!")
+  // }
 
-  useEffect((data?: any) => {
-    setChat(!data ? null : data)
-  }, [])
-  if (loading) return "Loading..."
-  if (error) return `Error! ${error.message}`
+  // useEffect((data?: any) => {
+  //   setChat(!data ? null : data)
+  // }, [])
+  // if (loading) return "Loading..."
+  // if (error) return `Error! ${error.message}`
+  const params: any = useParams()
+
+  const { data, loading, error } = useCreateZoneSubscriptionSubscription({
+    variables: { name: params.id },
+  })
+
+  console.log("loading: ", loading)
+  try {
+    if (error) {
+      console.log("ERROR: ", error)
+    }
+    console.log("data: ", data)
+  } catch (err) {
+    console.log(err)
+  }
 
   return (
     <div style={{ height: "100%" }}>
@@ -54,7 +71,7 @@ export const Zone: any = () => {
           <Notebook />
         </Col>
         <Col xs={24} md={7} style={{ height: "100%" }}>
-          <Chat chatFetched={!chat ? undefined : chat} />
+          <Chat data={data} chatFetched={!chat ? undefined : chat} />
         </Col>
       </Row>
     </div>

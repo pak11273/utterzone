@@ -2,10 +2,10 @@
 
 // import { Form } from "antd"
 
-import { Button, Card } from "antd"
 import { Col, Row } from "antd"
 import React, { useEffect } from "react"
 
+import { Button } from "antd"
 import { ZoneCard } from "../components"
 import { useZonesQuery } from "../generated/graphql"
 
@@ -16,7 +16,7 @@ import { useZonesQuery } from "../generated/graphql"
 
 interface zonesProps {}
 
-const { Meta } = Card
+// const { Meta } = Card
 
 export const Zones: React.FC<zonesProps> = () => {
   // const history = useHistory()

@@ -1,5 +1,5 @@
-subscription createZoneSubscription($recipeId: ID!) {
-  createZoneSubscription(recipeId: $recipeId) {
+subscription createZoneSubscription($name: ID!) {
+  createZoneSubscription(name: $name) {
     nickname
     content
     date

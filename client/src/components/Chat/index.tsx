@@ -25,13 +25,22 @@ interface chatInterface {
 
 type chatResult = chatInterface | null
 
-export const Chat = ({ chatFetched }: any) => {
+export const Chat = ({ data, chatFetched }: any) => {
   const [chat, setChat] = useState<chatResult | any>({ messages: [] })
   const [message, setMessage] = useState("")
+  console.log("chat data: ", data)
+
+  if (data) {
+    data!.createZoneSubscription.message = data!.createZoneSubscription.content
+  }
 
   useEffect(() => {
-    if (chatFetched) {
-      setChat({ ...chat, ...chatFetched })
+    if (chatFetched || data) {
+      setChat({
+        ...chat,
+        ...chatFetched,
+        ...data.createZoneSubscription,
+      })
     }
   }, [chat, chatFetched])
 

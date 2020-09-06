@@ -7,6 +7,7 @@ import { split } from "@apollo/client/link/core/split"
 
 const httpLink = new HttpLink({
   uri: "http://localhost:5000/graphql",
+  credentials: "include",
 })
 
 const wsLink = new WebSocketLink({
@@ -40,5 +41,5 @@ export const client = new ApolloClient({
   link: splitLink,
   // uri: "http://localhost:5000/graphql",
   cache: new InMemoryCache(),
-  credentials: "include",
+  // credentials: "include",
 })

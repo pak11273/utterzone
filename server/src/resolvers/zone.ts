@@ -23,14 +23,14 @@ import { v4 } from "uuid"
 // import { ZoneEvent, ZonePayload } from "../entities/Zone"
 import { Comment } from "../entities/Comment"
 import { NewCommentPayload } from "../shared/interfaces/newComment.interface"
-import { NewCommentsArgs } from "../shared/args/recipe.resolver.args"
-import { Recipe } from "../entities/recipe"
+import { NewZoneArgs } from "../shared/args/zone.resolver.args"
+// import { Recipe } from "../entities/recipe"
 import { Zone } from "../entities/Zone"
 
 import { Message } from "../entities/Message"
 import { MyContext } from "../types"
 import { Topic } from "../types/Topic"
-import { sampleRecipes } from "../data/recipe.samples"
+// import { sampleRecipes } from "../data/recipe.samples"
 
 import argon2 from "argon2"
 // import { getConnection } from "typeorm"
@@ -90,7 +90,7 @@ export class NewMessagesArgs {
 }
 @Resolver()
 export class ZoneResolver {
-  private readonly recipes: Recipe[] = sampleRecipes.slice()
+  // private readonly recipes: Recipe[] = sampleRecipes.slice()
   // private autoIncrement = 0
   @Query(() => Zone, { nullable: true })
   async zone(
@@ -190,21 +190,16 @@ export class ZoneResolver {
     @PubSub(Topic.NewMessage)
     notifyAboutNewComment: Publisher<NewCommentPayload>
   ): Promise<boolean> {
-    const recipe = this.recipes.find(r => r.id === input.recipeId)
-    if (!recipe) {
-      return false
-    }
     const comment: Comment = {
       content: input.content,
       nickname: input.nickname,
       date: new Date(),
     }
-    recipe.comments.push(comment)
     await notifyAboutNewComment({
       content: comment.content,
       nickname: comment.nickname,
       dateString: comment.date.toISOString(),
-      recipeId: input.recipeId,
+      name: input.name,
     })
     return true
   }
@@ -214,17 +209,17 @@ export class ZoneResolver {
     filter: ({
       payload,
       args,
-    }: ResolverFilterData<NewCommentPayload, NewCommentsArgs>) => {
+    }: ResolverFilterData<NewCommentPayload, NewZoneArgs>) => {
       console.log("args: ", args)
       console.log("payload: ", payload)
-      return payload.recipeId === args.recipeId
+      return payload.name === args.name
     },
   })
   createZoneSubscription(
     @Root() newComment: NewCommentPayload,
-    @Args() { recipeId }: NewCommentsArgs
+    @Args() { name }: NewZoneArgs
   ): Comment {
-    console.log("recipeId: ", recipeId)
+    console.log("name: ", name)
     return {
       content: newComment.content!,
       date: new Date(newComment.dateString), // limitation of Redis payload serialization

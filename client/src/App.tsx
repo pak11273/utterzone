@@ -1,6 +1,6 @@
 import "./less/index.less"
 
-import { Layout, MenuMain, NavbarMain } from "./components"
+import { Announcement, Layout, MenuMain, NavbarMain } from "./components"
 
 import { ApolloProvider } from "@apollo/client"
 import { Cache } from "react-avatar"
@@ -27,6 +27,7 @@ const App = () => {
       <ConfigProvider cache={cache}>
         <Router>
           <Layout>
+            <Announcement />
             <NavbarMain />
             <div style={{ display: "flex", height: "100vh" }}>
               <MenuMain />

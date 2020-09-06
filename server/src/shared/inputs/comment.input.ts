@@ -5,7 +5,7 @@ import { Comment } from "../../entities/Comment"
 @InputType()
 export class CommentInput implements Partial<Comment> {
   @Field(_type => ID)
-  recipeId: string
+  name: string
 
   @Field({ nullable: true })
   nickname?: string

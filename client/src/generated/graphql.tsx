@@ -231,7 +231,7 @@ export type PostInput = {
 };
 
 export type CommentInput = {
-  recipeId: Scalars['ID'];
+  name: Scalars['ID'];
   nickname?: Maybe<Scalars['String']>;
   content: Scalars['String'];
 };
@@ -288,7 +288,7 @@ export type SubscriptionSubscriptionWithFilterToDynamicTopicArgs = {
 
 
 export type SubscriptionNewCommentsArgs = {
-  recipeId: Scalars['ID'];
+  name: Scalars['ID'];
 };
 
 
@@ -298,7 +298,7 @@ export type SubscriptionUserStatusArgs = {
 
 
 export type SubscriptionCreateZoneSubscriptionArgs = {
-  recipeId: Scalars['ID'];
+  name: Scalars['ID'];
 };
 
 export type Notification = {
@@ -535,7 +535,7 @@ export type ZonesQuery = (
 );
 
 export type CreateZoneSubscriptionSubscriptionVariables = Exact<{
-  recipeId: Scalars['ID'];
+  name: Scalars['ID'];
 }>;
 
 
@@ -1095,8 +1095,8 @@ export type ZonesQueryHookResult = ReturnType<typeof useZonesQuery>;
 export type ZonesLazyQueryHookResult = ReturnType<typeof useZonesLazyQuery>;
 export type ZonesQueryResult = Apollo.QueryResult<ZonesQuery, ZonesQueryVariables>;
 export const CreateZoneSubscriptionDocument = gql`
-    subscription createZoneSubscription($recipeId: ID!) {
-  createZoneSubscription(recipeId: $recipeId) {
+    subscription createZoneSubscription($name: ID!) {
+  createZoneSubscription(name: $name) {
     nickname
     content
     date
@@ -1116,7 +1116,7 @@ export const CreateZoneSubscriptionDocument = gql`
  * @example
  * const { data, loading, error } = useCreateZoneSubscriptionSubscription({
  *   variables: {
- *      recipeId: // value for 'recipeId'
+ *      name: // value for 'name'
  *   },
  * });
  */

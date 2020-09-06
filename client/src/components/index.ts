@@ -1,6 +1,7 @@
 import { InputField, SelectField, SwitchField } from "./Inputs/Inputs"
 
 import { AdHeader } from "./Ads/AdHeader"
+import { Announcement } from "./Announcement/Announcement"
 import { Chat } from "./Chat"
 import { EditDeletePostbuttons } from "./EditDeletePostButtons"
 import { Gravatar } from "./Gravatar"
@@ -16,6 +17,7 @@ import { ZoneMain } from "./Zone/ZoneMain"
 
 export {
   AdHeader,
+  Announcement,
   Chat,
   EditDeletePostbuttons,
   Gravatar,
