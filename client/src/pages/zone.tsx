@@ -1,16 +1,17 @@
 import { Chat, Notebook, ZoneControls, ZoneMain } from "../components"
 import { Col, Row } from "antd"
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 
-import { loader } from "graphql.macro"
 import { useCreateZoneSubscriptionSubscription } from "../generated/graphql"
 import { useParams } from "react-router-dom"
+
+// import { loader } from "graphql.macro"
 
 // import { useQuery } from "@apollo/client"
 
 // import { useParams } from "react-router-dom"
 
-const ZONE_QUERY = loader("../graphql/queries/zone.graphql")
+// const ZONE_QUERY = loader("../graphql/queries/zone.graphql")
 interface ZoneQueryMessage {
   id: string
   name: string
@@ -32,7 +33,7 @@ type OptionalZoneQueryResult = ZoneQueryResult | null
 
 // export const Zone: React.FC<zoneProps> = ({ id }) => {
 export const Zone: any = () => {
-  const [chat, setChat] = useState<OptionalZoneQueryResult>(null)
+  const [chat] = useState<OptionalZoneQueryResult>(null)
   // const { loading, error, data } = useQuery(ZONE_QUERY, {
   //   variables: { id: 1 },
   // })
@@ -52,15 +53,7 @@ export const Zone: any = () => {
     variables: { name: params.id },
   })
 
-  console.log("loading: ", loading)
-  try {
-    if (error) {
-      console.log("ERROR: ", error)
-    }
-    console.log("data: ", data)
-  } catch (err) {
-    console.log(err)
-  }
+  if (error) console.log("ERROR: ", error)
 
   return (
     <div style={{ height: "100%" }}>

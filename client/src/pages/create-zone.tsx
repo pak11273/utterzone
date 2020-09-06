@@ -1,6 +1,6 @@
 import { Button, Checkbox, Form, Input, Select } from "antd"
 import React, { useState } from "react"
-import { gql, useQuery } from "@apollo/client"
+import { gql, useLazyQuery } from "@apollo/client"
 
 import { useHistory } from "react-router-dom"
 
@@ -10,36 +10,40 @@ const { Option } = Select
 
 interface CreateZoneProps {}
 
-// const ME = gql`
-//   query {
-//     me @client {
-//       id
-//       username
-//     }
-//   }
-// `
+const CACHE_ME = gql`
+  query {
+    me @client {
+      id
+      username
+    }
+  }
+`
 
 export const CreateZone: React.FC<CreateZoneProps> = () => {
-  // const { data } = useQuery(ME, {})
   const history = useHistory()
   const [privateZone, setPrivate] = useState(false)
-  const [values, setValues] = useState({} as any)
-  // console.log("me: ", data?.me?.id)
+  // const [values, setValues] = useState({} as any)
+  const [getMe, { data }] = useLazyQuery(CACHE_ME)
 
   const onFinish = async (values: any) => {
-    if (values) {
-      setValues({
-        ...values,
-        name: values.name,
-        password: "xyz",
-        maxParticipants: 36.0,
-        description: "test",
-        premium: false,
-        public: true,
-        mature: true,
-      })
+    //TODO: zone create validation
+    // if (values) {
+    //   setValues({
+    //     ...values,
+    //     name: values.name,
+    //     password: "xyz",
+    //     maxParticipants: 36.0,
+    //     description: "test",
+    //     premium: false,
+    //     public: true,
+    //     mature: true,
+    //   })
+    // }
+    if (!data.me) {
+      alert("you must be logged in")
+    } else {
+      history.push("/zone/thing/foo")
     }
-    history.push("/zone/thing/foo")
   }
 
   const formItemLayout = {}
@@ -174,6 +178,7 @@ export const CreateZone: React.FC<CreateZoneProps> = () => {
               type="primary"
               htmlType="submit"
               // loading={loading}
+              onClick={() => getMe()}
             >
               Create Zone
             </Button>

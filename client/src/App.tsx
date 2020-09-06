@@ -27,8 +27,8 @@ const App = () => {
       <ConfigProvider cache={cache}>
         <Router>
           <Layout>
-            <Announcement />
             <NavbarMain />
+            <Announcement />
             <div style={{ display: "flex", height: "100vh" }}>
               <MenuMain />
               <div style={{ width: "100%", minHeight: "100%" }}>{routes}</div>

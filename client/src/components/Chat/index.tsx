@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react"
 
 import { Message } from "./Message"
 import { SendOutlined } from "@ant-design/icons"
+import { useCreateZoneMessageMutation } from "../../generated/graphql"
 
 // import { Gravatar } from "../../components"
 
@@ -28,34 +29,54 @@ type chatResult = chatInterface | null
 export const Chat = ({ data, chatFetched }: any) => {
   const [chat, setChat] = useState<chatResult | any>({ messages: [] })
   const [message, setMessage] = useState("")
-  console.log("chat data: ", data)
+  const [
+    createZoneMessageMutation,
+    { data: msgData, loading, error },
+  ] = useCreateZoneMessageMutation({
+    variables: {
+      message: { name: "foo", nickname: "foo", content: message },
+    },
+  })
 
   if (data) {
     data!.createZoneSubscription.message = data!.createZoneSubscription.content
+    delete data.createZoneSubscription.content
   }
+
+  console.log("transformed data", data?.createZoneSubscription)
+  console.log("chat: chat, ", chat)
+
+  console.log("chat + messages: ", chat.messages)
 
   useEffect(() => {
     if (chatFetched || data) {
-      setChat({
-        ...chat,
-        ...chatFetched,
-        ...data.createZoneSubscription,
+      chat!.messages.push({
+        id: chat.id,
+        name: chat.name,
+        message: data.createZoneSubscription.message,
       })
+
+      let newChat = {
+        ...chat,
+        messages: chat!.messages,
+      }
+      setChat(newChat)
     }
-  }, [chat, chatFetched])
+  }, [data])
 
   const handleMessages = (e: any) => {
-    chat!.messages.push({ id: chat.id, name: chat.name, message })
+    // chat!.messages.push({ id: chat.id, name: chat.name, message })
 
-    let newChat = {
-      ...chat,
-      messages: chat!.messages,
-    }
-    setChat(newChat)
+    // let newChat = {
+    //   ...chat,
+    //   messages: chat!.messages,
+    // }
+    // setChat(newChat)
+    // TODO replace with chat message mutation
+    createZoneMessageMutation()
   }
 
   const handleMessage = (e: any) => {
-    console.log("chat typeing: ", chat)
     setMessage(e.target.value)
   }
 

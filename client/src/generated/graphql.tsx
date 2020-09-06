@@ -383,6 +383,16 @@ export type CreateZoneMutation = (
   ) }
 );
 
+export type CreateZoneMessageMutationVariables = Exact<{
+  message: CommentInput;
+}>;
+
+
+export type CreateZoneMessageMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'createZoneMessageMutation'>
+);
+
 export type DeletePostMutationVariables = Exact<{
   id: Scalars['Int'];
 }>;
@@ -689,6 +699,36 @@ export function useCreateZoneMutation(baseOptions?: Apollo.MutationHookOptions<C
 export type CreateZoneMutationHookResult = ReturnType<typeof useCreateZoneMutation>;
 export type CreateZoneMutationResult = Apollo.MutationResult<CreateZoneMutation>;
 export type CreateZoneMutationOptions = Apollo.BaseMutationOptions<CreateZoneMutation, CreateZoneMutationVariables>;
+export const CreateZoneMessageDocument = gql`
+    mutation CreateZoneMessage($message: CommentInput!) {
+  createZoneMessageMutation(message: $message)
+}
+    `;
+export type CreateZoneMessageMutationFn = Apollo.MutationFunction<CreateZoneMessageMutation, CreateZoneMessageMutationVariables>;
+
+/**
+ * __useCreateZoneMessageMutation__
+ *
+ * To run a mutation, you first call `useCreateZoneMessageMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateZoneMessageMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createZoneMessageMutation, { data, loading, error }] = useCreateZoneMessageMutation({
+ *   variables: {
+ *      message: // value for 'message'
+ *   },
+ * });
+ */
+export function useCreateZoneMessageMutation(baseOptions?: Apollo.MutationHookOptions<CreateZoneMessageMutation, CreateZoneMessageMutationVariables>) {
+        return Apollo.useMutation<CreateZoneMessageMutation, CreateZoneMessageMutationVariables>(CreateZoneMessageDocument, baseOptions);
+      }
+export type CreateZoneMessageMutationHookResult = ReturnType<typeof useCreateZoneMessageMutation>;
+export type CreateZoneMessageMutationResult = Apollo.MutationResult<CreateZoneMessageMutation>;
+export type CreateZoneMessageMutationOptions = Apollo.BaseMutationOptions<CreateZoneMessageMutation, CreateZoneMessageMutationVariables>;
 export const DeletePostDocument = gql`
     mutation DeletePost($id: Int!) {
   deletePost(id: $id)
