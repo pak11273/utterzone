@@ -26,7 +26,7 @@ export const Register: React.FC<registerProps> = () => {
       try {
         const response = await register({
           variables: { input: values },
-          update: (cache, { data }) => {
+          update: (cache: any, { data }: { data: any }) => {
             cache.writeQuery<MeQuery>({
               query: MeDocument,
               data: {
@@ -37,35 +37,18 @@ export const Register: React.FC<registerProps> = () => {
           },
         })
         if (response.data?.createUser.errors) {
-          console.log("hi")
           const errorMap = toErrorMap(response.data?.createUser.errors)
           form.setFields(errorMap)
         } else {
           history.push("/")
         }
       } catch (err) {
-        console.log("err err err: ", err)
         const errorMap = toErrorMap([
           { field: "username", message: err.message },
         ])
-        console.log("map: ", errorMap)
         form.setFields(errorMap)
       }
     }
-  }
-
-  const onFinishFailed = ({
-    values,
-    errorFields,
-    outOfDate,
-  }: {
-    values: any
-    errorFields: any
-    outOfDate: any
-  }) => {
-    console.log("val: ", values)
-    console.log("errors: ", errorFields)
-    console.log("out: ", outOfDate)
   }
 
   // const [autoCompleteResult, setAutoCompleteResult] = useState([])
@@ -93,7 +76,6 @@ export const Register: React.FC<registerProps> = () => {
           form={form}
           name="register"
           onFinish={onFinish}
-          onFinishFailed={onFinishFailed}
           initialValues={{
             residence: ["zhejiang", "hangzhou", "xihu"],
             prefix: "86",

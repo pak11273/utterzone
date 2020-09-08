@@ -5,23 +5,14 @@ export class ZoneInput {
   @Field()
   name: string
 
-  @Field()
-  username: string
-
-  @Field()
+  @Field({ nullable: true })
   password: string
 
   @Field({ nullable: true })
   app: string
 
   @Field()
-  hostId: number
-
-  @Field()
-  zoneId: string
-
-  @Field()
-  participants: number
+  hostname: string
 
   @Field()
   learningLanguage?: string
@@ -32,15 +23,15 @@ export class ZoneInput {
   @Field()
   maxParticipants?: number
 
-  @Field({ nullable: true })
+  @Field({ nullable: true, defaultValue: "Practice with us!" })
   description: string
 
-  @Field()
+  @Field({ defaultValue: true })
   public: boolean
 
-  @Field()
+  @Field({ defaultValue: false })
   mature: boolean
 
-  @Field()
+  @Field({ defaultValue: false })
   premium: boolean
 }

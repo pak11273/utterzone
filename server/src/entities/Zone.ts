@@ -1,5 +1,6 @@
 import {
   BaseEntity,
+  Column,
   CreateDateColumn,
   Entity,
   ManyToOne,
@@ -16,20 +17,24 @@ import { User } from "./User"
 @Entity()
 export class Zone extends BaseEntity {
   @Field({ nullable: true })
-  @PrimaryGeneratedColumn()
-  id!: number
+  @PrimaryGeneratedColumn("uuid")
+  id!: string
 
   @Field()
+  @Column({ nullable: true })
   name: string
 
   @Field({ nullable: true })
+  @Column({ nullable: true })
   app: string
 
   @Field()
-  hostId: number
+  @Column({ nullable: true })
+  hostname: string
 
   @Field()
-  zoneId: string
+  @PrimaryGeneratedColumn("uuid")
+  token: string
 
   @ManyToOne(_type => User, user => user.zones)
   host: User
@@ -38,15 +43,19 @@ export class Zone extends BaseEntity {
   participants: User[]
 
   @Field()
+  @Column()
   learningLanguage?: string
 
   @Field()
+  @Column()
   nativeLanguage?: string
 
   @Field()
+  @Column()
   maxParticipants?: number
 
   @Field({ nullable: true })
+  @Column()
   description: string
 
   @OneToMany(() => Message, message => message.zone)
@@ -59,12 +68,15 @@ export class Zone extends BaseEntity {
   password!: string
 
   @Field()
+  @Column()
   public: boolean
 
   @Field()
+  @Column()
   mature: boolean
 
   @Field()
+  @Column()
   premium: boolean
 
   @Field(() => String)

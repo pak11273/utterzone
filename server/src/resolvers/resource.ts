@@ -12,21 +12,21 @@ import {
   Args,
 } from "type-graphql"
 
-import { Recipe } from "../entities/recipe"
+import { Resource } from "../entities/Resource"
 import { CommentInput } from "../shared/inputs/comment.input"
 import { Comment } from "../entities/Comment"
 import { NewCommentPayload } from "../shared/interfaces/newComment.interface"
 import { Topic } from "../types/Topic"
-import { sampleRecipes } from "../data/recipe.samples"
-import { NewCommentsArgs } from "../shared/args/recipe.resolver.args"
+import { sampleResources } from "../data/Resource.samples"
+import { NewCommentsArgs } from "../shared/args/Resource.resolver.args"
 
 @Resolver()
-export class RecipeResolver {
-  private readonly recipes: Recipe[] = sampleRecipes.slice()
+export class ResourceResolver {
+  private readonly Resources: Resource[] = sampleResources.slice()
 
-  @Query(_returns => Recipe, { nullable: true })
-  async recipe(@Arg("id", _type => ID) id: string) {
-    return this.recipes.find(recipe => recipe.id === id)
+  @Query(_returns => Resource, { nullable: true })
+  async Resource(@Arg("id", _type => ID) id: string) {
+    return this.Resources.find(Resource => Resource.id === id)
   }
 
   @Mutation(_returns => Boolean)
@@ -35,19 +35,19 @@ export class RecipeResolver {
     @PubSub(Topic.NewComment)
     notifyAboutNewComment: Publisher<NewCommentPayload>
   ): Promise<boolean> {
-    const recipe = this.recipes.find(r => r.id === input.name)
-    if (!recipe) {
+    const Resource = this.Resources.find(r => r.id === input.name)
+    if (!Resource) {
       return false
     }
     const comment: Comment = {
       content: input.content,
-      nickname: input.nickname,
+      username: input.username,
       date: new Date(),
     }
-    recipe.comments.push(comment)
+    Resource.comments.push(comment)
     await notifyAboutNewComment({
       content: comment.content,
-      nickname: comment.nickname,
+      username: comment.username,
       dateString: comment.date.toISOString(),
       name: input.name,
     })
@@ -71,7 +71,7 @@ export class RecipeResolver {
     return {
       content: newComment.content!,
       date: new Date(newComment.dateString), // limitation of Redis payload serialization
-      nickname: newComment.nickname,
+      username: newComment.username,
     }
   }
 }

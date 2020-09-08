@@ -16,8 +16,8 @@ import { Post } from "./entities/Post"
 import { PostResolver } from "./resolvers/post"
 import { Profile } from "./entities/Profile"
 import { ProfileResolver } from "./resolvers/profile"
-import { Recipe } from "./entities/Recipe"
-import { RecipeResolver } from "./resolvers/recipe"
+import { Resource } from "./entities/Resource"
+import { ResourceResolver } from "./resolvers/Resource"
 import { Updoot } from "./entities/Updoot"
 import { User } from "./entities/User"
 import { UserResolver } from "./resolvers/user"
@@ -48,7 +48,7 @@ const main = async () => {
       Notification,
       Profile,
       Post,
-      Recipe,
+      Resource,
       User,
       Updoot,
       Zone,
@@ -78,7 +78,7 @@ const main = async () => {
         NotificationResolver,
         PostResolver,
         ProfileResolver,
-        RecipeResolver,
+        ResourceResolver,
         UserResolver,
         ZoneResolver,
       ],

@@ -3,7 +3,7 @@ import { Field, ObjectType } from "type-graphql"
 @ObjectType()
 export class Comment {
   @Field({ nullable: true })
-  nickname?: string
+  username?: string
 
   @Field()
   content: string

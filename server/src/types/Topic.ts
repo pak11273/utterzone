@@ -1,5 +1,5 @@
 export enum Topic {
   NewComment = "NEW_COMMENT",
-  NewRecipe = "NEW_RECIPE",
-  NewMessage = "NEW_MESSAGE",
+  NewResource = "NEW_RESOURCE",
+  ZoneMessage = "ZONE_MESSAGE",
 }

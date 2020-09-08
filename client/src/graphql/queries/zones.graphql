@@ -2,10 +2,10 @@ query Zones {
   zones {
     id
     app
-    hostId
+    hostname
     description
     name
     mature
-    zoneId
+    token
   }
 }

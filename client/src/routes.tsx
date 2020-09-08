@@ -16,7 +16,7 @@ export const routes = (
     <Route exact path="/" component={Home} />
     <Route exact path="/forgot-password" component={ForgotPassword} />
     <Route exact path="/zones" component={Zones} />
-    <Route exact path="/zone/:host/:id" component={Zone} />
+    <Route exact path="/zone/:host/:token" component={Zone} />
     <Route exact path="/zone/create" component={CreateZone} />
     <Route exact path="/login" component={Login} />
     <Route path="/register" component={Register} />

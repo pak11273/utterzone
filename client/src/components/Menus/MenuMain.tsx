@@ -1,8 +1,5 @@
 import { Layout, Menu } from "antd"
-import {
-  TeamOutlined,
-  UserOutlined,
-} from "@ant-design/icons"
+import { TeamOutlined, UserOutlined } from "@ant-design/icons"
 
 import { Gravatar } from "../Gravatar"
 import React from "react"
@@ -40,27 +37,7 @@ export class MenuMain extends React.Component {
             icon={<TeamOutlined />}
             title="Participants"
           ></SubMenu>
-          {[
-            1,
-            2,
-            3,
-            4,
-            5,
-            6,
-            7,
-            8,
-            9,
-            10,
-            11,
-            12,
-            13,
-            14,
-            15,
-            16,
-            17,
-            18,
-            19,
-          ].map(x => (
+          {[1].map(x => (
             <SubMenu key={`${x}`} icon={<Gravatar />} title="username">
               <div>text</div>
             </SubMenu>

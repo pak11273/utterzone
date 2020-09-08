@@ -1,17 +1,12 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import { Chat, Notebook, ZoneControls, ZoneMain } from "../components"
 import { Col, Row } from "antd"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 
-import { useCreateZoneSubscriptionSubscription } from "../generated/graphql"
+import { useCreateZonePubSubscription } from "../generated/graphql"
 import { useParams } from "react-router-dom"
 
-// import { loader } from "graphql.macro"
-
-// import { useQuery } from "@apollo/client"
-
-// import { useParams } from "react-router-dom"
-
-// const ZONE_QUERY = loader("../graphql/queries/zone.graphql")
 interface ZoneQueryMessage {
   id: string
   name: string
@@ -33,27 +28,26 @@ type OptionalZoneQueryResult = ZoneQueryResult | null
 
 // export const Zone: React.FC<zoneProps> = ({ id }) => {
 export const Zone: any = () => {
-  const [chat] = useState<OptionalZoneQueryResult>(null)
-  // const { loading, error, data } = useQuery(ZONE_QUERY, {
-  //   variables: { id: 1 },
-  // })
-  // let { id } = useParams()
-  // if (!data || !data.zone) {
-  //   console.log("no zone loaded!")
-  // }
-
-  // useEffect((data?: any) => {
-  //   setChat(!data ? null : data)
-  // }, [])
-  // if (loading) return "Loading..."
-  // if (error) return `Error! ${error.message}`
   const params: any = useParams()
-
-  const { data, loading, error } = useCreateZoneSubscriptionSubscription({
-    variables: { name: params.id },
+  const [chat] = useState<OptionalZoneQueryResult>(null)
+  const { data, loading, error } = useCreateZonePubSubscription({
+    variables: { token: params.token },
   })
 
-  if (error) console.log("ERROR: ", error)
+  console.log("data: ", data)
+  console.log("loading: ", loading)
+  console.log("error", error)
+
+  useEffect(() => {
+    window.addEventListener("beforeunload", event => {
+      event.returnValue = ""
+    })
+    return () => {
+      window.removeEventListener("beforeunload", () => {})
+    }
+  }, [])
+
+  console.log("data: ", data)
 
   return (
     <div style={{ height: "100%" }}>

@@ -1,9 +1,13 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-empty-pattern */
+
 import { Button, Input } from "antd"
 import React, { useEffect, useState } from "react"
 
 import { Message } from "./Message"
 import { SendOutlined } from "@ant-design/icons"
 import { useCreateZoneMessageMutation } from "../../generated/graphql"
+import { useParams } from "react-router-dom"
 
 // import { Gravatar } from "../../components"
 
@@ -27,14 +31,12 @@ interface chatInterface {
 type chatResult = chatInterface | null
 
 export const Chat = ({ data, chatFetched }: any) => {
+  const params: any = useParams()
   const [chat, setChat] = useState<chatResult | any>({ messages: [] })
   const [message, setMessage] = useState("")
-  const [
-    createZoneMessageMutation,
-    { data: msgData, loading, error },
-  ] = useCreateZoneMessageMutation({
+  const [createZoneMessageMutation, {}] = useCreateZoneMessageMutation({
     variables: {
-      message: { name: "foo", nickname: "foo", content: message },
+      message: { name: `${params.id}`, username: "nick", content: message },
     },
   })
 
@@ -43,7 +45,6 @@ export const Chat = ({ data, chatFetched }: any) => {
     delete data.createZoneSubscription.content
   }
 
-  console.log("transformed data", data?.createZoneSubscription)
   console.log("chat: chat, ", chat)
 
   console.log("chat + messages: ", chat.messages)
@@ -123,8 +124,7 @@ export const Chat = ({ data, chatFetched }: any) => {
         {chat.messages
           ? chat.messages.map((user: any, i: number) => (
               <div key={i}>
-                <div>{user.name}</div>
-                <Message msg={user.message} />
+                <Message msg={user.message} username={user.username} />
               </div>
             ))
           : null}

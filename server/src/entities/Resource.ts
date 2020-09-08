@@ -3,7 +3,7 @@ import { Field, ID, ObjectType } from "type-graphql"
 import { Comment } from "./Comment"
 
 @ObjectType()
-export class Recipe {
+export class Resource {
   @Field(_type => ID)
   id: string
 

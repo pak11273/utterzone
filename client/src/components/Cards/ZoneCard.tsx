@@ -7,8 +7,8 @@ const { Meta } = Card
 
 export const ZoneCard = ({
   app,
-  hostId,
-  zoneId,
+  hostname,
+  token,
   mature,
   name,
   premium,
@@ -16,8 +16,8 @@ export const ZoneCard = ({
   description,
 }: {
   app: string
-  hostId: number
-  zoneId: string
+  hostname: string
+  token: string
   mature: boolean
   premium: boolean
   name: string
@@ -34,7 +34,7 @@ export const ZoneCard = ({
         />
       </>
     }
-    actions={[<Link to={`/zone/${hostId}/${zoneId}`}>Enter Zone</Link>]}
+    actions={[<Link to={`/zone/${hostname}/${token}`}>Enter Zone</Link>]}
   >
     <Meta
       app={`${app}`}

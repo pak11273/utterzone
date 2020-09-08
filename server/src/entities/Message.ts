@@ -30,7 +30,7 @@ export class Message extends BaseEntity {
   // user: User
 
   // @Field()
-  // zoneId: number
+  // token: number
 
   @ManyToOne(() => Zone, zone => zone.messages)
   zone: number

@@ -3,6 +3,7 @@ schema: "http://localhost:5000/graphql"
 documents: "src/graphql/**/*.graphql"
 generates:
   src/generated/graphql.tsx:
+    # schema: "src/graphql/clientSchema.graphql"
     plugins:
       - typescript
       - typescript-operations

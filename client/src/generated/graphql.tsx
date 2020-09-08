@@ -19,7 +19,7 @@ export type Query = {
   currentDate: Scalars['DateTime'];
   posts: PaginatedPosts;
   post?: Maybe<Post>;
-  recipe?: Maybe<Recipe>;
+  Resource?: Maybe<Resource>;
   me?: Maybe<User>;
   user: User;
   zone?: Maybe<Zone>;
@@ -40,7 +40,7 @@ export type QueryPostArgs = {
 };
 
 
-export type QueryRecipeArgs = {
+export type QueryResourceArgs = {
   id: Scalars['ID'];
 };
 
@@ -86,8 +86,8 @@ export type User = {
   updatedAt: Scalars['String'];
 };
 
-export type Recipe = {
-  __typename?: 'Recipe';
+export type Resource = {
+  __typename?: 'Resource';
   id: Scalars['ID'];
   title: Scalars['String'];
   description?: Maybe<Scalars['String']>;
@@ -96,18 +96,18 @@ export type Recipe = {
 
 export type Comment = {
   __typename?: 'Comment';
-  nickname?: Maybe<Scalars['String']>;
+  username?: Maybe<Scalars['String']>;
   content: Scalars['String'];
   date: Scalars['DateTime'];
 };
 
 export type Zone = {
   __typename?: 'Zone';
-  id?: Maybe<Scalars['Float']>;
+  id?: Maybe<Scalars['String']>;
   name: Scalars['String'];
   app?: Maybe<Scalars['String']>;
-  hostId: Scalars['Float'];
-  zoneId: Scalars['String'];
+  hostname: Scalars['String'];
+  token: Scalars['String'];
   learningLanguage: Scalars['String'];
   nativeLanguage: Scalars['String'];
   maxParticipants: Scalars['Float'];
@@ -232,7 +232,7 @@ export type PostInput = {
 
 export type CommentInput = {
   name: Scalars['ID'];
-  nickname?: Maybe<Scalars['String']>;
+  username?: Maybe<Scalars['String']>;
   content: Scalars['String'];
 };
 
@@ -256,19 +256,16 @@ export type UsernamePasswordInput = {
 
 export type ZoneInput = {
   name: Scalars['String'];
-  username: Scalars['String'];
-  password: Scalars['String'];
+  password?: Maybe<Scalars['String']>;
   app?: Maybe<Scalars['String']>;
-  hostId: Scalars['Float'];
-  zoneId: Scalars['String'];
-  participants: Scalars['Float'];
+  hostname: Scalars['String'];
   learningLanguage: Scalars['String'];
   nativeLanguage: Scalars['String'];
   maxParticipants: Scalars['Float'];
   description?: Maybe<Scalars['String']>;
-  public: Scalars['Boolean'];
-  mature: Scalars['Boolean'];
-  premium: Scalars['Boolean'];
+  public?: Maybe<Scalars['Boolean']>;
+  mature?: Maybe<Scalars['Boolean']>;
+  premium?: Maybe<Scalars['Boolean']>;
 };
 
 export type Subscription = {
@@ -278,7 +275,7 @@ export type Subscription = {
   subscriptionWithFilterToDynamicTopic: Notification;
   newComments: Comment;
   userStatus: UserStatus;
-  createZoneSubscription: Comment;
+  createZonePub: Comment;
 };
 
 
@@ -297,8 +294,8 @@ export type SubscriptionUserStatusArgs = {
 };
 
 
-export type SubscriptionCreateZoneSubscriptionArgs = {
-  name: Scalars['ID'];
+export type SubscriptionCreateZonePubArgs = {
+  token: Scalars['String'];
 };
 
 export type Notification = {
@@ -379,7 +376,7 @@ export type CreateZoneMutation = (
   { __typename?: 'Mutation' }
   & { createZone: (
     { __typename?: 'Zone' }
-    & Pick<Zone, 'id' | 'hostId'>
+    & Pick<Zone, 'id' | 'token'>
   ) }
 );
 
@@ -540,20 +537,20 @@ export type ZonesQuery = (
   { __typename?: 'Query' }
   & { zones: Array<(
     { __typename?: 'Zone' }
-    & Pick<Zone, 'id' | 'app' | 'hostId' | 'description' | 'name' | 'mature' | 'zoneId'>
+    & Pick<Zone, 'id' | 'app' | 'hostname' | 'description' | 'name' | 'mature' | 'token'>
   )> }
 );
 
-export type CreateZoneSubscriptionSubscriptionVariables = Exact<{
-  name: Scalars['ID'];
+export type CreateZonePubSubscriptionVariables = Exact<{
+  token: Scalars['String'];
 }>;
 
 
-export type CreateZoneSubscriptionSubscription = (
+export type CreateZonePubSubscription = (
   { __typename?: 'Subscription' }
-  & { createZoneSubscription: (
+  & { createZonePub: (
     { __typename?: 'Comment' }
-    & Pick<Comment, 'nickname' | 'content' | 'date'>
+    & Pick<Comment, 'username' | 'content' | 'date'>
   ) }
 );
 
@@ -670,7 +667,7 @@ export const CreateZoneDocument = gql`
     mutation CreateZone($input: ZoneInput!) {
   createZone(input: $input) {
     id
-    hostId
+    token
   }
 }
     `;
@@ -1101,11 +1098,11 @@ export const ZonesDocument = gql`
   zones {
     id
     app
-    hostId
+    hostname
     description
     name
     mature
-    zoneId
+    token
   }
 }
     `;
@@ -1134,10 +1131,10 @@ export function useZonesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Zone
 export type ZonesQueryHookResult = ReturnType<typeof useZonesQuery>;
 export type ZonesLazyQueryHookResult = ReturnType<typeof useZonesLazyQuery>;
 export type ZonesQueryResult = Apollo.QueryResult<ZonesQuery, ZonesQueryVariables>;
-export const CreateZoneSubscriptionDocument = gql`
-    subscription createZoneSubscription($name: ID!) {
-  createZoneSubscription(name: $name) {
-    nickname
+export const CreateZonePubDocument = gql`
+    subscription createZonePub($token: String!) {
+  createZonePub(token: $token) {
+    username
     content
     date
   }
@@ -1145,23 +1142,23 @@ export const CreateZoneSubscriptionDocument = gql`
     `;
 
 /**
- * __useCreateZoneSubscriptionSubscription__
+ * __useCreateZonePubSubscription__
  *
- * To run a query within a React component, call `useCreateZoneSubscriptionSubscription` and pass it any options that fit your needs.
- * When your component renders, `useCreateZoneSubscriptionSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useCreateZonePubSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useCreateZonePubSubscription` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useCreateZoneSubscriptionSubscription({
+ * const { data, loading, error } = useCreateZonePubSubscription({
  *   variables: {
- *      name: // value for 'name'
+ *      token: // value for 'token'
  *   },
  * });
  */
-export function useCreateZoneSubscriptionSubscription(baseOptions?: Apollo.SubscriptionHookOptions<CreateZoneSubscriptionSubscription, CreateZoneSubscriptionSubscriptionVariables>) {
-        return Apollo.useSubscription<CreateZoneSubscriptionSubscription, CreateZoneSubscriptionSubscriptionVariables>(CreateZoneSubscriptionDocument, baseOptions);
+export function useCreateZonePubSubscription(baseOptions?: Apollo.SubscriptionHookOptions<CreateZonePubSubscription, CreateZonePubSubscriptionVariables>) {
+        return Apollo.useSubscription<CreateZonePubSubscription, CreateZonePubSubscriptionVariables>(CreateZonePubDocument, baseOptions);
       }
-export type CreateZoneSubscriptionSubscriptionHookResult = ReturnType<typeof useCreateZoneSubscriptionSubscription>;
-export type CreateZoneSubscriptionSubscriptionResult = Apollo.SubscriptionResult<CreateZoneSubscriptionSubscription>;
+export type CreateZonePubSubscriptionHookResult = ReturnType<typeof useCreateZonePubSubscription>;
+export type CreateZonePubSubscriptionResult = Apollo.SubscriptionResult<CreateZonePubSubscription>;

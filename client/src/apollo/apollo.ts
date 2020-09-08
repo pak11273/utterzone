@@ -2,8 +2,16 @@ import { ApolloClient } from "@apollo/client/core/ApolloClient"
 import { HttpLink } from "@apollo/client/link/http/HttpLink"
 import { InMemoryCache } from "@apollo/client/cache/inmemory/inMemoryCache"
 import { WebSocketLink } from "@apollo/client/link/ws"
+import { apolloPolicies } from "./apolloPolicies"
 import { getMainDefinition } from "@apollo/client/utilities"
+import { loader } from "graphql.macro"
 import { split } from "@apollo/client/link/core/split"
+
+// const typeDefs = loader("../graphql/clientSchema.graphql")
+
+export const cache = new InMemoryCache({
+  typePolicies: apolloPolicies,
+})
 
 const httpLink = new HttpLink({
   uri: "http://localhost:5000/graphql",
@@ -40,6 +48,7 @@ const splitLink = split(
 export const client = new ApolloClient({
   link: splitLink,
   // uri: "http://localhost:5000/graphql",
-  cache: new InMemoryCache(),
+  cache,
   // credentials: "include",
+  // typeDefs,
 })

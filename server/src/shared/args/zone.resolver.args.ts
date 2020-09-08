@@ -1,7 +1,7 @@
-import { ArgsType, Field, ID } from "type-graphql"
+import { ArgsType, Field } from "type-graphql"
 
 @ArgsType()
 export class NewZoneArgs {
-  @Field(_type => ID)
-  name: string
+  @Field(_type => String)
+  token: string
 }

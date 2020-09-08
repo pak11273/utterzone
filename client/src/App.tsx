@@ -7,7 +7,7 @@ import { Cache } from "react-avatar"
 import { ConfigProvider } from "react-avatar"
 import React from "react"
 import { BrowserRouter as Router } from "react-router-dom"
-import { client } from "./apollo"
+import { client } from "./apollo/apollo"
 import dotenv from "dotenv"
 import { routes } from "./routes"
 

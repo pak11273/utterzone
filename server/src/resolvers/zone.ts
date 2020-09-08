@@ -18,19 +18,19 @@ import {
   Args,
 } from "type-graphql"
 
-import { ZONE_PREFIX } from "../constants"
-import { v4 } from "uuid"
+// import { ZONE_PREFIX } from "../constants"
+// import { v4 } from "uuid"
 // import { ZoneEvent, ZonePayload } from "../entities/Zone"
 import { Comment } from "../entities/Comment"
 import { NewCommentPayload } from "../shared/interfaces/newComment.interface"
 import { NewZoneArgs } from "../shared/args/zone.resolver.args"
-// import { Recipe } from "../entities/recipe"
+// import { Resource } from "../entities/Resource"
 import { Zone } from "../entities/Zone"
 
 import { Message } from "../entities/Message"
 import { MyContext } from "../types"
 import { Topic } from "../types/Topic"
-// import { sampleRecipes } from "../data/recipe.samples"
+// import { sampleResources } from "../data/Resource.samples"
 
 import argon2 from "argon2"
 // import { getConnection } from "typeorm"
@@ -63,7 +63,7 @@ import { CommentInput } from "../shared/inputs/comment.input"
 @InputType()
 export class MessageInput implements Partial<Message> {
   @Field(_type => ID)
-  zoneId: string
+  token: string
 
   @Field({ nullable: true })
   username?: string
@@ -73,24 +73,24 @@ export class MessageInput implements Partial<Message> {
 }
 
 // enum Topic {
-//   NewMessage = "NEW_MESSAGE",
+//   ZoneMessage = "NEW_MESSAGE",
 //   NewZone = "NEW_ZONE",
 // }
-// interface NewMessagePayload {
-//   zoneId: string
+// interface ZoneMessagePayload {
+//   token: string
 //   dateString: string // limitation of Redis payload serialization
 //   content: string
 //   username?: string
 // }
 
 @ArgsType()
-export class NewMessagesArgs {
+export class ZoneMessagesArgs {
   @Field(_type => ID)
-  zoneId: string
+  token: string
 }
 @Resolver()
 export class ZoneResolver {
-  // private readonly recipes: Recipe[] = sampleRecipes.slice()
+  // private readonly Resources: Resource[] = sampleResources.slice()
   // private autoIncrement = 0
   @Query(() => Zone, { nullable: true })
   async zone(
@@ -104,6 +104,8 @@ export class ZoneResolver {
   @Query(_type => [Zone])
   async zones(@Ctx() {}: MyContext): Promise<any | undefined> {
     try {
+      const zones = await Zone.find()
+      return zones
     } catch (err) {
       console.log("error: ", err)
       throw new ApolloError(err)
@@ -125,47 +127,35 @@ export class ZoneResolver {
   @UseMiddleware(isAuth)
   async createZone(
     @Arg("input") input: ZoneInput,
-    @Ctx() { redis, req }: MyContext
+    @Ctx() {}: MyContext
   ): Promise<Zone> {
-    // const errors = validateZone(input)
-    // if (errors) {
-    //   {
-    //     errors
-    //   }
-    // }
+    try {
+      console.log("input: ", input)
+      // const errors = validateZone(input)
+      // if (errors) {
+      //   {
+      //     errors
+      //   }
+      // }
 
-    if (input.public) {
-      const hashedPassword = await argon2.hash("narcotics") // TODO: make dynamic
-      input.password = hashedPassword
+      if (input.public) {
+        const hashedPassword = await argon2.hash("narcotics") // TODO: make dynamic
+        input.password = hashedPassword
+      }
+      const zone = await Zone.create(input).save()
+
+      // TODO: validations
+
+      if (!zone) {
+        throw new ApolloError("There was an error.  Zone not created.")
+      }
+
+      console.log("zone ster: ", zone)
+
+      return zone
+    } catch (err) {
+      throw new ApolloError("rut roh raggy")
     }
-
-    let token = v4()
-    let amendedInput: any = {
-      id: 0,
-      app: "youglish",
-      name: input.name,
-      premium: false,
-      mature: true,
-      public: true,
-      maxParticipants: input.maxParticipants,
-      totalParticipants: 0,
-      hostId: req.session.userId,
-      zoneId: token,
-      password: input.password,
-    }
-
-    let zone = await redis.hmset(ZONE_PREFIX + token, {
-      ...amendedInput,
-    })
-
-    // TODO: validations
-
-    if (!zone) {
-      throw new ApolloError("There was an error.  Zone not created.")
-    }
-    console.log("amend: ", amendedInput)
-
-    return amendedInput
   }
 
   // TODO: messages
@@ -187,17 +177,17 @@ export class ZoneResolver {
   @Mutation(_returns => Boolean)
   async createZoneMessageMutation(
     @Arg("message") input: CommentInput,
-    @PubSub(Topic.NewMessage)
+    @PubSub(Topic.ZoneMessage)
     notifyAboutNewComment: Publisher<NewCommentPayload>
   ): Promise<boolean> {
     const comment: Comment = {
       content: input.content,
-      nickname: input.nickname,
+      username: input.username,
       date: new Date(),
     }
     await notifyAboutNewComment({
       content: comment.content,
-      nickname: comment.nickname,
+      username: comment.username,
       dateString: comment.date.toISOString(),
       name: input.name,
     })
@@ -205,25 +195,25 @@ export class ZoneResolver {
   }
 
   @Subscription(_returns => Comment, {
-    topics: Topic.NewMessage,
+    topics: Topic.ZoneMessage,
     filter: ({
       payload,
       args,
     }: ResolverFilterData<NewCommentPayload, NewZoneArgs>) => {
       console.log("args: ", args)
       console.log("payload: ", payload)
-      return payload.name === args.name
+      return payload.name === args.token
     },
   })
-  createZoneSubscription(
+  createZonePub(
     @Root() newComment: NewCommentPayload,
-    @Args() { name }: NewZoneArgs
+    @Args() { token }: NewZoneArgs
   ): Comment {
-    console.log("name: ", name)
+    console.log("token: ", token)
     return {
       content: newComment.content!,
       date: new Date(newComment.dateString), // limitation of Redis payload serialization
-      nickname: newComment.nickname,
+      username: newComment.username,
     }
   }
 }

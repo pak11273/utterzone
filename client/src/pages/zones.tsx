@@ -30,11 +30,12 @@ export const Zones: React.FC<zonesProps> = () => {
   //   setLoading(true)
   // }
 
-  useEffect(data => {
+  useEffect((): void => {
     if (!data || !data.zones) {
       console.log("no zones loaded!")
     }
-  }, [])
+    console.log("data: ", data)
+  }, [data])
 
   // const onFinish = async (values: any) => {
   // if (values) {
@@ -92,8 +93,8 @@ export const Zones: React.FC<zonesProps> = () => {
                       name={x.name}
                       loading={loading}
                       description={x.description}
-                      hostId={x.hostId}
-                      zoneId={x.zoneId}
+                      hostname={x.hostname}
+                      token={x.token}
                       premium={x.premium}
                       mature={x.mature}
                     />

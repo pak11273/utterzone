@@ -8,7 +8,7 @@ export class CommentInput implements Partial<Comment> {
   name: string
 
   @Field({ nullable: true })
-  nickname?: string
+  username?: string
 
   @Field()
   content: string

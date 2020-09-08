@@ -1,46 +1,46 @@
 import { Comment } from "../entities/Comment"
-import { Recipe } from "../entities/Recipe"
+import { Resource } from "../entities/Resource"
 import { plainToClass } from "class-transformer"
 
-export const sampleRecipes = [
-  createRecipe({
+export const sampleResources = [
+  createResource({
     id: "1",
-    title: "Recipe 1",
+    title: "Resource 1",
     description: "Desc 1",
     comments: createComments([
       {
         date: new Date("2018-03-21"),
         content: "Very tasty!",
-        nickname: "Anonymous",
+        username: "Anonymous",
       },
       {
         date: new Date("2018-01-12"),
         content: "Not so tasty!",
-        nickname: "Anonymous again",
+        username: "Anonymous again",
       },
     ]),
   }),
-  createRecipe({
+  createResource({
     id: "2",
-    title: "Recipe 2",
+    title: "Resource 2",
     description: "Desc 2",
     comments: createComments([
       {
         date: new Date(),
         content: "Very good, very cheap!",
-        nickname: "Master of cooking",
+        username: "Master of cooking",
       },
     ]),
   }),
-  createRecipe({
+  createResource({
     id: "3",
-    title: "Recipe 3",
+    title: "Resource 3",
     comments: [],
   }),
 ]
 
-function createRecipe(recipeData: Partial<Recipe>): Recipe {
-  return plainToClass(Recipe, recipeData)
+function createResource(ResourceData: Partial<Resource>): Resource {
+  return plainToClass(Resource, ResourceData)
 }
 
 function createComments(commentData: Array<Partial<Comment>>): Comment[] {
