@@ -4,8 +4,10 @@ import { InMemoryCache } from "@apollo/client/cache/inmemory/inMemoryCache"
 import { WebSocketLink } from "@apollo/client/link/ws"
 import { apolloPolicies } from "./apolloPolicies"
 import { getMainDefinition } from "@apollo/client/utilities"
-import { loader } from "graphql.macro"
 import { split } from "@apollo/client/link/core/split"
+
+// import { loader } from "graphql.macro"
+
 
 // const typeDefs = loader("../graphql/clientSchema.graphql")
 

@@ -29,14 +29,11 @@ type OptionalZoneQueryResult = ZoneQueryResult | null
 // export const Zone: React.FC<zoneProps> = ({ id }) => {
 export const Zone: any = () => {
   const params: any = useParams()
+  const [playing, setPlaying] = useState(false)
   const [chat] = useState<OptionalZoneQueryResult>(null)
   const { data, loading, error } = useCreateZonePubSubscription({
     variables: { token: params.token },
   })
-
-  console.log("data: ", data)
-  console.log("loading: ", loading)
-  console.log("error", error)
 
   useEffect(() => {
     window.addEventListener("beforeunload", event => {
@@ -47,14 +44,12 @@ export const Zone: any = () => {
     }
   }, [])
 
-  console.log("data: ", data)
-
   return (
     <div style={{ height: "100%" }}>
       <Row style={{ height: "100%" }}>
         <Col className="zone_content" xs={24} md={17}>
-          <ZoneMain />
-          {"ifyouarethehost" ? <ZoneControls /> : null}
+          <ZoneMain playing={playing} />
+          {"ifyouarethehost" ? <ZoneControls playing={setPlaying} /> : null}
           <Notebook />
         </Col>
         <Col xs={24} md={7} style={{ height: "100%" }}>

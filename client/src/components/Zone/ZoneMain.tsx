@@ -1,23 +1,20 @@
 import React from "react"
+import ReactPlayer from "react-player"
 
-interface indexProps {}
+interface indexProps {
+  playing: boolean
+}
 
-export const ZoneMain: React.FC<indexProps> = () => {
+export const ZoneMain: React.FC<indexProps> = ({ playing }) => {
   return (
-    <div id="HTML5Area">
-      <div>
-        <video
-          src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
-          width="100%"
-          height="100%"
-          className="video_screen"
-          id="html5src"
-          controls
-        >
-          <source src="video/sintel-short.mp4" type="video/mp4" />
-          <source src="video/sintel-short.webm" type="video/webm" />
-        </video>
-      </div>
+    <div className="player_wrapper">
+      <ReactPlayer
+        className="react_player"
+        width="100%"
+        height="100%"
+        url="https://www.youtube.com/watch?v=ysz5S6PUM-U"
+        playing={playing}
+      />
     </div>
   )
 }

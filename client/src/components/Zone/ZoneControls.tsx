@@ -1,45 +1,50 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import { Button, Input } from "antd"
+import React, { useState } from "react"
 
-import React from "react"
-
-interface ZoneControlsProps {}
-
-const roomnum = 1
-const playVideo = (num: number) => {
-  console.log(num)
-}
-const syncVideo = (num: number) => {
-  console.log(num)
-}
-const changeHost = (num: number) => {
-  console.log(num)
+interface ZoneControlsProps {
+  playing: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const enqueueVideoParse = (num: number) => {
-  console.log(num)
-}
+export const ZoneControls: React.FC<ZoneControlsProps> = ({ playing }) => {
+  const [play, setPlay] = useState(true)
+  const roomnum = 1
+  const playVideo = (num: number) => {
+    console.log(num)
+    setPlay(!play)
+    playing(play)
+  }
+  const syncVideo = (num: number) => {
+    console.log(num)
+  }
+  const changeHost = (num: number) => {
+    console.log(num)
+  }
 
-const emptyQueue = (num: number) => {
-  console.log(num)
-}
+  const enqueueVideoParse = (num: number) => {
+    console.log(num)
+  }
 
-const changeVideoParse = (num: number) => {
-  console.log(num)
-}
+  const emptyQueue = (num: number) => {
+    console.log(num)
+  }
 
-const prevVideo = (num: number) => {
-  console.log(num)
-}
+  const changeVideoParse = (num: number) => {
+    console.log(num)
+  }
 
-const playNext = (num: number) => {
-  console.log(num)
-}
+  const prevVideo = (num: number) => {
+    console.log(num)
+  }
 
-// const removeAt = (num: number) => {
-//   console.log(num)
-// }
+  const playNext = (num: number) => {
+    console.log(num)
+  }
 
-export const ZoneControls: React.FC<ZoneControlsProps> = () => {
+  // const removeAt = (num: number) => {
+  //   console.log(num)
+  // }
   return (
     <div className="zone_controls">
       <div style={{ textAlign: "center" }}>

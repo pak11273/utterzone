@@ -45,10 +45,6 @@ export const Chat = ({ data, chatFetched }: any) => {
     delete data.createZonePub.content
   }
 
-  console.log("chat: chat, ", chat)
-
-  console.log("chat + messages: ", chat.messages)
-
   useEffect(() => {
     if (chatFetched || data) {
       chat!.messages.push({

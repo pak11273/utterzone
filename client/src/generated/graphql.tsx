@@ -105,7 +105,7 @@ export type Zone = {
   __typename?: 'Zone';
   id?: Maybe<Scalars['String']>;
   name: Scalars['String'];
-  app?: Maybe<Scalars['String']>;
+  app: Scalars['String'];
   hostname: Scalars['String'];
   token: Scalars['String'];
   learningLanguage: Scalars['String'];

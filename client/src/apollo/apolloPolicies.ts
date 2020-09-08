@@ -14,7 +14,7 @@ export const apolloPolicies = {
   Me: {
     fields: {
       isLoggedIn: {
-        read(_: any, {}) {
+        read(_: any) {
           return false
         },
       },
