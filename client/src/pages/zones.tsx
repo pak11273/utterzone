@@ -77,7 +77,7 @@ export const Zones: React.FC<zonesProps> = () => {
             <Col xs={24}>Learning: Korean</Col>
             <Col xs={24}>Participants: High to Low</Col>
             <Col xs={24}>App: Youtube</Col>
-            {/* <Col xs={24}>Mature Zone</Col> */}
+            <Col xs={24}>Mature Zone</Col>
           </Row>
           <Button size="small" type="primary" style={{ width: "100px" }}>
             Select

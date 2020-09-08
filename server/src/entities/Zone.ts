@@ -24,7 +24,7 @@ export class Zone extends BaseEntity {
   @Column({ nullable: true })
   name: string
 
-  @Field({ nullable: true })
+  @Field()
   @Column({ nullable: true })
   app: string
 

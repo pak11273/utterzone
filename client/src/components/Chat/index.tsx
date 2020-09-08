@@ -36,13 +36,13 @@ export const Chat = ({ data, chatFetched }: any) => {
   const [message, setMessage] = useState("")
   const [createZoneMessageMutation, {}] = useCreateZoneMessageMutation({
     variables: {
-      message: { name: `${params.id}`, username: "nick", content: message },
+      message: { name: `${params.token}`, username: "nick", content: message },
     },
   })
 
   if (data) {
-    data!.createZoneSubscription.message = data!.createZoneSubscription.content
-    delete data.createZoneSubscription.content
+    data!.createZonePub.message = data!.createZonePub.content
+    delete data.createZonePub.content
   }
 
   console.log("chat: chat, ", chat)
@@ -54,7 +54,7 @@ export const Chat = ({ data, chatFetched }: any) => {
       chat!.messages.push({
         id: chat.id,
         name: chat.name,
-        message: data.createZoneSubscription.message,
+        message: data.createZonePub.message,
       })
 
       let newChat = {
