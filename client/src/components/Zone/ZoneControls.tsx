@@ -42,7 +42,7 @@ const playNext = (num: number) => {
 export const ZoneControls: React.FC<ZoneControlsProps> = () => {
   return (
     <div className="zone_controls">
-      <div>
+      <div style={{ textAlign: "center" }}>
         <Button
           id="playButton"
           onClick={() => playVideo(roomnum)}
@@ -52,7 +52,7 @@ export const ZoneControls: React.FC<ZoneControlsProps> = () => {
           Pause
         </Button>
 
-        <Button
+        {/* <Button
           id="syncbutton"
           onClick={() => syncVideo(roomnum)}
           style={{ marginTop: ".5rem" }}
@@ -66,10 +66,10 @@ export const ZoneControls: React.FC<ZoneControlsProps> = () => {
           style={{ marginTop: ".5rem" }}
         >
           <i className="fas fa-users"></i> Make me the host!
-        </Button>
+        </Button> */}
       </div>
       <div className="topbotmargins">
-        <Input
+        {/* <Input
           type="Video"
           style={{
             maxWidth: "200px",
@@ -80,43 +80,43 @@ export const ZoneControls: React.FC<ZoneControlsProps> = () => {
           className="form-control"
           id="inputVideoId"
           placeholder="Video ID / URL"
-        />
-        <Button
+        /> */}
+        {/* <Button
           id="enqueueButton"
           onClick={() => enqueueVideoParse(roomnum)}
           className="btn btn-primary"
         >
           <i className="fas fa-plus"></i> Add to Queue
-        </Button>
-        <button
+        </Button> */}
+        {/* <button
           id="emptyButton"
           onClick={() => emptyQueue(roomnum)}
           className="btn btn-primary"
         >
           <i className="fas fa-trash"></i> Empty Queue
-        </button>
+        </button> */}
         {/* <!-- <a className="ghost-button-full-color"><i className="far fa-times-circle"></i></a> --> */}
-        <Button
+        {/* <Button
           id="changeButton"
           onClick={() => changeVideoParse(roomnum)}
           className="btn btn-primary"
         >
           <i className="fas fa-exchange-alt"></i> Change Video
-        </Button>
-        <Button
+        </Button> */}
+        {/* <Button
           id="previousButton"
           onClick={() => prevVideo(roomnum)}
           className="btn btn-primary"
         >
           <i className="fas fa-step-backward"></i> Previous
-        </Button>
-        <button
+        </Button> */}
+        {/* <button
           id="nextButton"
           onClick={() => playNext(roomnum)}
           className="btn btn-primary"
         >
           <i className="fas fa-step-forward"></i> Next
-        </button>
+        </button> */}
 
         <br />
       </div>
