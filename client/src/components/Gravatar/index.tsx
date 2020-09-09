@@ -52,6 +52,7 @@ export const Gravatar: React.FC<indexProps> = () => {
         "mediumseagreen",
       ])}
       size="24"
+      className="avatar"
       onClick={() => alert("gravatar!!")}
     />
   )

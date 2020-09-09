@@ -105,6 +105,7 @@ export class ZoneResolver {
   async zones(@Ctx() {}: MyContext): Promise<any | undefined> {
     try {
       const zones = await Zone.find()
+      console.log("zones: ", zones)
       return zones
     } catch (err) {
       console.log("error: ", err)

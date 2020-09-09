@@ -3,14 +3,15 @@
 
 import { Button, Checkbox, Form, Input, InputNumber, Select } from "antd"
 import React, { useState } from "react"
+import { cache, client } from "../apollo/apollo"
 import { gql, useLazyQuery } from "@apollo/client"
 
-import { cache } from "../apollo/apollo"
 import { loader } from "graphql.macro"
 import { useCreateZoneMutation } from "../generated/graphql"
 import { useHistory } from "react-router-dom"
 import { v4 } from "uuid"
 
+const CREATE_ZONE = loader("../graphql/mutations/createZone.graphql")
 const Me = loader("../graphql/queries/me.graphql")
 
 // import { toErrorMap } from "../utils/toErrorMap"
@@ -54,6 +55,9 @@ export const CreateZone: React.FC<CreateZoneProps> = () => {
     createZoneMutation,
     { data: zoneData, loading },
   ] = useCreateZoneMutation()
+
+  // TODO: created zone should return all fields
+  console.log("dat: ", zoneData)
 
   cache.writeQuery({
     query: Me,

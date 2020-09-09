@@ -24,10 +24,15 @@ export class MenuMain extends React.Component {
         collapsed={this.state.collapsed}
         onCollapse={this.onCollapse}
         collapsedWidth={40}
-        className="main_menu--sider"
+        className="main_menu_sider"
         style={{ height: "100vh", overflow: "scroll" }}
       >
-        <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline">
+        <Menu
+          theme="dark"
+          defaultSelectedKeys={["1"]}
+          mode="inline"
+          className="main_menu_sider--menu"
+        >
           <SubMenu key="sub1" icon={<UserOutlined />} title="Contacts">
             <Menu.Item key="3">Jed</Menu.Item>
             <Menu.Item key="4">Clem</Menu.Item>
@@ -36,11 +41,39 @@ export class MenuMain extends React.Component {
             key="sub2"
             icon={<TeamOutlined />}
             title="Participants"
+            className=".main_menu_sider--participants"
           ></SubMenu>
-          {[1].map(x => (
-            <SubMenu key={`${x}`} icon={<Gravatar />} title="username">
-              <div>text</div>
-            </SubMenu>
+          {[
+            1,
+            2,
+            1,
+            1,
+            1,
+            1,
+            11,
+            1,
+            1,
+            1,
+            111,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            11,
+            1,
+            1,
+          ].map((x, i) => (
+            <SubMenu
+              key={`${i}`}
+              icon={<Gravatar />}
+              className="main_menu_submenu"
+              title={
+                <span className="main_menu_submenu_span">ZZZZimbalimbabm</span>
+              }
+            ></SubMenu>
           ))}
         </Menu>
       </Sider>

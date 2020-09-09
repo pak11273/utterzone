@@ -25,7 +25,7 @@ export class Zone extends BaseEntity {
   name: string
 
   @Field()
-  @Column({ nullable: true })
+  @Column({ nullable: true, default: "chat" })
   app: string
 
   @Field()

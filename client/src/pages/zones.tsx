@@ -21,10 +21,7 @@ interface zonesProps {}
 export const Zones: React.FC<zonesProps> = () => {
   // const history = useHistory()
   // const [form] = Form.useForm()
-  const { data, loading } = useZonesQuery({
-    variables: {},
-    fetchPolicy: "no-cache",
-  })
+  const { data, loading } = useZonesQuery()
 
   // if (loading) {
   //   setLoading(true)
@@ -59,7 +56,6 @@ export const Zones: React.FC<zonesProps> = () => {
   //   }
   // }
   // }
-  console.log("data: ", data)
 
   return (
     <section className="userform_section">
@@ -73,11 +69,21 @@ export const Zones: React.FC<zonesProps> = () => {
         >
           <h1 style={{ textAlign: "center" }}>Filters</h1>
           <Row gutter={[24, 32]}>
-            <Col xs={24}>I speak: English</Col>
-            <Col xs={24}>Learning: Korean</Col>
-            <Col xs={24}>Participants: High to Low</Col>
-            <Col xs={24}>App: Youtube</Col>
-            <Col xs={24}>Mature Zone</Col>
+            <Col xs={24} md={4}>
+              I speak: English
+            </Col>
+            <Col xs={24} md={4}>
+              Learning: Korean
+            </Col>
+            <Col xs={24} md={4}>
+              Participants: High to Low
+            </Col>
+            <Col xs={24} md={4}>
+              App: Youtube
+            </Col>
+            <Col xs={24} md={4}>
+              Mature Zone
+            </Col>
           </Row>
           <Button size="small" type="primary" style={{ width: "100px" }}>
             Select
@@ -96,7 +102,7 @@ export const Zones: React.FC<zonesProps> = () => {
                       hostname={x.hostname}
                       token={x.token}
                       premium={x.premium}
-                      mature={x.mature}
+                      // mature={x.mature}
                     />
                   </Col>
                 )
