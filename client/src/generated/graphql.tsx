@@ -15,6 +15,7 @@ export type Scalars = {
 
 export type Query = {
   __typename?: 'Query';
+  Course?: Maybe<Course>;
   hello: Scalars['String'];
   currentDate: Scalars['DateTime'];
   posts: PaginatedPosts;
@@ -26,6 +27,11 @@ export type Query = {
   zones: Array<Zone>;
   messages: Message;
   lastMessage: Message;
+};
+
+
+export type QueryCourseArgs = {
+  id: Scalars['ID'];
 };
 
 
@@ -54,6 +60,25 @@ export type QueryZoneArgs = {
   id: Scalars['Float'];
 };
 
+export type Course = {
+  __typename?: 'Course';
+  id: Scalars['String'];
+  name: Scalars['String'];
+  owner: User;
+  zone: Course;
+};
+
+export type User = {
+  __typename?: 'User';
+  id: Scalars['Float'];
+  username: Scalars['String'];
+  email: Scalars['String'];
+  followers: Scalars['Float'];
+  following: Scalars['Float'];
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
+};
+
 
 export type PaginatedPosts = {
   __typename?: 'PaginatedPosts';
@@ -73,17 +98,6 @@ export type Post = {
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
   textSnippet: Scalars['String'];
-};
-
-export type User = {
-  __typename?: 'User';
-  id: Scalars['Float'];
-  username: Scalars['String'];
-  email: Scalars['String'];
-  followers: Scalars['Float'];
-  following: Scalars['Float'];
-  createdAt: Scalars['String'];
-  updatedAt: Scalars['String'];
 };
 
 export type Resource = {
@@ -106,6 +120,7 @@ export type Zone = {
   id?: Maybe<Scalars['String']>;
   name: Scalars['String'];
   app: Scalars['String'];
+  course: Course;
   hostname: Scalars['String'];
   token: Scalars['String'];
   learningLanguage: Scalars['String'];
