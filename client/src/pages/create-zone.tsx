@@ -78,6 +78,7 @@ export const CreateZone: React.FC<CreateZoneProps> = () => {
         })
         console.log("zone: ", zoneData)
         console.log("res: ", response)
+
         if (response) {
           history.push(
             `/zone/${response.data?.createZone.id}/${response.data?.createZone.token}`

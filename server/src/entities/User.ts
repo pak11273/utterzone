@@ -11,6 +11,7 @@ import {
 } from "typeorm"
 import { Field, ObjectType } from "type-graphql"
 
+import { Course } from "./Course"
 import { Post } from "./Post"
 import { Profile } from "./Profile"
 import { Updoot } from "./Updoot"
@@ -37,6 +38,9 @@ export class User extends BaseEntity {
 
   @Column()
   password!: string
+
+  @OneToMany(_type => Course, course => course.owner)
+  course: Course
 
   // @OneToMany(() => Message, message => message.user)
   // messages: Message[]

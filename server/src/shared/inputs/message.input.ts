@@ -1,11 +1,11 @@
 import { Authorized, Field, ID, InputType } from "type-graphql"
 
-import { Comment } from "../../entities/Comment"
+import { Message } from "../../entities/Message"
 
 @InputType()
-export class CommentInput implements Partial<Comment> {
+export class MessageInput implements Partial<Message> {
   @Field(_type => ID)
-  name: string
+  zone: string
 
   @Authorized()
   @Field()

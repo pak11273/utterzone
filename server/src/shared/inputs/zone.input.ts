@@ -1,11 +1,15 @@
 import { Field, InputType } from "type-graphql"
 
+import { Length } from "class-validator"
+
 @InputType()
 export class ZoneInput {
   @Field()
+  @Length(8, 30)
   name: string
 
   @Field({ nullable: true })
+  @Length(2, 300)
   password: string
 
   @Field({ nullable: true })

@@ -5,11 +5,13 @@ import {
   Entity,
   ManyToOne,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm"
 import { Field, ID, ObjectType } from "type-graphql"
 
+import { Course } from "./Course"
 import { Message } from "./Message"
 import { User } from "./User"
 
@@ -27,6 +29,10 @@ export class Zone extends BaseEntity {
   @Field()
   @Column({ nullable: true, default: "chat" })
   app: string
+
+  @Field(() => Course)
+  @OneToOne(_type => Course, course => course.zone)
+  course: Course
 
   @Field()
   @Column({ nullable: true })

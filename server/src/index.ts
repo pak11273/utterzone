@@ -8,6 +8,8 @@ import { pubSub, redis, redisSession } from "./redis"
 
 import { ApolloServer } from "apollo-server-express"
 import { Comment } from "./entities/Comment"
+import { Course } from "./entities/Course"
+import { CourseResolver } from "./resolvers/course"
 import { HelloResolver } from "./resolvers/hello"
 import { Message } from "./entities/Message"
 import { Notification } from "./entities/Notification"
@@ -29,6 +31,7 @@ import cors from "cors"
 import { createConnection } from "typeorm"
 import { createUpdootLoader } from "./utils/createUpdootLoader"
 import { createUserLoader } from "./utils/createUserLoader"
+import { customAuthChecker } from "./auth/custom-auth-checker"
 import express from "express"
 import http from "http"
 import path from "path"
@@ -44,6 +47,7 @@ const main = async () => {
     migrations: [path.join(__dirname, "./migrations/*")],
     entities: [
       Comment,
+      Course,
       Message,
       Notification,
       Profile,
@@ -81,8 +85,10 @@ const main = async () => {
         ResourceResolver,
         UserResolver,
         ZoneResolver,
+        CourseResolver,
       ],
-      validate: false,
+      authChecker: customAuthChecker,
+      validate: false, // set true for speedier dev testing
       pubSub, // provide redis-based instance of PubSub
     }),
     context: ({ req, res }) => ({

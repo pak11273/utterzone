@@ -16,6 +16,7 @@ import {
   ResolverFilterData,
   Root,
   Args,
+  Authorized,
 } from "type-graphql"
 
 // import { ZONE_PREFIX } from "../constants"
@@ -23,6 +24,7 @@ import {
 // import { ZoneEvent, ZonePayload } from "../entities/Zone"
 import { Comment } from "../entities/Comment"
 import { NewCommentPayload } from "../shared/interfaces/newComment.interface"
+import { NewMessagePayload } from "../shared/interfaces/newMessage.interface"
 import { NewZoneArgs } from "../shared/args/zone.resolver.args"
 // import { Resource } from "../entities/Resource"
 import { Zone } from "../entities/Zone"
@@ -39,7 +41,7 @@ import { messages } from "../db/mock"
 // import { validateZone } from "../utils/validateZone"
 import { ApolloError } from "apollo-server-express"
 import { ZoneInput } from "../shared/inputs/zone.input"
-import { CommentInput } from "../shared/inputs/comment.input"
+// import { CommentInput } from "../shared/inputs/comment.input"
 
 // import { User } from "../entities/User"
 
@@ -62,14 +64,17 @@ import { CommentInput } from "../shared/inputs/comment.input"
 // }
 @InputType()
 export class MessageInput implements Partial<Message> {
-  @Field(_type => ID)
-  token: string
+  @Field(_type => ID, { defaultValue: "xyz" })
+  token?: string
 
   @Field({ nullable: true })
   username?: string
 
   @Field()
   content: string
+
+  @Field()
+  name: string
 }
 
 // enum Topic {
@@ -108,7 +113,6 @@ export class ZoneResolver {
       console.log("zones: ", zones)
       return zones
     } catch (err) {
-      console.log("error: ", err)
       throw new ApolloError(err)
     }
   }
@@ -159,44 +163,27 @@ export class ZoneResolver {
     }
   }
 
-  // TODO: messages
-
-  // @Mutation(_returns => Boolean)
-  // @UseMiddleware(resolveTime)
-  // async createZoneMessageMutation(
-  //   @PubSub()
-  //   @Ctx()
-  //   { redis }: MyContext,
-  //   @Arg("topic")
-  //   topic: string,
-  //   @Arg("message", { nullable: true }) message: string
-  // ): Promise<boolean> {
-  //   await redis.publish(topic, message)
-  //   return true
-  // }
-
+  @Authorized()
   @Mutation(_returns => Boolean)
   async createZoneMessageMutation(
-    @Arg("message") input: CommentInput,
-    @PubSub(Topic.ZoneMessage)
-    notifyAboutNewComment: Publisher<NewCommentPayload>
+    @Arg("message")
+    input: MessageInput,
+    @PubSub(Topic.ZoneToken)
+    publish: Publisher<NewMessagePayload>
   ): Promise<boolean> {
-    const comment: Comment = {
-      content: input.content,
-      username: input.username,
-      date: new Date(),
+    try {
+      await publish({
+        message: input.content,
+        dateString: new Date().toISOString(),
+      })
+      return true
+    } catch (err) {
+      throw new ApolloError(err)
     }
-    await notifyAboutNewComment({
-      content: comment.content,
-      username: comment.username,
-      dateString: comment.date.toISOString(),
-      name: input.name,
-    })
-    return true
   }
 
   @Subscription(_returns => Comment, {
-    topics: Topic.ZoneMessage,
+    topics: Topic.ZoneToken,
     filter: ({
       payload,
       args,

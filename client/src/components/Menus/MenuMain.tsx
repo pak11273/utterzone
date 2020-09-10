@@ -25,7 +25,7 @@ export class MenuMain extends React.Component {
         onCollapse={this.onCollapse}
         collapsedWidth={40}
         className="main_menu_sider"
-        style={{ height: "800px", overflow: "scroll" }}
+        style={{ overflow: "scroll" }}
       >
         <Menu
           theme="dark"

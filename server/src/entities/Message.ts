@@ -33,7 +33,7 @@ export class Message extends BaseEntity {
   // token: number
 
   @ManyToOne(() => Zone, zone => zone.messages)
-  zone: number
+  zone: string
 
   @Field(() => String)
   @CreateDateColumn()

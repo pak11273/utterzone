@@ -222,7 +222,7 @@ export type MutationCreateZoneArgs = {
 
 
 export type MutationCreateZoneMessageMutationArgs = {
-  message: CommentInput;
+  message: MessageInput;
 };
 
 export type PostInput = {
@@ -232,7 +232,7 @@ export type PostInput = {
 
 export type CommentInput = {
   name: Scalars['ID'];
-  username?: Maybe<Scalars['String']>;
+  username: Scalars['String'];
   content: Scalars['String'];
 };
 
@@ -266,6 +266,13 @@ export type ZoneInput = {
   public?: Maybe<Scalars['Boolean']>;
   mature?: Maybe<Scalars['Boolean']>;
   premium?: Maybe<Scalars['Boolean']>;
+};
+
+export type MessageInput = {
+  token?: Maybe<Scalars['ID']>;
+  username?: Maybe<Scalars['String']>;
+  content: Scalars['String'];
+  name: Scalars['String'];
 };
 
 export type Subscription = {
@@ -381,7 +388,7 @@ export type CreateZoneMutation = (
 );
 
 export type CreateZoneMessageMutationVariables = Exact<{
-  message: CommentInput;
+  message: MessageInput;
 }>;
 
 
@@ -697,7 +704,7 @@ export type CreateZoneMutationHookResult = ReturnType<typeof useCreateZoneMutati
 export type CreateZoneMutationResult = Apollo.MutationResult<CreateZoneMutation>;
 export type CreateZoneMutationOptions = Apollo.BaseMutationOptions<CreateZoneMutation, CreateZoneMutationVariables>;
 export const CreateZoneMessageDocument = gql`
-    mutation CreateZoneMessage($message: CommentInput!) {
+    mutation CreateZoneMessage($message: MessageInput!) {
   createZoneMessageMutation(message: $message)
 }
     `;
