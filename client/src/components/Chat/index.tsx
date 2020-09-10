@@ -34,16 +34,24 @@ export const Chat = ({ data, chatFetched }: any) => {
   const params: any = useParams()
   const [chat, setChat] = useState<chatResult | any>({ messages: [] })
   const [message, setMessage] = useState("")
+  console.log("messa: ", message)
   const [createZoneMessageMutation, {}] = useCreateZoneMessageMutation({
     variables: {
-      message: { name: `${params.token}`, username: "nick", content: message },
+      message: {
+        token: `${params.token}`,
+        username: "nick",
+        message: message,
+        zone: "d",
+      },
     },
   })
 
-  if (data) {
-    data!.createZonePub.message = data!.createZonePub.content
-    delete data.createZonePub.content
-  }
+  console.log("data: ", data)
+
+  // if (data) {
+  //   data!.createZonePub.message = data!.createZonePub.content
+  //   delete data.createZonePub.content
+  // }
 
   useEffect(() => {
     if (chatFetched || data) {

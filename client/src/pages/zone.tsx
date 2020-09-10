@@ -35,7 +35,7 @@ export const Zone: any = () => {
     variables: { token: params.token },
   })
 
-  console.log("ERRORRR: ", error)
+  console.log("zone data: ", data)
 
   useEffect(() => {
     window.addEventListener("beforeunload", event => {

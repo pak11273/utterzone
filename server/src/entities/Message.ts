@@ -1,18 +1,16 @@
 import { Field, ObjectType } from "type-graphql"
 
-import { Zone } from "./Zone"
-
 @ObjectType()
 export class Message {
   @Field()
-  message: string
+  zone: string
 
   @Field()
   username: string
 
   @Field()
-  zone: string
+  message: string
 
-  @Field(() => String)
+  @Field()
   createdAt: Date
 }

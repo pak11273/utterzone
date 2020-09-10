@@ -105,6 +105,9 @@ export const CreateZone: React.FC<CreateZoneProps> = () => {
           scrollToFirstError
           initialValues={{
             maxParticipants: 30,
+            nativeLanguage: "Korean",
+            learningLanguage: "English",
+            app: "youtube",
           }}
         >
           <Form.Item
@@ -134,7 +137,6 @@ export const CreateZone: React.FC<CreateZoneProps> = () => {
           >
             <Select
               allowClear
-              defaultValue="Korean"
               showSearch
               style={{ width: 200 }}
               placeholder="Select a language"
@@ -159,7 +161,6 @@ export const CreateZone: React.FC<CreateZoneProps> = () => {
           >
             <Select
               allowClear
-              defaultValue="English"
               showSearch
               style={{ width: 200 }}
               placeholder="Select a language"
@@ -193,7 +194,6 @@ export const CreateZone: React.FC<CreateZoneProps> = () => {
           <Form.Item name="app" label="app">
             <Select
               allowClear
-              defaultValue="youtube"
               showSearch
               style={{ width: 200 }}
               placeholder="Select an app"

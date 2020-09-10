@@ -70,9 +70,6 @@ export class Zone extends BaseEntity {
   description: string
 
   @Field(_type => Message)
-  messages: Message[]
-
-  @Field(_type => Message)
   lastMessage: Message
 
   @Field()

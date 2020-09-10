@@ -11,7 +11,7 @@ import {
   ID,
   PubSub,
   Subscription,
-  ArgsType,
+  // ArgsType,
   Publisher,
   ResolverFilterData,
   Root,
@@ -22,8 +22,8 @@ import {
 // import { ZONE_PREFIX } from "../constants"
 // import { v4 } from "uuid"
 // import { ZoneEvent, ZonePayload } from "../entities/Zone"
-import { Comment } from "../entities/Comment"
-import { NewCommentPayload } from "../shared/interfaces/newComment.interface"
+// import { Comment } from "../entities/Comment"
+// import { NewCommentPayload } from "../shared/interfaces/newComment.interface"
 import { NewMessagePayload } from "../shared/interfaces/newMessage.interface"
 import { NewZoneArgs } from "../shared/args/zone.resolver.args"
 // import { Resource } from "../entities/Resource"
@@ -37,7 +37,7 @@ import { Topic } from "../shared/enums/Topic"
 import argon2 from "argon2"
 // import { getConnection } from "typeorm"
 import { isAuth } from "../middleware/isAuth"
-import { messages } from "../db/mock"
+// import { messages } from "../db/mock"
 // import { validateZone } from "../utils/validateZone"
 import { ApolloError } from "apollo-server-express"
 import { ZoneInput } from "../shared/inputs/zone.input"
@@ -71,10 +71,7 @@ export class MessageInput implements Partial<Message> {
   username?: string
 
   @Field()
-  content: string
-
-  @Field()
-  name: string
+  message: string
 
   @Field()
   zone: string
@@ -91,11 +88,6 @@ export class MessageInput implements Partial<Message> {
 //   username?: string
 // }
 
-@ArgsType()
-export class ZoneMessagesArgs {
-  @Field(_type => ID)
-  token: string
-}
 @Resolver()
 export class ZoneResolver {
   // private readonly Resources: Resource[] = sampleResources.slice()
@@ -118,17 +110,6 @@ export class ZoneResolver {
     } catch (err) {
       throw new ApolloError(err)
     }
-  }
-
-  @Query(() => Message)
-  async messages(zone: any) {
-    return messages.filter(m => zone.messages.includes(m.id))
-  }
-
-  @Query(() => Message)
-  async lastMessage(zone: any) {
-    const lastMessage = zone.messages[zone.messages.length - 1]
-    return messages.find(m => m.id === lastMessage)
   }
 
   @Mutation(() => Zone)
@@ -174,9 +155,11 @@ export class ZoneResolver {
     @PubSub(Topic.ZoneToken)
     publish: Publisher<NewMessagePayload>
   ): Promise<boolean> {
+    console.log("INPUT: ", input)
+
     try {
       await publish({
-        message: input.content,
+        message: input.message,
         token: input.token,
         zone: input.zone,
         date: new Date(),
@@ -203,6 +186,8 @@ export class ZoneResolver {
     @Args() { token }: NewZoneArgs
   ): Message {
     console.log("token: ", token)
+    console.log("message: ", newMessage.message)
+
     return {
       message: newMessage.message,
       createdAt: new Date(), // limitation of Redis payload serialization

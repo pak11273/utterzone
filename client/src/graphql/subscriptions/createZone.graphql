@@ -1,7 +1,6 @@
 subscription createZonePub($token: String!) {
   createZonePub(token: $token) {
     username
-    content
-    date
+    message
   }
 }

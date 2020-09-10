@@ -25,8 +25,6 @@ export type Query = {
   user: User;
   zone?: Maybe<Zone>;
   zones: Array<Zone>;
-  messages: Message;
-  lastMessage: Message;
 };
 
 
@@ -277,11 +275,10 @@ export enum Language {
 
 export type Message = {
   __typename?: 'Message';
-  id: Scalars['Float'];
-  content: Scalars['String'];
-  username?: Maybe<Scalars['String']>;
-  createdAt: Scalars['String'];
-  updatedAt: Scalars['String'];
+  zone: Scalars['String'];
+  username: Scalars['String'];
+  message: Scalars['String'];
+  createdAt: Scalars['DateTime'];
 };
 
 export type Mutation = {
@@ -425,8 +422,8 @@ export type ZoneInput = {
 export type MessageInput = {
   token?: Maybe<Scalars['ID']>;
   username?: Maybe<Scalars['String']>;
-  content: Scalars['String'];
-  name: Scalars['String'];
+  message: Scalars['String'];
+  zone: Scalars['String'];
 };
 
 export type Subscription = {
@@ -436,7 +433,7 @@ export type Subscription = {
   subscriptionWithFilterToDynamicTopic: Notification;
   newComments: Comment;
   userStatus: UserStatus;
-  createZonePub: Comment;
+  createZonePub: Message;
 };
 
 
@@ -710,8 +707,8 @@ export type CreateZonePubSubscriptionVariables = Exact<{
 export type CreateZonePubSubscription = (
   { __typename?: 'Subscription' }
   & { createZonePub: (
-    { __typename?: 'Comment' }
-    & Pick<Comment, 'username' | 'content' | 'date'>
+    { __typename?: 'Message' }
+    & Pick<Message, 'username' | 'message'>
   ) }
 );
 
@@ -1296,8 +1293,7 @@ export const CreateZonePubDocument = gql`
     subscription createZonePub($token: String!) {
   createZonePub(token: $token) {
     username
-    content
-    date
+    message
   }
 }
     `;
