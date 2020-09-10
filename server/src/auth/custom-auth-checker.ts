@@ -14,5 +14,5 @@ export const customAuthChecker: AuthChecker<MyContext> = (
   // console.log(info)
   console.log(roles)
 
-  return false // or false if access is denied
+  return true // or false if access is denied
 }

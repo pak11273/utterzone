@@ -1,7 +1,3 @@
-// import { MeDocument, MeQuery } from "../generated/graphql"
-
-// import { Form } from "antd"
-
 import { Col, Row } from "antd"
 import React, { useEffect } from "react"
 
@@ -19,13 +15,7 @@ interface zonesProps {}
 // const { Meta } = Card
 
 export const Zones: React.FC<zonesProps> = () => {
-  // const history = useHistory()
-  // const [form] = Form.useForm()
   const { data, loading } = useZonesQuery()
-
-  // if (loading) {
-  //   setLoading(true)
-  // }
 
   useEffect((): void => {
     if (!data || !data.zones) {
@@ -33,29 +23,6 @@ export const Zones: React.FC<zonesProps> = () => {
     }
     console.log("data: ", data)
   }, [data])
-
-  // const onFinish = async (values: any) => {
-  // if (values) {
-  //   const response = await register({
-  //     variables: { options: values },
-  //     update: (cache, { data }) => {
-  //       cache.writeQuery<MeQuery>({
-  //         query: MeDocument,
-  //         data: {
-  //           __typename: "Query",
-  //           me: data?.register.user,
-  //         },
-  //       })
-  //     },
-  //   })
-  //   if (response.data?.register.errors) {
-  //     const errorMap = toErrorMap(response.data?.register.errors)
-  //     form.setFields(errorMap)
-  //   } else {
-  //     history.push("/")
-  //   }
-  // }
-  // }
 
   return (
     <section className="userform_section">
@@ -102,7 +69,7 @@ export const Zones: React.FC<zonesProps> = () => {
                       hostname={x.hostname}
                       token={x.token}
                       premium={x.premium}
-                      // mature={x.mature}
+                      mature={x.mature.toString()}
                     />
                   </Col>
                 )

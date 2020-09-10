@@ -31,7 +31,7 @@ import { Zone } from "../entities/Zone"
 
 import { Message } from "../entities/Message"
 import { MyContext } from "../types"
-import { Topic } from "../types/Topic"
+import { Topic } from "../shared/enums/Topic"
 // import { sampleResources } from "../data/Resource.samples"
 
 import argon2 from "argon2"
@@ -75,6 +75,9 @@ export class MessageInput implements Partial<Message> {
 
   @Field()
   name: string
+
+  @Field()
+  zone: string
 }
 
 // enum Topic {
@@ -174,7 +177,9 @@ export class ZoneResolver {
     try {
       await publish({
         message: input.content,
-        dateString: new Date().toISOString(),
+        token: input.token,
+        zone: input.zone,
+        date: new Date(),
       })
       return true
     } catch (err) {
@@ -182,26 +187,27 @@ export class ZoneResolver {
     }
   }
 
-  @Subscription(_returns => Comment, {
+  @Subscription(_returns => Message, {
     topics: Topic.ZoneToken,
     filter: ({
       payload,
       args,
-    }: ResolverFilterData<NewCommentPayload, NewZoneArgs>) => {
+    }: ResolverFilterData<NewMessagePayload, NewZoneArgs>) => {
       console.log("args: ", args)
       console.log("payload: ", payload)
-      return payload.name === args.token
+      return payload.token === args.token
     },
   })
   createZonePub(
-    @Root() newComment: NewCommentPayload,
+    @Root() newMessage: NewMessagePayload,
     @Args() { token }: NewZoneArgs
-  ): Comment {
+  ): Message {
     console.log("token: ", token)
     return {
-      content: newComment.content!,
-      date: new Date(newComment.dateString), // limitation of Redis payload serialization
-      username: newComment.username,
+      message: newMessage.message,
+      createdAt: new Date(), // limitation of Redis payload serialization
+      zone: newMessage.zone,
+      username: newMessage.username || "",
     }
   }
 }

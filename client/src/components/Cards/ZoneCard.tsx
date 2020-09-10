@@ -18,7 +18,7 @@ export const ZoneCard = ({
   app: string
   hostname: string
   token: string
-  mature: boolean
+  mature: string
   premium: boolean
   name: string
   loading: boolean
@@ -26,24 +26,15 @@ export const ZoneCard = ({
 }) => (
   <Card
     loading={loading}
-    cover={
-      <>
-        <img
-          alt="example"
-          src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
-        />
-      </>
-    }
     actions={[<Link to={`/zone/${hostname}/${token}`}>Enter Zone</Link>]}
   >
-    <Meta
-      app={`${app}`}
-      title={`${name}`}
-      description={`${description}`}
-      mature={mature}
-      premium={premium}
-    />
+    {console.log("magure: ", typeof mature)}
+    <Meta title={`${name}`} description={`${description}`} />
+    <p>hosted by:{`${hostname}`}</p>
+    <p>app: {`${app}`}</p>
+    <p>{mature === "true" ? "18+" : "family friendly"}</p>
+    <p>premium zone {`${premium}`}</p>
     <TeamOutlined key="setting" />
-    <span>{30}</span>
+    <span>Max: {30}</span>
   </Card>
 )

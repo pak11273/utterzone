@@ -13,6 +13,9 @@ export class Resource {
   @Field({ nullable: true })
   description?: string
 
+  @Field({ nullable: true })
+  votes: number
+
   @Field(_type => [Comment])
   comments: Comment[]
 }

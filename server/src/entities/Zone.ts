@@ -9,11 +9,16 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm"
-import { Field, ID, ObjectType } from "type-graphql"
+import { Field, ID, ObjectType, registerEnumType } from "type-graphql"
 
 import { Course } from "./Course"
+import { Language } from "../shared/enums/Language.enums"
 import { Message } from "./Message"
 import { User } from "./User"
+
+registerEnumType(Language, {
+  name: "Language",
+})
 
 @ObjectType()
 @Entity()
@@ -23,7 +28,7 @@ export class Zone extends BaseEntity {
   id!: string
 
   @Field()
-  @Column({ nullable: true })
+  @Column({ nullable: true, default: "The Utterzone" })
   name: string
 
   @Field()
@@ -48,13 +53,13 @@ export class Zone extends BaseEntity {
   @OneToMany(() => User, user => user)
   participants: User[]
 
-  @Field()
+  @Field(_type => Language)
   @Column()
-  learningLanguage?: string
+  learningLanguage: Language
 
-  @Field()
+  @Field(_type => Language)
   @Column()
-  nativeLanguage?: string
+  nativeLanguage: Language
 
   @Field()
   @Column()
@@ -64,7 +69,7 @@ export class Zone extends BaseEntity {
   @Column()
   description: string
 
-  @OneToMany(() => Message, message => message.zone)
+  @Field(_type => Message)
   messages: Message[]
 
   @Field(_type => Message)

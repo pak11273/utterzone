@@ -1,6 +1,8 @@
 export interface NewMessagePayload {
+  zone: string
+  token?: string
   message: string
-  dateString: string // limitation of Redis payload serialization
+  date: Date // limitation of Redis payload serialization
   content?: string
   username?: string
 }

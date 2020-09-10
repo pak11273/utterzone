@@ -1,5 +1,6 @@
 import { Field, InputType } from "type-graphql"
 
+import { Language } from "../enums/Language.enums"
 import { Length } from "class-validator"
 
 @InputType()
@@ -19,10 +20,10 @@ export class ZoneInput {
   hostname: string
 
   @Field()
-  learningLanguage?: string
+  learningLanguage: Language
 
   @Field()
-  nativeLanguage?: string
+  nativeLanguage: Language
 
   @Field()
   maxParticipants?: number

@@ -16,7 +16,7 @@ import { Resource } from "../entities/Resource"
 import { CommentInput } from "../shared/inputs/comment.input"
 import { Comment } from "../entities/Comment"
 import { NewCommentPayload } from "../shared/interfaces/newComment.interface"
-import { Topic } from "../types/Topic"
+import { Topic } from "../shared/enums/Topic"
 import { sampleResources } from "../data/Resource.samples"
 import { NewCommentsArgs } from "../shared/args/Resource.resolver.args"
 

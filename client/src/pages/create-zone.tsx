@@ -3,9 +3,10 @@
 
 import { Button, Checkbox, Form, Input, InputNumber, Select } from "antd"
 import React, { useState } from "react"
-import { cache, client } from "../apollo/apollo"
 import { gql, useLazyQuery } from "@apollo/client"
 
+import { Language } from "../data/language"
+import { cache } from "../apollo/apollo"
 import { loader } from "graphql.macro"
 import { useCreateZoneMutation } from "../generated/graphql"
 import { useHistory } from "react-router-dom"
@@ -50,14 +51,8 @@ const tips = "Max 30 people.  May vary with apps."
 export const CreateZone: React.FC<CreateZoneProps> = () => {
   const history = useHistory()
   const [privateZone, setPrivate] = useState(false)
-  const [getMe, { data: me }] = useLazyQuery(CACHE_ME)
-  const [
-    createZoneMutation,
-    { data: zoneData, loading },
-  ] = useCreateZoneMutation()
-
-  // TODO: created zone should return all fields
-  console.log("dat: ", zoneData)
+  const [getMe] = useLazyQuery(CACHE_ME)
+  const [createZoneMutation, { loading }] = useCreateZoneMutation()
 
   cache.writeQuery({
     query: Me,
@@ -66,18 +61,15 @@ export const CreateZone: React.FC<CreateZoneProps> = () => {
     },
   })
 
-  console.log("me: ", me)
-
   const onFinish = async (values: any) => {
     if (values) {
+      // Todo: return host name from server
       values.hostname = "blah"
 
       try {
         const response = await createZoneMutation({
           variables: { input: values },
         })
-        console.log("zone: ", zoneData)
-        console.log("res: ", response)
 
         if (response) {
           history.push(
@@ -133,7 +125,7 @@ export const CreateZone: React.FC<CreateZoneProps> = () => {
               },
             ]}
           >
-            <Input />
+            <Input placeholder="Enter a zone name" />
           </Form.Item>
           <Form.Item
             name="nativeLanguage"
@@ -142,16 +134,17 @@ export const CreateZone: React.FC<CreateZoneProps> = () => {
           >
             <Select
               allowClear
+              defaultValue="Korean"
               showSearch
               style={{ width: 200 }}
-              placeholder="Select a person"
+              placeholder="Select a language"
               optionFilterProp="children"
               filterOption={(input, option) =>
                 option!.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
               }
             >
               <>
-                {["English", "Korean", "Spanish"].map((lang, i) => (
+                {Language.map((lang, i) => (
                   <Option key={i} value={`${lang}`}>
                     {lang}
                   </Option>
@@ -166,16 +159,17 @@ export const CreateZone: React.FC<CreateZoneProps> = () => {
           >
             <Select
               allowClear
+              defaultValue="English"
               showSearch
               style={{ width: 200 }}
-              placeholder="Select a person"
+              placeholder="Select a language"
               optionFilterProp="children"
               filterOption={(input, option) =>
                 option!.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
               }
             >
               <>
-                {["English", "Korean", "Spanish"].map((lang, i) => (
+                {Language.map((lang, i) => (
                   <Option key={i} value={`${lang}`}>
                     {lang}
                   </Option>
@@ -195,6 +189,27 @@ export const CreateZone: React.FC<CreateZoneProps> = () => {
             ]}
           >
             <InputNumber min={1} max={30} />
+          </Form.Item>
+          <Form.Item name="app" label="app">
+            <Select
+              allowClear
+              defaultValue="youtube"
+              showSearch
+              style={{ width: 200 }}
+              placeholder="Select an app"
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option!.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+            >
+              <>
+                {["youtube", "chat"].map((app, i) => (
+                  <Option key={i} value={`${app}`}>
+                    {app}
+                  </Option>
+                ))}
+              </>
+            </Select>
           </Form.Item>
           <div style={{ display: "flex", marginTop: "20px" }}>
             <Form.Item

@@ -1,45 +1,18 @@
-import {
-  BaseEntity,
-  Column,
-  CreateDateColumn,
-  Entity,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from "typeorm"
 import { Field, ObjectType } from "type-graphql"
 
 import { Zone } from "./Zone"
 
 @ObjectType()
-@Entity()
-export class Message extends BaseEntity {
+export class Message {
   @Field()
-  @PrimaryGeneratedColumn()
-  id!: number
+  message: string
 
   @Field()
-  @Column()
-  content: string
-
-  @Field({ nullable: true })
-  @Column()
   username: string
-  // @Field(() => String)
-  // @ManyToOne(() => User, user => user.messages)
-  // user: User
 
-  // @Field()
-  // token: number
-
-  @ManyToOne(() => Zone, zone => zone.messages)
+  @Field()
   zone: string
 
   @Field(() => String)
-  @CreateDateColumn()
   createdAt: Date
-
-  @Field(() => String)
-  @UpdateDateColumn()
-  updatedAt: Date
 }
