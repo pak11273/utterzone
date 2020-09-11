@@ -296,6 +296,7 @@ export type Mutation = {
   createUser: UserResponse;
   login: UserResponse;
   logout: Scalars['Boolean'];
+  joinZone: Zone;
   createZone: Zone;
   createZoneMessageMutation: Scalars['Boolean'];
 };

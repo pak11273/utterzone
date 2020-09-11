@@ -1,3 +1,4 @@
+import ChangePassword from "./change-password/change-password"
 import { CreateZone } from "./create-zone"
 import { ForgotPassword } from "./forgot-password"
 import { Home } from "./home"
@@ -6,4 +7,13 @@ import { Register } from "./register"
 import { Zone } from "./zone"
 import { Zones } from "./zones"
 
-export { ForgotPassword, Home, Login, Register, Zone, Zones, CreateZone }
+export {
+  ChangePassword,
+  ForgotPassword,
+  Home,
+  Login,
+  Register,
+  Zone,
+  Zones,
+  CreateZone,
+}
