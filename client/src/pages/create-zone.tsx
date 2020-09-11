@@ -3,7 +3,7 @@
 
 import { Button, Checkbox, Form, Input, InputNumber, Select } from "antd"
 import React, { useState } from "react"
-import { gql, useLazyQuery } from "@apollo/client"
+import { gql, useLazyQuery, useQuery } from "@apollo/client"
 
 import { Language } from "../data/language"
 import { cache } from "../apollo/apollo"
@@ -39,7 +39,7 @@ interface CreateZoneProps {}
 
 const CACHE_ME = gql`
   query {
-    Me {
+    me {
       id
       username
     }
@@ -49,10 +49,12 @@ const CACHE_ME = gql`
 const tips = "Max 30 people.  May vary with apps."
 
 export const CreateZone: React.FC<CreateZoneProps> = () => {
+  const { data } = useQuery(CACHE_ME)
   const history = useHistory()
   const [privateZone, setPrivate] = useState(false)
   const [getMe] = useLazyQuery(CACHE_ME)
   const [createZoneMutation, { loading }] = useCreateZoneMutation()
+  console.log("me: ", data)
 
   cache.writeQuery({
     query: Me,
@@ -64,7 +66,7 @@ export const CreateZone: React.FC<CreateZoneProps> = () => {
   const onFinish = async (values: any) => {
     if (values) {
       // Todo: return host name from server
-      values.hostname = "blah"
+      values.hostname = data.me.username
 
       try {
         const response = await createZoneMutation({
@@ -80,13 +82,6 @@ export const CreateZone: React.FC<CreateZoneProps> = () => {
         console.log("catch: ", err)
       }
     }
-    const token = v4()
-    console.log("values: ", values)
-    // if (!data?.me) {
-    //   alert("you must be logged in")
-    // } else {
-    //   history.push(`/zone/${values.name}/${token}`)
-    // }
   }
 
   const [form] = Form.useForm()
@@ -104,6 +99,7 @@ export const CreateZone: React.FC<CreateZoneProps> = () => {
           onFinish={onFinish}
           scrollToFirstError
           initialValues={{
+            name: "Utterzone",
             maxParticipants: 30,
             nativeLanguage: "Korean",
             learningLanguage: "English",

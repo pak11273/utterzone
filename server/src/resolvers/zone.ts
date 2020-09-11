@@ -41,6 +41,7 @@ import { isAuth } from "../middleware/isAuth"
 // import { validateZone } from "../utils/validateZone"
 import { ApolloError } from "apollo-server-express"
 import { ZoneInput } from "../shared/inputs/zone.input"
+import { Test } from "../decorators/auth/test"
 // import { CommentInput } from "../shared/inputs/comment.input"
 
 // import { User } from "../entities/User"
@@ -101,6 +102,7 @@ export class ZoneResolver {
     return zone
   }
 
+  @Test()
   @Query(_type => [Zone])
   async zones(@Ctx() {}: MyContext): Promise<any | undefined> {
     try {
@@ -109,6 +111,15 @@ export class ZoneResolver {
       return zones
     } catch (err) {
       throw new ApolloError(err)
+    }
+  }
+
+  @Mutation(_type => Zone)
+  async joinZone(@Ctx() {}: MyContext): Promise<any | undefined> {
+    try {
+      console.log("hi test from resolver")
+    } catch (err) {
+      return err
     }
   }
 
