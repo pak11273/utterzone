@@ -30,11 +30,13 @@ export const Zones: React.FC<zonesProps> = () => {
         <div
           style={{
             display: "flex",
+            alignItems: "center",
             flexDirection: "column",
             justifyContent: "center",
+            marginBottom: "60px",
           }}
         >
-          <h1 style={{ textAlign: "center" }}>Filters</h1>
+          <h1 style={{ textAlign: "center" }}>Criteria</h1>
           <Row gutter={[24, 32]}>
             <Col xs={24} md={4}>
               I speak: English
