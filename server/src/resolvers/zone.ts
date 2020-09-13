@@ -44,7 +44,8 @@ import { ZoneInput } from "../shared/inputs/zone.input"
 import { Test } from "../decorators/auth/test"
 // import { CommentInput } from "../shared/inputs/comment.input"
 
-// import { User } from "../entities/User"
+import { User } from "../entities/User"
+import { getManager } from "typeorm"
 
 // import { MixinFieldError } from "../shared/mixins/MixinFieldError"
 
@@ -95,10 +96,10 @@ export class ZoneResolver {
   // private autoIncrement = 0
   @Query(() => Zone, { nullable: true })
   async zone(
-    @Arg("id") id: number,
+    @Arg("id") id: string,
     @Ctx() {}: MyContext
   ): Promise<Zone | undefined> {
-    const zone = await Zone.findOne(id)
+    const zone = await Zone.findOne({ id: id })
     return zone
   }
 
@@ -107,7 +108,6 @@ export class ZoneResolver {
   async zones(@Ctx() {}: MyContext): Promise<any | undefined> {
     try {
       const zones = await Zone.find()
-      console.log("zones: ", zones)
       return zones
     } catch (err) {
       throw new ApolloError(err)
@@ -115,9 +115,17 @@ export class ZoneResolver {
   }
 
   @Mutation(_type => Zone)
-  async joinZone(@Ctx() {}: MyContext): Promise<any | undefined> {
+  @Test()
+  async joinZone(
+    @Arg("id") id: string,
+    @Ctx() { req }: MyContext
+  ): Promise<any | undefined> {
     try {
-      console.log("hi test from resolver")
+      console.log("id: ", id)
+      req.session.zoneId = id
+      return {
+        id: id,
+      }
     } catch (err) {
       return err
     }
@@ -127,34 +135,31 @@ export class ZoneResolver {
   @UseMiddleware(isAuth)
   async createZone(
     @Arg("input") input: ZoneInput,
-    @Ctx() {}: MyContext
+    @Ctx() { req }: MyContext
   ): Promise<Zone> {
     try {
-      console.log("input: ", input)
-      // const errors = validateZone(input)
-      // if (errors) {
-      //   {
-      //     errors
-      //   }
-      // }
+      const manager = getManager()
+      const user = await manager.findOne(User, req.session.userId)
 
       if (input.public) {
         const hashedPassword = await argon2.hash("narcotics") // TODO: make dynamic
         input.password = hashedPassword
       }
-      const zone = await Zone.create(input).save()
 
-      // TODO: validations
+      console.log("input: ", input)
+      // const zone = new Zone()
+      // zone.save(input)
+      const zone = await Zone.create(input).save()
+      user!.zone = zone
+      await manager.save(user)
 
       if (!zone) {
         throw new ApolloError("There was an error.  Zone not created.")
       }
 
-      console.log("zone ster: ", zone)
-
       return zone
     } catch (err) {
-      throw new ApolloError("rut roh raggy")
+      return err
     }
   }
 
@@ -166,8 +171,6 @@ export class ZoneResolver {
     @PubSub(Topic.ZoneToken)
     publish: Publisher<NewMessagePayload>
   ): Promise<boolean> {
-    console.log("INPUT: ", input)
-
     try {
       await publish({
         message: input.message,

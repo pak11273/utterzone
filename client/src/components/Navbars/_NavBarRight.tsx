@@ -20,6 +20,8 @@ export const RightMenu: React.FC<NavBarProps> = (props: any) => {
     history.push("/login")
   }
 
+  console.log("login data: ", data)
+
   if (!data?.me) {
     return (
       <Menu mode="horizontal">

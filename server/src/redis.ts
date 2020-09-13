@@ -33,6 +33,7 @@ export const redisSession = session({
   secret: process.env.SESSION_SECRET,
   resave: false,
 })
+
 // create Redis-based pub-sub
 export const pubSub = new RedisPubSub({
   publisher: new Redis(options),

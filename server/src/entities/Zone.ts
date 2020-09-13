@@ -3,7 +3,6 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  ManyToOne,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -28,7 +27,7 @@ export class Zone extends BaseEntity {
   id!: string
 
   @Field()
-  @Column({ nullable: true, default: "The Utterzone" })
+  @Column({ nullable: true, default: "A Random Zone" })
   name: string
 
   @Field()
@@ -40,16 +39,14 @@ export class Zone extends BaseEntity {
   course: Course
 
   @Field()
-  @Column({ nullable: true })
+  @Column({ nullable: true, unique: true })
   hostname: string
 
   @Field()
   @PrimaryGeneratedColumn("uuid")
   token: string
 
-  @ManyToOne(_type => User, user => user.zones)
-  host: User
-
+  @Field(() => [User])
   @OneToMany(() => User, user => user)
   participants: User[]
 
@@ -62,8 +59,8 @@ export class Zone extends BaseEntity {
   nativeLanguage: Language
 
   @Field()
-  @Column()
-  maxParticipants?: number
+  @Column({ nullable: true })
+  maxParticipants: number
 
   @Field({ nullable: true })
   @Column()

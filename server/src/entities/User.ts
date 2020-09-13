@@ -25,8 +25,8 @@ import { Zone } from "./Zone"
 @Entity()
 export class User extends BaseEntity {
   @Field()
-  @PrimaryGeneratedColumn()
-  id!: number
+  @PrimaryGeneratedColumn("uuid")
+  id!: string
 
   @Field()
   @Column({ unique: true })
@@ -61,8 +61,9 @@ export class User extends BaseEntity {
   @OneToMany(() => Updoot, updoot => updoot.user)
   updoots: Updoot[]
 
-  @OneToMany(_type => Zone, zone => zone.host)
-  zones: Zone[]
+  @OneToOne(_type => Zone)
+  @JoinColumn()
+  zone: Zone
 
   @Field()
   @Column({ nullable: true })

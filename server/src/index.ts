@@ -36,8 +36,6 @@ import express from "express"
 import http from "http"
 import path from "path"
 
-// import { pubSub, redis, redisSession } from "./redis"
-
 const main = async () => {
   const conn = await createConnection({
     type: "postgres",

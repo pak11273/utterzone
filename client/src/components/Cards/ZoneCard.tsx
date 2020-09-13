@@ -1,12 +1,19 @@
 import { Button, Card } from "antd"
 
 import React from "react"
-import { TeamOutlined } from "@ant-design/icons"
 import { useHistory } from "react-router-dom"
+import { useJoinZoneMutation } from "../../generated/graphql"
 
-const { Meta } = Card
+// import { loader } from "graphql.macro"
+
+// const JOIN_ZONE = loader("../../graphql/mutations/joinZone.graphql")
+
+// import { TeamOutlined } from "@ant-design/icons"
+
+// const { Meta } = Card
 
 export const ZoneCard = ({
+  id,
   app,
   hostname,
   token,
@@ -17,6 +24,7 @@ export const ZoneCard = ({
   description,
   maxParticipants,
 }: {
+  id: any
   app: string
   hostname: string
   token: string
@@ -24,15 +32,17 @@ export const ZoneCard = ({
   premium: boolean
   name: string
   loading: boolean
-  description: string | undefined
+  description: string | null | undefined
   maxParticipants: number
 }) => {
+  const [joinZoneMutation, { data }] = useJoinZoneMutation({
+    variables: { id: id },
+  })
   const history = useHistory()
-  const handleClick = () => {
-    //if false give error
-    alert("hi")
-    //if true
-    history.push(`/zone/${hostname}/${token}`)
+  const handleClick = async () => {
+    const response = await joinZoneMutation()
+    console.log("res: ", response)
+    // history.push(`/zone/${id}/${token}`)
   }
 
   return (

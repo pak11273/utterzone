@@ -19,7 +19,7 @@ export const Zones: React.FC<zonesProps> = () => {
 
   useEffect((): void => {
     if (!data || !data.zones) {
-      console.log("no zones loaded!")
+      console.log("no zones available for this language!")
     }
     console.log("data: ", data)
   }, [data])
@@ -64,10 +64,12 @@ export const Zones: React.FC<zonesProps> = () => {
                 return (
                   <Col key={i} xs={24} sm={18} md={12} lg={6} xl={4}>
                     <ZoneCard
+                      id={x.id}
                       app={x.app}
                       name={x.name}
                       loading={loading}
                       description={x.description}
+                      maxParticipants={x.maxParticipants}
                       hostname={x.hostname}
                       token={x.token}
                       premium={x.premium}

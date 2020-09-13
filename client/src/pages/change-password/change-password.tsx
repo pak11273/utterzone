@@ -1,19 +1,22 @@
-import { Button, Checkbox, Form, Input, Tooltip } from "antd"
-import React, { useState } from "react"
+import { Button, Form, Input } from "antd"
 
-import { Formik } from "formik"
-import { InputField } from "../../components"
-import { QuestionCircleOutlined } from "@ant-design/icons"
-import { toErrorMap } from "../../utils/toErrorMap"
-import { useChangePasswordMutation } from "../../generated/graphql"
-import { useHistory } from "react-router-dom"
+import React from "react"
 import { withApollo } from "../../utils/withApollo"
+
+// import { useChangePasswordMutation } from "../../generated/graphql"
+
+
+// import { useHistory } from "react-router-dom"
+
+// import { InputField } from "../../components"
+// import { QuestionCircleOutlined } from "@ant-design/icons"
+// import { toErrorMap } from "../../utils/toErrorMap"
 
 const ChangePassword: any = () => {
   // const router = useRouter()
-  const [changePassword] = useChangePasswordMutation()
-  const [tokenError, setTokenError] = useState("")
-  const history = useHistory()
+  // const [changePassword] = useChangePasswordMutation()
+  // const [tokenError, setTokenError] = useState("")
+  // const history = useHistory()
   const [form] = Form.useForm()
 
   // TODO: implement loading
@@ -106,6 +109,7 @@ const ChangePassword: any = () => {
               },
               ({ getFieldValue }) => ({
                 validator(rule, value) {
+                  console.log(rule)
                   if (!value || getFieldValue("password") === value) {
                     return Promise.resolve()
                   }

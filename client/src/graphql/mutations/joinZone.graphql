@@ -1,0 +1,5 @@
+mutation joinZone($id: String!) {
+  joinZone(id: $id) {
+    id
+  }
+}

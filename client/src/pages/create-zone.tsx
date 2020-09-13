@@ -54,7 +54,6 @@ export const CreateZone: React.FC<CreateZoneProps> = () => {
   const [privateZone, setPrivate] = useState(false)
   const [getMe] = useLazyQuery(CACHE_ME)
   const [createZoneMutation, { loading }] = useCreateZoneMutation()
-  console.log("me: ", data)
 
   cache.writeQuery({
     query: Me,
@@ -65,13 +64,17 @@ export const CreateZone: React.FC<CreateZoneProps> = () => {
 
   const onFinish = async (values: any) => {
     if (values) {
-      // Todo: return host name from server
-      values.hostname = data.me.username
-
       try {
+        if (!data.me) {
+          console.log('login" ', "you need to log in")
+        }
+
+        values.hostname = await data.me.username
+
         const response = await createZoneMutation({
           variables: { input: values },
         })
+        console.log("response: ", response)
 
         if (response) {
           history.push(
@@ -99,11 +102,11 @@ export const CreateZone: React.FC<CreateZoneProps> = () => {
           onFinish={onFinish}
           scrollToFirstError
           initialValues={{
-            name: "Utterzone",
+            name: "A Random Zone",
             maxParticipants: 30,
             nativeLanguage: "Korean",
             learningLanguage: "English",
-            app: "youtube",
+            app: "lobby",
           }}
         >
           <Form.Item
@@ -199,7 +202,7 @@ export const CreateZone: React.FC<CreateZoneProps> = () => {
               }
             >
               <>
-                {["youtube", "chat"].map((app, i) => (
+                {["youtube", "lobby"].map((app, i) => (
                   <Option key={i} value={`${app}`}>
                     {app}
                   </Option>

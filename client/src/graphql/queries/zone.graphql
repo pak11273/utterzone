@@ -1,5 +1,6 @@
-query Zone($id: Float!) {
+query Zone($id: String!) {
   zone(id: $id) {
     id
+    app
   }
 }

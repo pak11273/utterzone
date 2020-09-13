@@ -3,17 +3,17 @@
 import { Button, Input } from "antd"
 import React, { useState } from "react"
 
-interface ZoneControlsProps {
-  playing: React.Dispatch<React.SetStateAction<boolean>>
+interface YTControlsProps {
+  setPlaying: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export const ZoneControls: React.FC<ZoneControlsProps> = ({ playing }) => {
+export const YTControls: React.FC<YTControlsProps> = ({ setPlaying }) => {
   const [play, setPlay] = useState(true)
   const roomnum = 1
   const playVideo = (num: number) => {
     console.log(num)
     setPlay(!play)
-    playing(play)
+    setPlaying(play)
   }
   const syncVideo = (num: number) => {
     console.log(num)
@@ -45,6 +45,7 @@ export const ZoneControls: React.FC<ZoneControlsProps> = ({ playing }) => {
   // const removeAt = (num: number) => {
   //   console.log(num)
   // }
+
   return (
     <div className="zone_controls">
       <div style={{ textAlign: "center" }}>

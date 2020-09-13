@@ -1,10 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import { Chat, Notebook, ZoneControls, ZoneMain } from "../components"
+import { Chat, Notebook, ZoneAppContainer } from "../components"
 import { Col, Row } from "antd"
 import React, { useEffect, useState } from "react"
+import {
+  useCreateZonePubSubscription,
+  useZoneQuery,
+} from "../generated/graphql"
 
-import { useCreateZonePubSubscription } from "../generated/graphql"
 import { useParams } from "react-router-dom"
 
 interface ZoneQueryMessage {
@@ -35,7 +38,13 @@ export const Zone: any = () => {
     variables: { token: params.token },
   })
 
-  console.log("zone data: ", data)
+  const {
+    data: zoneData,
+    loading: zoneLoading,
+    error: zoneErrors,
+  } = useZoneQuery({
+    variables: { id: params.id },
+  })
 
   useEffect(() => {
     window.addEventListener("beforeunload", event => {
@@ -50,8 +59,11 @@ export const Zone: any = () => {
     <div style={{ height: "100%" }}>
       <Row style={{ height: "100%" }}>
         <Col className="zone_content" xs={24} md={17}>
-          <ZoneMain playing={playing} />
-          {"ifyouarethehost" ? <ZoneControls playing={setPlaying} /> : null}
+          <ZoneAppContainer
+            setPlaying={setPlaying}
+            playing={playing}
+            app={zoneData?.zone?.app}
+          />
           <Notebook />
         </Col>
         <Col xs={24} md={7} style={{ height: "100%" }}>

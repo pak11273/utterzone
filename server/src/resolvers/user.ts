@@ -77,6 +77,7 @@ export class UserResolver {
   @Query(() => User, { nullable: true })
   async me(@Ctx() { req }: MyContext) {
     // you are not logged in
+    console.log("me: ", req.session)
     if (!req.session.userId) {
       return null
     }
@@ -121,8 +122,7 @@ export class UserResolver {
       }
     }
 
-    const userIdNum = parseInt(userId)
-    const user = await User.findOne(userIdNum)
+    const user = await User.findOne(userId)
 
     if (!user) {
       return {
@@ -136,7 +136,7 @@ export class UserResolver {
     }
 
     await User.update(
-      { id: userIdNum },
+      { id: userId },
       {
         password: await argon2.hash(newPassword),
       }

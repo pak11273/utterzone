@@ -55,7 +55,7 @@ export type QueryUserArgs = {
 
 
 export type QueryZoneArgs = {
-  id: Scalars['Float'];
+  id: Scalars['String'];
 };
 
 export type Course = {
@@ -68,7 +68,7 @@ export type Course = {
 
 export type User = {
   __typename?: 'User';
-  id: Scalars['Float'];
+  id: Scalars['String'];
   username: Scalars['String'];
   email: Scalars['String'];
   followers: Scalars['Float'];
@@ -91,7 +91,7 @@ export type Post = {
   text: Scalars['String'];
   points: Scalars['Float'];
   voteStatus?: Maybe<Scalars['Int']>;
-  creatorId: Scalars['Float'];
+  creatorId: Scalars['String'];
   creator: User;
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
@@ -122,6 +122,7 @@ export type Zone = {
   course: Course;
   hostname: Scalars['String'];
   token: Scalars['String'];
+  participants: Array<User>;
   learningLanguage: Language;
   nativeLanguage: Language;
   maxParticipants: Scalars['Float'];
@@ -368,6 +369,11 @@ export type MutationLoginArgs = {
 };
 
 
+export type MutationJoinZoneArgs = {
+  id: Scalars['String'];
+};
+
+
 export type MutationCreateZoneArgs = {
   input: ZoneInput;
 };
@@ -569,6 +575,19 @@ export type ForgotPasswordMutation = (
   & Pick<Mutation, 'forgotPassword'>
 );
 
+export type JoinZoneMutationVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type JoinZoneMutation = (
+  { __typename?: 'Mutation' }
+  & { joinZone: (
+    { __typename?: 'Zone' }
+    & Pick<Zone, 'id'>
+  ) }
+);
+
 export type LoginMutationVariables = Exact<{
   usernameOrEmail: Scalars['String'];
   password: Scalars['String'];
@@ -677,7 +696,7 @@ export type PostsQuery = (
 );
 
 export type ZoneQueryVariables = Exact<{
-  id: Scalars['Float'];
+  id: Scalars['String'];
 }>;
 
 
@@ -685,7 +704,7 @@ export type ZoneQuery = (
   { __typename?: 'Query' }
   & { zone?: Maybe<(
     { __typename?: 'Zone' }
-    & Pick<Zone, 'id'>
+    & Pick<Zone, 'id' | 'app'>
   )> }
 );
 
@@ -696,7 +715,7 @@ export type ZonesQuery = (
   { __typename?: 'Query' }
   & { zones: Array<(
     { __typename?: 'Zone' }
-    & Pick<Zone, 'id' | 'app' | 'hostname' | 'description' | 'name' | 'mature' | 'token'>
+    & Pick<Zone, 'id' | 'app' | 'hostname' | 'description' | 'name' | 'mature' | 'maxParticipants' | 'premium' | 'token'>
   )> }
 );
 
@@ -945,6 +964,38 @@ export function useForgotPasswordMutation(baseOptions?: Apollo.MutationHookOptio
 export type ForgotPasswordMutationHookResult = ReturnType<typeof useForgotPasswordMutation>;
 export type ForgotPasswordMutationResult = Apollo.MutationResult<ForgotPasswordMutation>;
 export type ForgotPasswordMutationOptions = Apollo.BaseMutationOptions<ForgotPasswordMutation, ForgotPasswordMutationVariables>;
+export const JoinZoneDocument = gql`
+    mutation joinZone($id: String!) {
+  joinZone(id: $id) {
+    id
+  }
+}
+    `;
+export type JoinZoneMutationFn = Apollo.MutationFunction<JoinZoneMutation, JoinZoneMutationVariables>;
+
+/**
+ * __useJoinZoneMutation__
+ *
+ * To run a mutation, you first call `useJoinZoneMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useJoinZoneMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [joinZoneMutation, { data, loading, error }] = useJoinZoneMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useJoinZoneMutation(baseOptions?: Apollo.MutationHookOptions<JoinZoneMutation, JoinZoneMutationVariables>) {
+        return Apollo.useMutation<JoinZoneMutation, JoinZoneMutationVariables>(JoinZoneDocument, baseOptions);
+      }
+export type JoinZoneMutationHookResult = ReturnType<typeof useJoinZoneMutation>;
+export type JoinZoneMutationResult = Apollo.MutationResult<JoinZoneMutation>;
+export type JoinZoneMutationOptions = Apollo.BaseMutationOptions<JoinZoneMutation, JoinZoneMutationVariables>;
 export const LoginDocument = gql`
     mutation Login($usernameOrEmail: String!, $password: String!) {
   login(usernameOrEmail: $usernameOrEmail, password: $password) {
@@ -1220,9 +1271,10 @@ export type PostsQueryHookResult = ReturnType<typeof usePostsQuery>;
 export type PostsLazyQueryHookResult = ReturnType<typeof usePostsLazyQuery>;
 export type PostsQueryResult = Apollo.QueryResult<PostsQuery, PostsQueryVariables>;
 export const ZoneDocument = gql`
-    query Zone($id: Float!) {
+    query Zone($id: String!) {
   zone(id: $id) {
     id
+    app
   }
 }
     `;
@@ -1261,6 +1313,8 @@ export const ZonesDocument = gql`
     description
     name
     mature
+    maxParticipants
+    premium
     token
   }
 }

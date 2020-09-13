@@ -6,6 +6,8 @@ query Zones {
     description
     name
     mature
+    maxParticipants
+    premium
     token
   }
 }
