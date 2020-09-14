@@ -5,6 +5,8 @@ import { testConfig } from "./test.config"
 const defaults = {
   DB_USERNAME: process.env.DB_DEV_USERNAME,
   DB_PASSWORD: process.env.DB_DEV_PASSWORD,
+  DB_NAME: process.env.DB_DEV_NAME,
+  DB_URL: process.env.DB_DEV_URL,
 }
 
 export const combineConfigs = () => {
