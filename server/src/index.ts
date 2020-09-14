@@ -28,6 +28,7 @@ import express from "express"
 import http from "http"
 import path from "path"
 
+const main = async () => {
   const schema = await createSchema()
 
   const conn = await createConnection({
