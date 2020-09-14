@@ -11,7 +11,7 @@ export const createConnection = (drop: boolean = false) => {
     port: 5432,
     username: config.DB_USERNAME,
     password: config.DB_PASSWORD,
-    database: "utterzone-test",
+    database: config.DB_NAME,
     entities: ["dist/entities/*.js"],
     migrations: ["dist/migrations/*.js"],
     synchronize: drop,

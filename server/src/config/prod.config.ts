@@ -4,5 +4,7 @@ dontenv.config()
 
 export const prodConfig = {
   DB_USERNAME: process.env.DB_PROD_USERNAME,
-  DB_DATABASE: process.env.DB_PROD_DATABASE,
+  DB_PASSWORD: process.env.DB_PROD_PASSWORD,
+  DB_NAME: process.env.DB_PROD_NAME,
+  DB_URL: process.env.DB_PROD_URL,
 }

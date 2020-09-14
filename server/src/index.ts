@@ -18,6 +18,7 @@ import { Updoot } from "./entities/Updoot"
 import { User } from "./entities/User"
 import { Zone } from "./entities/Zone"
 import { __prod__ } from "./constants"
+import { config } from "./config"
 import cors from "cors"
 import { createConnection } from "typeorm"
 import { createSchema } from "./utils/createSchema"
@@ -32,7 +33,7 @@ const main = async () => {
 
   const conn = await createConnection({
     type: "postgres",
-    url: process.env.DATABASE_URL,
+    url: config.DB_URL,
     logging: false,
     synchronize: true,
     migrations: [path.join(__dirname, "./migrations/*")],
