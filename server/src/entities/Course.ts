@@ -21,7 +21,7 @@ export class Course extends BaseEntity {
   @Column()
   name: string
 
-  @Field()
+  @Field(_type => User)
   @ManyToOne(_type => User, user => user.course)
   owner: User
 

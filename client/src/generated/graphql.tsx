@@ -15,7 +15,6 @@ export type Scalars = {
 
 export type Query = {
   __typename?: 'Query';
-  Course?: Maybe<Course>;
   hello: Scalars['String'];
   currentDate: Scalars['DateTime'];
   posts: PaginatedPosts;
@@ -25,11 +24,6 @@ export type Query = {
   user: User;
   zone?: Maybe<Zone>;
   zones: Array<Zone>;
-};
-
-
-export type QueryCourseArgs = {
-  id: Scalars['ID'];
 };
 
 
@@ -58,25 +52,6 @@ export type QueryZoneArgs = {
   id: Scalars['String'];
 };
 
-export type Course = {
-  __typename?: 'Course';
-  id: Scalars['String'];
-  name: Scalars['String'];
-  owner: User;
-  zone: Course;
-};
-
-export type User = {
-  __typename?: 'User';
-  id: Scalars['String'];
-  username: Scalars['String'];
-  email: Scalars['String'];
-  followers: Scalars['Float'];
-  following: Scalars['Float'];
-  createdAt: Scalars['String'];
-  updatedAt: Scalars['String'];
-};
-
 
 export type PaginatedPosts = {
   __typename?: 'PaginatedPosts';
@@ -96,6 +71,17 @@ export type Post = {
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
   textSnippet: Scalars['String'];
+};
+
+export type User = {
+  __typename?: 'User';
+  id: Scalars['String'];
+  username: Scalars['String'];
+  email: Scalars['String'];
+  followers: Scalars['Float'];
+  following: Scalars['Float'];
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
 };
 
 export type Resource = {
@@ -121,6 +107,8 @@ export type Zone = {
   app: Scalars['String'];
   course: Course;
   hostname: Scalars['String'];
+  hostId: Scalars['String'];
+  banned: Array<User>;
   token: Scalars['String'];
   participants: Array<User>;
   learningLanguage: Language;
@@ -134,6 +122,14 @@ export type Zone = {
   premium: Scalars['Boolean'];
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
+};
+
+export type Course = {
+  __typename?: 'Course';
+  id: Scalars['String'];
+  name: Scalars['String'];
+  owner: User;
+  zone: Course;
 };
 
 export enum Language {
@@ -417,6 +413,7 @@ export type ZoneInput = {
   password?: Maybe<Scalars['String']>;
   app?: Maybe<Scalars['String']>;
   hostname: Scalars['String'];
+  hostId: Scalars['String'];
   learningLanguage: Scalars['String'];
   nativeLanguage: Scalars['String'];
   maxParticipants: Scalars['Float'];

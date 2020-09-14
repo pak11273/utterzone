@@ -70,6 +70,7 @@ export const CreateZone: React.FC<CreateZoneProps> = () => {
         }
 
         values.hostname = await data.me.username
+        values.hostId = await data.me.id
 
         const response = await createZoneMutation({
           variables: { input: values },

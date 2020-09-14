@@ -20,6 +20,9 @@ export class ZoneInput {
   hostname: string
 
   @Field()
+  hostId: string
+
+  @Field()
   learningLanguage: Language
 
   @Field()

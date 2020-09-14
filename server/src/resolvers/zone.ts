@@ -41,11 +41,11 @@ import { isAuth } from "../middleware/isAuth"
 // import { validateZone } from "../utils/validateZone"
 import { ApolloError } from "apollo-server-express"
 import { ZoneInput } from "../shared/inputs/zone.input"
-import { Test } from "../decorators/auth/test"
 // import { CommentInput } from "../shared/inputs/comment.input"
 
 import { User } from "../entities/User"
 import { getManager } from "typeorm"
+import { Test } from "../decorators/auth/authTest"
 
 // import { MixinFieldError } from "../shared/mixins/MixinFieldError"
 

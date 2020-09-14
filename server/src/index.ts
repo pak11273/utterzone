@@ -4,39 +4,32 @@
 import "reflect-metadata"
 import "dotenv-safe/config"
 
-import { pubSub, redis, redisSession } from "./redis"
+import { redis, redisSession } from "./redis"
 
 import { ApolloServer } from "apollo-server-express"
 import { Comment } from "./entities/Comment"
 import { Course } from "./entities/Course"
-import { CourseResolver } from "./resolvers/course"
-import { HelloResolver } from "./resolvers/hello"
 import { Message } from "./entities/Message"
 import { Notification } from "./entities/Notification"
-import { NotificationResolver } from "./resolvers/notification"
 import { Post } from "./entities/Post"
-import { PostResolver } from "./resolvers/post"
 import { Profile } from "./entities/Profile"
-import { ProfileResolver } from "./resolvers/profile"
 import { Resource } from "./entities/Resource"
-import { ResourceResolver } from "./resolvers/Resource"
 import { Updoot } from "./entities/Updoot"
 import { User } from "./entities/User"
-import { UserResolver } from "./resolvers/user"
 import { Zone } from "./entities/Zone"
-import { ZoneResolver } from "./resolvers/zone"
 import { __prod__ } from "./constants"
-import { buildSchema } from "type-graphql"
 import cors from "cors"
 import { createConnection } from "typeorm"
+import { createSchema } from "./utils/createSchema"
 import { createUpdootLoader } from "./utils/createUpdootLoader"
 import { createUserLoader } from "./utils/createUserLoader"
-import { customAuthChecker } from "./decorators/auth/custom-auth-checker"
 import express from "express"
 import http from "http"
 import path from "path"
 
 const main = async () => {
+  const schema = await createSchema()
+
   const conn = await createConnection({
     type: "postgres",
     url: process.env.DATABASE_URL,
@@ -74,21 +67,23 @@ const main = async () => {
   app.use(redisSession)
 
   const apolloServer = new ApolloServer({
-    schema: await buildSchema({
-      resolvers: [
-        HelloResolver,
-        NotificationResolver,
-        PostResolver,
-        ProfileResolver,
-        ResourceResolver,
-        UserResolver,
-        ZoneResolver,
-        CourseResolver,
-      ],
-      authChecker: customAuthChecker,
-      validate: false, // set true for speedier dev testing
-      pubSub, // provide redis-based instance of PubSub
-    }),
+    schema,
+
+    // await buildSchema({
+    //   resolvers: [
+    //     HelloResolver,
+    //     NotificationResolver,
+    //     PostResolver,
+    //     ProfileResolver,
+    //     ResourceResolver,
+    //     UserResolver,
+    //     ZoneResolver,
+    //     CourseResolver,
+    //   ],
+    //   authChecker: customAuthChecker,
+    //   validate: false, // set true for speedier dev testing
+    //   pubSub, // provide redis-based instance of PubSub
+    // }),
     context: ({ req, res }) => ({
       req,
       res,

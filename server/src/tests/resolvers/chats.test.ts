@@ -31,3 +31,23 @@
 //     expect(res.data).toMatchSnapshot();
 //   });
 // });
+
+import { Connection } from "typeorm"
+import { testConn } from "../utils/testConn"
+
+let conn: Connection
+
+beforeAll(async () => {
+  conn = await testConn()
+})
+
+afterAll(async () => {
+  await conn.close()
+})
+
+describe("createUse", () => {
+  it("create user", () => {
+    // do something here
+    // graphql({})
+  })
+})

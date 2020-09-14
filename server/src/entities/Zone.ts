@@ -43,11 +43,19 @@ export class Zone extends BaseEntity {
   hostname: string
 
   @Field()
+  @Column({ nullable: true, unique: true })
+  hostId: string
+
+  @Field(() => [User])
+  @OneToMany(() => User, user => user, { nullable: true })
+  banned: User[]
+
+  @Field()
   @PrimaryGeneratedColumn("uuid")
   token: string
 
   @Field(() => [User])
-  @OneToMany(() => User, user => user)
+  @OneToMany(() => User, user => user, { nullable: true })
   participants: User[]
 
   @Field(_type => Language)

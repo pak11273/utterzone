@@ -41,8 +41,7 @@ export const ZoneCard = ({
   const history = useHistory()
   const handleClick = async () => {
     const response = await joinZoneMutation()
-    console.log("res: ", response)
-    // history.push(`/zone/${id}/${token}`)
+    history.push(`/zone/${id}/${token}`)
   }
 
   return (

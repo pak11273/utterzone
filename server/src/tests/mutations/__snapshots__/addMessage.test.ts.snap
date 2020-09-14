@@ -7,7 +7,7 @@ Object {
     "id": "5",
   },
 }
-`
+`;
 
 exports[`Mutation.addMessage should add message to specified chat 2`] = `
 Object {
@@ -19,4 +19,4 @@ Object {
     },
   },
 }
-`
+`;

@@ -9,9 +9,9 @@ export class Level extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string
 
-  @Field()
+  @Field(_type => Word)
   words: Word[]
 
-  @Field()
+  @Field(_type => Phrase)
   phrases: Phrase[]
 }

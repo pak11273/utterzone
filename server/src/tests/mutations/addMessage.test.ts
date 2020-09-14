@@ -8,7 +8,7 @@
 //   beforeEach(resetDb)
 
 //   it("should add message to specified chat", async () => {
-//     const server = new ApolloServer({ schema })
+// const server = new ApolloServer({ schema })
 
 //     const { query, mutate } = createTestClient(server)
 
@@ -48,3 +48,22 @@
 //     expect(getChatRes.data).toMatchSnapshot()
 //   })
 // })
+
+import { Connection } from "typeorm"
+import { testConn } from "../utils/testConn"
+
+let conn: Connection
+
+beforeAll(async () => {
+  conn = await testConn()
+})
+
+afterAll(async () => {
+  await conn.close()
+})
+
+describe("createUse", () => {
+  it("create user", () => {
+    // do something here
+  })
+})

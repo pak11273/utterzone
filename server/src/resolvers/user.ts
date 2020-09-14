@@ -180,20 +180,21 @@ export class UserResolver {
   }
 
   @Mutation(() => UserResponse)
-  @UseMiddleware(
-    resolveTime,
-    rateLimit({
-      limitAnon: 50,
-      limitUser: 50,
-      msgAnon: "Too many failed attempts.  Try again in an hour.",
-      msgUser: "Too many failed attempts.  Try again in an hour.",
-      time: "hour",
-      multiplier: 1,
-    })
-  )
+  // @UseMiddleware(
+  //   resolveTime,
+  //   rateLimit({
+  //     limitAnon: 50,
+  //     limitUser: 50,
+  //     msgAnon: "Too many failed attempts.  Try again in an hour.",
+  //     msgUser: "Too many failed attempts.  Try again in an hour.",
+  //     time: "hour",
+  //     multiplier: 1,
+  //   })
+  // )
   async createUser(
     @Arg("input") input: UsernamePasswordInput,
-    @Ctx() { redis, req }: MyContext
+    // @Ctx() { redis, req }: MyContext
+    @Ctx() { req }: MyContext
   ): Promise<UserResponse> {
     const errors = validateCreateUser(input)
     if (errors) {
@@ -242,7 +243,7 @@ export class UserResolver {
       return err
     }
 
-    addUserToOnlineStatus(redis, user.username)
+    // addUserToOnlineStatus(redis, user.username)
 
     req.session.userId = user.id
     req.session.userName = user.username

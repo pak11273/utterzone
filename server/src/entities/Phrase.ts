@@ -13,6 +13,6 @@ export class Phrase extends BaseEntity {
   @Field()
   definition: string // translation
 
-  @Field()
+  @Field(_type => String)
   meta: string[]
 }
