@@ -27,9 +27,9 @@ export const gCall = async ({ source, variableValues, userId }: Options) => {
           userId,
         },
       },
+      res: {
+        clearCookie: jest.fn(),
+      },
     },
-    // res: {
-    //   clearCookie: jest.fn(),
-    // },
   })
 }

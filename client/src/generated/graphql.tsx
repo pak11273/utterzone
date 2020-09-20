@@ -80,6 +80,7 @@ export type User = {
   email: Scalars['String'];
   followers: Scalars['Float'];
   following: Scalars['Float'];
+  confirmed: Scalars['Boolean'];
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
 };

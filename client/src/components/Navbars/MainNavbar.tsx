@@ -9,7 +9,7 @@ import { Link } from "react-router-dom"
 import { RightMenu } from "./_NavBarRight"
 
 // import { useLogoutMutation, useMeQuery } from "../generated/graphql"
-export const NavbarMain = () => {
+export const MainNavbar = () => {
   const [state, changeState] = useState({
     current: "mail",
     visible: false,

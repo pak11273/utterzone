@@ -1,6 +1,6 @@
 import "./less/index.less"
 
-import { Announcement, Layout, MenuMain, NavbarMain } from "./components"
+import { Announcement, Layout, MainMenu, NavbarMain } from "./components"
 
 import { ApolloProvider } from "@apollo/client"
 import { Cache } from "react-avatar"
@@ -30,7 +30,7 @@ const App = () => {
             <NavbarMain />
             <Announcement />
             <div style={{ display: "flex", height: "100vh" }}>
-              <MenuMain />
+              <MainMenu />
               <div style={{ width: "100%", minHeight: "100%" }}>{routes}</div>
             </div>
           </Layout>

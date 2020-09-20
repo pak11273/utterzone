@@ -1,16 +1,14 @@
 import { UsernamePasswordInput } from "../shared/inputs/UsernamePasswordInput"
 
 export const validateCreateUser = (options: UsernamePasswordInput) => {
-  //  TODO temporarily disable validations for dev, restore when publishing
-  console.log(options) // remove this later
-  // if (!options.email.includes("@")) {
-  //   return [
-  //     {
-  //       field: "email",
-  //       message: "invalid email",
-  //     },
-  //   ]
-  // }
+  if (!options.email.includes("@")) {
+    return [
+      {
+        field: "email",
+        message: "invalid email",
+      },
+    ]
+  }
 
   // if (options.username.length > 25 || options.username.length < 4) {
   //   return [

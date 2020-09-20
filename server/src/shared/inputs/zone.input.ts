@@ -17,16 +17,13 @@ export class ZoneInput {
   app: string
 
   @Field()
-  hostname: string
-
-  @Field()
-  hostId: string
-
-  @Field()
   learningLanguage: Language
 
   @Field()
   nativeLanguage: Language
+
+  @Field()
+  hostId: string
 
   @Field()
   maxParticipants?: number

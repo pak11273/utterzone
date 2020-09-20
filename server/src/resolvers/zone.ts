@@ -139,25 +139,37 @@ export class ZoneResolver {
   ): Promise<Zone> {
     try {
       const manager = getManager()
-      const user = await manager.findOne(User, req.session.userId)
+      const user = await manager.findOne(User, req.session.userId, {
+        relations: ["zone"],
+      })
 
       if (input.public) {
-        const hashedPassword = await argon2.hash("narcotics") // TODO: make dynamic
+        const hashedPassword = await argon2.hash(
+          "n23laddlrxxdjhkotiasdjfk3j3242cs"
+        ) // TODO: make dynamic
         input.password = hashedPassword
       }
 
-      console.log("input: ", input)
-      // const zone = new Zone()
-      // zone.save(input)
-      const zone = await Zone.create(input).save()
-      user!.zone = zone
-      await manager.save(user)
-
-      if (!zone) {
-        throw new ApolloError("There was an error.  Zone not created.")
+      let zone: any = null
+      if (!user?.zone) {
+        zone = await Zone.create(input).save()
       }
 
+      user!.zone = zone
+
+      console.log("USER: ", user)
+
+      // attribute the zone to user
+      const userZone = await manager.save(user)
+      if (userZone) null
+
+      // if (!zone) {
+      //   throw new ApolloError("There was an error.  Zone not created.")
+      // }
+
+      // console.log(user)
       return zone
+      // return zone
     } catch (err) {
       return err
     }

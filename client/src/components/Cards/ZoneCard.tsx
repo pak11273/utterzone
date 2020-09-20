@@ -35,12 +35,13 @@ export const ZoneCard = ({
   description: string | null | undefined
   maxParticipants: number
 }) => {
-  const [joinZoneMutation, { data }] = useJoinZoneMutation({
+  const [joinZoneMutation] = useJoinZoneMutation({
     variables: { id: id },
   })
   const history = useHistory()
   const handleClick = async () => {
     const response = await joinZoneMutation()
+    console.log(response)
     history.push(`/zone/${id}/${token}`)
   }
 

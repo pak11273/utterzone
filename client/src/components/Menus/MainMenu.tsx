@@ -8,7 +8,7 @@ const { Sider } = Layout
 
 const { SubMenu } = Menu
 
-export class MenuMain extends React.Component {
+export class MainMenu extends React.Component {
   state = {
     collapsed: false,
   }

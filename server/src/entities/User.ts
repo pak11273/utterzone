@@ -61,7 +61,7 @@ export class User extends BaseEntity {
   @OneToMany(() => Updoot, updoot => updoot.user)
   updoots: Updoot[]
 
-  @OneToOne(_type => Zone)
+  @OneToOne(_type => Zone, { onDelete: "CASCADE" })
   @JoinColumn()
   zone: Zone
 
@@ -72,6 +72,10 @@ export class User extends BaseEntity {
   @Field()
   @Column({ nullable: true })
   following: number = 0
+
+  @Field()
+  @Column("bool", { default: false })
+  confirmed: boolean
 
   @Field(() => String)
   @CreateDateColumn()

@@ -8,8 +8,8 @@ import { Gravatar } from "./Gravatar"
 import { Hamburger } from "./Buttons"
 import { Layout } from "./Layout"
 import { Lobby } from "./Apps/Lobby/Lobby"
-import { MenuMain } from "./Menus/MenuMain"
-import { NavbarMain } from "./Navbars/NavBarMain"
+import { MainMenu } from "./Menus/MainMenu"
+import { MainNavbar } from "./Navbars/MainNavbar"
 import { Notebook } from "./Notebook"
 import { UpdootSection } from "./UpdootSection"
 import { YTControls } from "./Apps/Youtube/YTControls"
@@ -26,12 +26,13 @@ export {
   Hamburger,
   InputField,
   Lobby,
-  MenuMain,
+  MainNavbar,
+  MainMenu,
   Notebook,
   SelectField,
   SwitchField,
   Layout,
-  NavbarMain,
+  MainNavbar as NavbarMain,
   UpdootSection,
   Youtube,
   ZoneCard,

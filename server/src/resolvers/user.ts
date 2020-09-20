@@ -48,12 +48,6 @@ class UserStatus {
   status: String
 }
 
-const addUserToOnlineStatus = (redis: any, user: string) => {
-  redis.hset(USER_PREFIX, {
-    [user]: 1,
-  })
-}
-
 const removeUserFromRedis = async (redis: any, username: any) => {
   await redis.hdel(USER_PREFIX, username)
 }
@@ -76,8 +70,6 @@ export class UserResolver {
 
   @Query(() => User, { nullable: true })
   async me(@Ctx() { req }: MyContext) {
-    // you are not logged in
-    console.log("me: ", req.session)
     if (!req.session.userId) {
       return null
     }
@@ -180,20 +172,19 @@ export class UserResolver {
   }
 
   @Mutation(() => UserResponse)
-  // @UseMiddleware(
-  //   resolveTime,
-  //   rateLimit({
-  //     limitAnon: 50,
-  //     limitUser: 50,
-  //     msgAnon: "Too many failed attempts.  Try again in an hour.",
-  //     msgUser: "Too many failed attempts.  Try again in an hour.",
-  //     time: "hour",
-  //     multiplier: 1,
-  //   })
-  // )
+  @UseMiddleware(
+    resolveTime,
+    rateLimit({
+      limitAnon: 50,
+      limitUser: 50,
+      msgAnon: "Too many failed attempts.  Try again in an hour.",
+      msgUser: "Too many failed attempts.  Try again in an hour.",
+      time: "hour",
+      multiplier: 1,
+    })
+  )
   async createUser(
     @Arg("input") input: UsernamePasswordInput,
-    // @Ctx() { redis, req }: MyContext
     @Ctx() { req }: MyContext
   ): Promise<UserResponse> {
     const errors = validateCreateUser(input)
@@ -203,6 +194,7 @@ export class UserResolver {
 
     const hashedPassword = await argon2.hash(input.password)
     let user
+
     try {
       const result = await getConnection()
         .createQueryBuilder()
@@ -243,8 +235,6 @@ export class UserResolver {
       return err
     }
 
-    // addUserToOnlineStatus(redis, user.username)
-
     req.session.userId = user.id
     req.session.userName = user.username
 
@@ -253,20 +243,20 @@ export class UserResolver {
 
   @Mutation(() => UserResponse)
   @UseMiddleware(
-    resolveTime,
-    rateLimit({
-      limitAnon: 50,
-      limitUser: 0,
-      msgAnon: "Too many failed attempts.  Try again in an hour.",
-      msgUser: "You are already logged in.",
-      time: "hour",
-      multiplier: 1,
-    })
+    resolveTime
+    // rateLimit({
+    //   limitAnon: 50,
+    //   limitUser: 0,
+    //   msgAnon: "Too many failed attempts.  Try again in an hour.",
+    //   msgUser: "You are already logged in.",
+    //   time: "hour",
+    //   multiplier: 1,
+    // })
   )
   async login(
     @Arg("usernameOrEmail") usernameOrEmail: string,
     @Arg("password") password: string,
-    @Ctx() { redis, req }: MyContext
+    @Ctx() { req }: MyContext
   ): Promise<UserResponse> {
     const user = await User.findOne(
       usernameOrEmail.includes("@")
@@ -293,8 +283,6 @@ export class UserResolver {
 
     req.session.userId = user.id
     req.session.username = user.username
-
-    addUserToOnlineStatus(redis, user.username)
 
     return {
       user,

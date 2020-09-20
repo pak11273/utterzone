@@ -34,6 +34,7 @@ export const rateLimit: ({
   time,
   multiplier = 1,
 }) => async ({ context: { req }, info }, next) => {
+  if (process.env.NODE_ENV === "test") return next()
   try {
     // no session = anon user
     const isAnon = !req.session!.userId

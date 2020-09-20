@@ -38,17 +38,16 @@ export class Zone extends BaseEntity {
   @OneToOne(_type => Course, course => course.zone)
   course: Course
 
-  @Field()
-  @Column({ nullable: true, unique: true })
-  hostname: string
-
-  @Field()
-  @Column({ nullable: true, unique: true })
-  hostId: string
-
   @Field(() => [User])
   @OneToMany(() => User, user => user, { nullable: true })
   banned: User[]
+
+  @Field()
+  @Column({ nullable: true })
+  hostId: string
+
+  @OneToOne(() => User, user => user.zone)
+  host: User
 
   @Field()
   @PrimaryGeneratedColumn("uuid")
