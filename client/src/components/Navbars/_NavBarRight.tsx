@@ -26,7 +26,6 @@ export const RightMenu: React.FC<NavBarProps> = (props: any) => {
   }
 
   const handleClick = (e: any) => {
-    console.log("click ", e)
     changeCurrent(e.key)
   }
 
@@ -41,20 +40,12 @@ export const RightMenu: React.FC<NavBarProps> = (props: any) => {
         </Menu.Item>
       </Menu>
     )
-  }
-
-  return (
-    <Menu mode="horizontal">
+  } else {
+    return (
       <Menu onClick={handleClick} selectedKeys={[current]} mode="horizontal">
-        {/* <Menu.Item key="mail" icon={<BellOutlined />}></Menu.Item> */}
         <SubMenu key="SubMenu" icon={<SettingOutlined style={{ margin: 0 }} />}>
-          <Menu.ItemGroup title="Item 1">
-            <Menu.Item key="setting:1">Option 1</Menu.Item>
-            <Menu.Item key="setting:2">Option 2</Menu.Item>
-          </Menu.ItemGroup>
-          <Menu.ItemGroup title="Item 2">
-            <Menu.Item key="setting:3">Option 3</Menu.Item>
-            <Menu.Item key="setting:4">Option 4</Menu.Item>
+          <Menu.ItemGroup title="Settings">
+            <Menu.Item key="setting:1">Profile</Menu.Item>
           </Menu.ItemGroup>
           <Menu.Item key="app">
             <NavLink to="#" onClick={handleLogout}>
@@ -63,6 +54,6 @@ export const RightMenu: React.FC<NavBarProps> = (props: any) => {
           </Menu.Item>
         </SubMenu>
       </Menu>
-    </Menu>
-  )
+    )
+  }
 }

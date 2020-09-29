@@ -47,8 +47,8 @@ export const MainNavbar = () => {
           onClose={OnClose}
           visible={state.visible}
         >
-          <LeftMenu />
-          <RightMenu />
+          {/* <LeftMenu /> */}
+          {/* <RightMenu /> */}
         </Drawer>
       </div>
     </nav>

@@ -141,7 +141,7 @@ export class ZoneResolver {
     try {
       const manager = getManager()
       console.log("req: ", req.session.id)
-      const user = await manager.findOne({ id: req.session.userId })
+      const user = await manager.findOne(req.session.userId)
 
       console.log("zone user: ", user)
 
