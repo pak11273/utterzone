@@ -1,4 +1,5 @@
 // import { resolveTime } from "../middleware/resolveTime"
+
 import {
   Field,
   InputType,
@@ -43,7 +44,7 @@ import { ApolloError } from "apollo-server-express"
 import { ZoneInput } from "../shared/inputs/zone.input"
 // import { CommentInput } from "../shared/inputs/comment.input"
 
-import { User } from "../entities/User"
+// import { User } from "../entities/User"
 import { getManager } from "typeorm"
 import { Test } from "../decorators/auth/authTest"
 
@@ -139,9 +140,10 @@ export class ZoneResolver {
   ): Promise<Zone> {
     try {
       const manager = getManager()
-      const user = await manager.findOne(User, req.session.userId, {
-        relations: ["zone"],
-      })
+      console.log("req: ", req.session.id)
+      const user = await manager.findOne({ id: req.session.userId })
+
+      console.log("zone user: ", user)
 
       if (input.public) {
         const hashedPassword = await argon2.hash(
@@ -151,17 +153,16 @@ export class ZoneResolver {
       }
 
       let zone: any = null
-      if (!user?.zone) {
-        zone = await Zone.create(input).save()
-      }
+      // if (!user?.zone) {
+      //   zone = await Zone.create(input).save()
+      // }
 
-      user!.zone = zone
-
-      console.log("USER: ", user)
+      // user!.zone = zone
 
       // attribute the zone to user
-      const userZone = await manager.save(user)
-      if (userZone) null
+      // const userZone = await manager.save(user)
+
+      // if (userZone) console.log("hi")
 
       // if (!zone) {
       //   throw new ApolloError("There was an error.  Zone not created.")

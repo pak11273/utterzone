@@ -2,7 +2,7 @@ query Zones {
   zones {
     id
     app
-    hostname
+    hostId
     description
     name
     mature

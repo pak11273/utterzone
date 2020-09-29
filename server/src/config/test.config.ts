@@ -1,6 +1,4 @@
-import dontenv from "dotenv-safe"
-
-dontenv.config()
+require("dotenv").config()
 
 export const testConfig = {
   DB_USERNAME: process.env.DB_TEST_USERNAME,

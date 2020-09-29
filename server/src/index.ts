@@ -2,7 +2,6 @@
 // ref: https://github.com/apollographql/apollo-server/issues/1902
 
 import "reflect-metadata"
-import "dotenv-safe/config"
 
 import { redis, redisSession } from "./redis"
 
@@ -27,6 +26,8 @@ import { createUserLoader } from "./utils/createUserLoader"
 import express from "express"
 import http from "http"
 import path from "path"
+
+require("dotenv").config()
 
 const main = async () => {
   const schema = await createSchema()

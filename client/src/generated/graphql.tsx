@@ -107,9 +107,8 @@ export type Zone = {
   name: Scalars['String'];
   app: Scalars['String'];
   course: Course;
-  hostname: Scalars['String'];
-  hostId: Scalars['String'];
   banned: Array<User>;
+  hostId: Scalars['String'];
   token: Scalars['String'];
   participants: Array<User>;
   learningLanguage: Language;
@@ -413,10 +412,9 @@ export type ZoneInput = {
   name: Scalars['String'];
   password?: Maybe<Scalars['String']>;
   app?: Maybe<Scalars['String']>;
-  hostname: Scalars['String'];
-  hostId: Scalars['String'];
   learningLanguage: Scalars['String'];
   nativeLanguage: Scalars['String'];
+  hostId: Scalars['String'];
   maxParticipants: Scalars['Float'];
   description?: Maybe<Scalars['String']>;
   public?: Maybe<Scalars['Boolean']>;
@@ -713,7 +711,7 @@ export type ZonesQuery = (
   { __typename?: 'Query' }
   & { zones: Array<(
     { __typename?: 'Zone' }
-    & Pick<Zone, 'id' | 'app' | 'hostname' | 'description' | 'name' | 'mature' | 'maxParticipants' | 'premium' | 'token'>
+    & Pick<Zone, 'id' | 'app' | 'hostId' | 'description' | 'name' | 'mature' | 'maxParticipants' | 'premium' | 'token'>
   )> }
 );
 
@@ -1307,7 +1305,7 @@ export const ZonesDocument = gql`
   zones {
     id
     app
-    hostname
+    hostId
     description
     name
     mature

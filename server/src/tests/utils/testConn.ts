@@ -13,9 +13,8 @@ import { Zone } from "../../entities/Zone"
 import { __prod__ } from "../../constants"
 import { config } from "../../config"
 import { createConnection } from "typeorm"
-import dontenv from "dotenv-safe"
 
-dontenv.config()
+require("dotenv").config()
 
 export const testConn = (drop: boolean = false) => {
   return createConnection({

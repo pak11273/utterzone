@@ -5,6 +5,8 @@ import { RedisPubSub } from "graphql-redis-subscriptions"
 import connectRedis from "connect-redis"
 import session from "express-session"
 
+require("dotenv").config()
+
 export const redis = new Redis(
   process.env.REDIS_URL + ":" + process.env.REDIS_PORT
 )
