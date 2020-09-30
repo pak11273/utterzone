@@ -1,4 +1,5 @@
 const CracoLessPlugin = require("craco-less")
+const jestConfig = require("./jest.config")
 
 module.exports = {
   plugins: [
