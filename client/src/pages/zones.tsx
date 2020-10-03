@@ -70,7 +70,7 @@ export const Zones: React.FC<zonesProps> = () => {
                       loading={loading}
                       description={x.description}
                       maxParticipants={x.maxParticipants}
-                      hostname={x.hostname}
+                      // hostname={x.hostname}
                       token={x.token}
                       premium={x.premium}
                       mature={x.mature.toString()}

@@ -15,7 +15,7 @@ import { useJoinZoneMutation } from "../../generated/graphql"
 export const ZoneCard = ({
   id,
   app,
-  hostname,
+  // hostname,
   token,
   mature,
   name,
@@ -26,7 +26,7 @@ export const ZoneCard = ({
 }: {
   id: any
   app: string
-  hostname: string
+  // hostname: string
   token: string
   mature: string
   premium: boolean
@@ -87,7 +87,7 @@ export const ZoneCard = ({
       </div>
       <div className="zonecard_meta">
         <p className="zonecard_small_text">hosted by</p>
-        <p className="zonecard_hostname">{`${hostname}`}</p>
+        {/* <p className="zonecard_hostname">{`${hostname}`}</p> */}
       </div>
     </Card>
   )

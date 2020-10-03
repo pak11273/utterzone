@@ -57,6 +57,7 @@ export const Login = (props: any) => {
     <section className="userform_section">
       <div className="user_form">
         <Form
+          className="user_form_items"
           {...formItemLayout}
           layout="vertical"
           form={form}
@@ -69,6 +70,7 @@ export const Login = (props: any) => {
           scrollToFirstError
         >
           <Form.Item
+            className="user_email"
             name="usernameOrEmail"
             label="E-mail"
             rules={[
@@ -86,11 +88,12 @@ export const Login = (props: any) => {
           </Form.Item>
 
           <Form.Item
+            className="user_password"
             label="Password"
             name="password"
             rules={[{ required: true, message: "Please input your password!" }]}
           >
-            <Input.Password />
+            <Input.Password className="password_input" />
           </Form.Item>
           <Form.Item>
             <Button

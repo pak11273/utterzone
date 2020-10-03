@@ -18,4 +18,10 @@ module.exports = {
       },
     },
   ],
+  jest: {
+    configure: {
+      /* Any Jest configuration options: https://jestjs.io/docs/en/configuration. */
+      testTimeout: 90000,
+    },
+  },
 }

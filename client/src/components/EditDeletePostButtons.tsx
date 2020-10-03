@@ -9,14 +9,15 @@ interface EditDeletePostbuttonsProps {
 
 export const EditDeletePostbuttons: React.FC<EditDeletePostbuttonsProps> = ({
   id,
-  creatorId,
+  // creatorId,
 }) => {
   const { data: meData } = useMeQuery()
+  console.log(meData)
   const [deletePost] = useDeletePostMutation()
 
-  if (meData?.me?.id !== creatorId) {
-    return null
-  }
+  // if (meData?.me?.id !== creatorId) {
+  //   return null
+  // }
 
   return (
     <div>

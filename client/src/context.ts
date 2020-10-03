@@ -1,7 +1,0 @@
-// import React, { createContext } from "react"
-
-// export const AnnouncementContext = React.createContext({
-//   message: "",
-//   type: "info",
-//   className: "announcement",
-// })

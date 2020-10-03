@@ -26,7 +26,7 @@ export const Register: React.FC<registerProps> = () => {
       try {
         const response = await register({
           variables: { input: values },
-          update: (cache: any, { data }: { data: any }) => {
+          update: (cache, { data }) => {
             cache.writeQuery<MeQuery>({
               query: MeDocument,
               data: {

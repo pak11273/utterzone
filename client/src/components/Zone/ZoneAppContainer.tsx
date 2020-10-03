@@ -5,7 +5,7 @@ import React from "react"
 interface indexProps {
   playing: boolean
   setPlaying: React.Dispatch<React.SetStateAction<boolean>>
-  app: {}
+  app: any
 }
 
 export const ZoneAppContainer: React.FC<indexProps> = ({

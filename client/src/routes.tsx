@@ -4,6 +4,7 @@ import {
   ForgotPassword,
   Home,
   Login,
+  Profile,
   Register,
   Zone,
   Zones,
@@ -15,6 +16,7 @@ import React from "react"
 export const routes = (
   <Switch>
     <Route exact path="/" component={Home} />
+    <Route exact path="/:profile" component={Profile} />
     <Route exact path="/forgot-password" component={ForgotPassword} />
     <Route exact path="/change-password/:id" component={ChangePassword} />
     <Route exact path="/zones" component={Zones} />

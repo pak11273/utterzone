@@ -45,7 +45,9 @@ export const RightMenu: React.FC<NavBarProps> = (props: any) => {
       <Menu onClick={handleClick} selectedKeys={[current]} mode="horizontal">
         <SubMenu key="SubMenu" icon={<SettingOutlined style={{ margin: 0 }} />}>
           <Menu.ItemGroup title="Settings">
-            <Menu.Item key="setting:1">Profile</Menu.Item>
+            <Menu.Item key="setting:1">
+              <NavLink to="/profile">Profile</NavLink>
+            </Menu.Item>
           </Menu.ItemGroup>
           <Menu.Item key="app">
             <NavLink to="#" onClick={handleLogout}>

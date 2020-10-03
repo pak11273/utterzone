@@ -20,6 +20,11 @@
     "isolatedModules": false,
     "jsx": "preserve"
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "utils/test-helpers.ts.BACKUP"
+  ],
   "exclude": ["node_modules"]
 }
