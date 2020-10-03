@@ -19,7 +19,7 @@ export const routes = (
     <Route exact path="/:profile" component={Profile} />
     <Route exact path="/forgot-password" component={ForgotPassword} />
     <Route exact path="/change-password/:id" component={ChangePassword} />
-    <Route exact path="/zones" component={Zones} />
+    <Route exact path="/zones/all" component={Zones} />
     <Route exact path="/zone/:id/:token" component={Zone} />
     <Route exact path="/zone/create" component={CreateZone} />
     <Route exact path="/login" component={Login} />
