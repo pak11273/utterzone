@@ -45,7 +45,7 @@ import { ZoneInput } from "../shared/inputs/zone.input"
 // import { CommentInput } from "../shared/inputs/comment.input"
 
 // import { User } from "../entities/User"
-import { getManager } from "typeorm"
+// import { getManager } from "typeorm"
 import { Test } from "../decorators/auth/authTest"
 
 // import { MixinFieldError } from "../shared/mixins/MixinFieldError"
@@ -135,15 +135,12 @@ export class ZoneResolver {
   @Mutation(() => Zone)
   @UseMiddleware(isAuth)
   async createZone(
-    @Arg("input") input: ZoneInput,
-    @Ctx() { req }: MyContext
+    @Arg("input") input: ZoneInput
+    // @Ctx() { req }: MyContext
   ): Promise<Zone> {
     try {
-      const manager = getManager()
-      console.log("req: ", req.session.id)
-      const user = await manager.findOne(req.session.userId)
-
-      console.log("zone user: ", user)
+      // const manager = getManager()
+      // const user = await manager.findOne(req.session.userId)
 
       if (input.public) {
         const hashedPassword = await argon2.hash(

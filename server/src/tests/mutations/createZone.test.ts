@@ -91,7 +91,7 @@ describe("create a zone", () => {
 
     const foundUser = await User.find({ username: "zoner1234ABC!" })
 
-    console.log("user: ", foundUser)
+    // console.log("user: ", foundUser)
 
     const response1 = await gCall({
       source: createZoneMutation,

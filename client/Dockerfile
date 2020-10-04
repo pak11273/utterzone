@@ -9,9 +9,6 @@ WORKDIR /usr/src/app
 COPY package.json ./
 COPY yarn.lock ./
 
-# sanity check for what files were copied over
-RUN ls -l
-
 RUN yarn
 
 COPY . .
@@ -22,14 +19,8 @@ RUN ls -l
 
 RUN yarn build
 
-# TODO: server to run react app
-COPY nodeServer.js dist/nodeServer.js
-
 ENV NODE_ENV production
 
-# possible implement, but probably needs to trash
-# WORKDIR /usr/src/app/dist
-
-EXPOSE 3000 
-CMD [ "node", "dist/nodeServer.js" ]
+EXPOSE 5000 
+CMD [ "node", "dist/index.js" ]
 USER node
