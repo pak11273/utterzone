@@ -43,7 +43,7 @@ beforeAll(() => {
   })
 })
 
-describe("login", () => {
+describe("/login", () => {
   const LoginComponent = (
     <MockedProvider mocks={mocks} addTypename={false}>
       <BrowserRouter>

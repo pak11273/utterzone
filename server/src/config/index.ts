@@ -10,8 +10,14 @@ const defaults = {
 }
 
 export const combineConfigs = () => {
-  let prod = process.env.NODE_ENV === "production" || "prod" ? prodConfig : null
-  let test = process.env.NODE_ENV === "test" || "test" ? testConfig : null
+  let prod =
+    process.env.NODE_ENV === "production" || process.env.NODE_ENV === "prod"
+      ? prodConfig
+      : {}
+  let test =
+    process.env.NODE_ENV === "test" || process.env.NODE_ENV === "test"
+      ? testConfig
+      : {}
 
   return {
     ...defaults,

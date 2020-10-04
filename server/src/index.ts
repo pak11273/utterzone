@@ -95,15 +95,13 @@ const main = async () => {
     }),
   })
 
-  apolloServer.applyMiddleware({
-    app,
-    cors: false,
-  })
+  apolloServer.applyMiddleware({ app, cors: false })
 
   const httpServer = http.createServer(app)
   apolloServer.installSubscriptionHandlers(httpServer)
 
   httpServer.listen(parseInt(process.env.PORT), () => {
+    console.log(`🚀 Environment: ${process.env.NODE_ENV}`)
     console.log(
       `🚀 Server ready at http://localhost:${process.env.PORT}${apolloServer.graphqlPath}`
     )

@@ -1,0 +1,135 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`/zones/all render without crashing and match its snapshot 1`] = `
+<section
+  className="userform_section"
+>
+  <div
+    className="zones_container"
+  >
+    <div
+      style={
+        Object {
+          "alignItems": "center",
+          "display": "flex",
+          "flexDirection": "column",
+          "justifyContent": "center",
+          "marginBottom": "60px",
+        }
+      }
+    >
+      <h1
+        style={
+          Object {
+            "textAlign": "center",
+          }
+        }
+      >
+        Criteria
+      </h1>
+      <div
+        className="ant-row"
+        style={
+          Object {
+            "marginBottom": 16,
+            "marginLeft": -12,
+            "marginRight": -12,
+            "marginTop": -16,
+          }
+        }
+      >
+        <div
+          className="ant-col ant-col-xs-24 ant-col-md-4"
+          style={
+            Object {
+              "paddingBottom": 16,
+              "paddingLeft": 12,
+              "paddingRight": 12,
+              "paddingTop": 16,
+            }
+          }
+        >
+          I speak: English
+        </div>
+        <div
+          className="ant-col ant-col-xs-24 ant-col-md-4"
+          style={
+            Object {
+              "paddingBottom": 16,
+              "paddingLeft": 12,
+              "paddingRight": 12,
+              "paddingTop": 16,
+            }
+          }
+        >
+          Learning: Korean
+        </div>
+        <div
+          className="ant-col ant-col-xs-24 ant-col-md-4"
+          style={
+            Object {
+              "paddingBottom": 16,
+              "paddingLeft": 12,
+              "paddingRight": 12,
+              "paddingTop": 16,
+            }
+          }
+        >
+          Participants: High to Low
+        </div>
+        <div
+          className="ant-col ant-col-xs-24 ant-col-md-4"
+          style={
+            Object {
+              "paddingBottom": 16,
+              "paddingLeft": 12,
+              "paddingRight": 12,
+              "paddingTop": 16,
+            }
+          }
+        >
+          App: Youtube
+        </div>
+        <div
+          className="ant-col ant-col-xs-24 ant-col-md-4"
+          style={
+            Object {
+              "paddingBottom": 16,
+              "paddingLeft": 12,
+              "paddingRight": 12,
+              "paddingTop": 16,
+            }
+          }
+        >
+          Mature Zone
+        </div>
+      </div>
+      <button
+        className="ant-btn ant-btn-primary ant-btn-sm"
+        onClick={[Function]}
+        style={
+          Object {
+            "width": "100px",
+          }
+        }
+        type="button"
+      >
+        <span>
+          Select
+        </span>
+      </button>
+    </div>
+    <div
+      className="ant-row"
+      style={
+        Object {
+          "marginBottom": 16,
+          "marginLeft": -12,
+          "marginRight": -12,
+          "marginTop": -16,
+        }
+      }
+    />
+  </div>
+</section>
+`;
