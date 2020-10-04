@@ -18,11 +18,11 @@ import { Comment } from "../entities/Comment"
 import { NewCommentPayload } from "../shared/interfaces/newComment.interface"
 import { Topic } from "../shared/enums/Topic"
 import { sampleResources } from "../data/Resource.samples"
-import { NewCommentsArgs } from "../shared/args/Resource.resolver.args"
+import { NewCommentsArgs } from "../shared/args/resource.resolver.args"
 
 @Resolver()
 export class ResourceResolver {
-  private readonly Resources: Resource[] = sampleResources.slice()
+  private readonly Resources: Resource[] = sampleResources.sample.slice()
 
   @Query(_returns => Resource, { nullable: true })
   async Resource(@Arg("id", _type => ID) id: string) {

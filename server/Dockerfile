@@ -14,7 +14,7 @@ RUN ls -l
 
 RUN yarn
 
-COPY server/. .
+COPY server/. ./
 
 # sanity check for what files were copied over
 RUN ls -l
