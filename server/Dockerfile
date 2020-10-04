@@ -15,7 +15,6 @@ RUN ls -l
 RUN yarn
 
 COPY server/. .
-COPY server/.env.production .
 
 # sanity check for what files were copied over
 RUN ls -l
