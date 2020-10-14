@@ -16,9 +16,9 @@ export const LeftMenu: React.FC<NavBarProps> = () => {
           <Menu.Item key="setting:2">
             <Link to="/zones/all">Find a Zone</Link>
           </Menu.Item>
-          <Menu.Item key="setting:1">
+          {/* <Menu.Item key="setting:1">
             <Link to="/zone/create">Create a Zone</Link>
-          </Menu.Item>
+          </Menu.Item> */}
         </MenuItemGroup>
         <MenuItemGroup title="Apps">
           <Menu.Item key="setting:4">Games</Menu.Item>

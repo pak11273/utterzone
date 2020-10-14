@@ -1,23 +1,28 @@
-FROM node:14
+
+# Grabs library:version from docker register(default dockerhub.com), adds it to your docker container
+FROM node:12
 
 # Create app directory
 WORKDIR /usr/src/app
 
-# Install app dependencies
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
-# where available (npm@5+)
-COPY package.json ./
-COPY yarn.lock ./
+COPY yarn.lock .
+COPY package.json .
 
-RUN yarn
+# Install app dependencies
+RUN npm install
 
 COPY . .
-COPY .env.production .env
 
-RUN yarn build
+
+# sanity check for what files were copied over
+RUN ls -l
+
+RUN npm run build
 
 ENV NODE_ENV production
 
-EXPOSE 8080
-CMD [ "node", "dist/index.js" ]
+COPY wait-for-it.sh .
+
+CMD node dist/index.js
+
 USER node

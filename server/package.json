@@ -10,7 +10,6 @@
     "dev": "NODE_ENV=development nodemon dist/index.js",
     "start": "NODE_ENV=development node dist/index.js",
     "start2": "NODE_ENV=development ts-node src/index.ts",
-    "dev2": "NODE_ENV=development nodemon --exec ts-node src/index.ts",
     "dev:debug": "NODE_ENV=development nodemon --inspect dist/index.js",
     "db:setup": "NODE_ENV=test ts-node ./src/tests/utils/setup.ts",
     "test": "NODE_ENV=test npm run db:setup && jest --watch"
@@ -25,7 +24,7 @@
     "@types/express-session": "^1.17.0",
     "@types/faker": "^5.1.0",
     "@types/graphql": "^14.5.0",
-    "@types/jest": "^26.0.13",
+    "@types/jest": "^26.0.14",
     "@types/node": "^14.0.27",
     "@types/nodemailer": "^6.4.0",
     "@types/redis": "^2.8.25",

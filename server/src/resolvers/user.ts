@@ -21,7 +21,7 @@ import { validateCreateUser } from "../utils/validateCreateUser"
 import { sendEmail } from "../utils/sendEmail"
 import { v4 } from "uuid"
 import { getConnection } from "typeorm"
-import { rateLimit, resolveTime } from "../middleware"
+// import { rateLimit, resolveTime } from "../middleware"
 import { ApolloError } from "apollo-server-express"
 import { __prod__ } from "../constants"
 
@@ -172,17 +172,16 @@ export class UserResolver {
   }
 
   @Mutation(() => UserResponse)
-  @UseMiddleware(
-    resolveTime,
-    rateLimit({
-      limitAnon: 50,
-      limitUser: 50,
-      msgAnon: "Too many failed attempts.  Try again in an hour.",
-      msgUser: "Too many failed attempts.  Try again in an hour.",
-      time: "hour",
-      multiplier: 1,
-    })
-  )
+  @UseMiddleware()
+  // resolveTime,
+  // rateLimit({
+  //   limitAnon: 50,
+  //   limitUser: 50,
+  //   msgAnon: "Too many failed attempts.  Try again in an hour.",
+  //   msgUser: "Too many failed attempts.  Try again in an hour.",
+  //   time: "hour",
+  //   multiplier: 1,
+  // })
   async createUser(
     @Arg("input") input: UsernamePasswordInput,
     @Ctx() { req }: MyContext
@@ -242,17 +241,16 @@ export class UserResolver {
   }
 
   @Mutation(() => UserResponse)
-  @UseMiddleware(
-    resolveTime
-    // rateLimit({
-    //   limitAnon: 50,
-    //   limitUser: 0,
-    //   msgAnon: "Too many failed attempts.  Try again in an hour.",
-    //   msgUser: "You are already logged in.",
-    //   time: "hour",
-    //   multiplier: 1,
-    // })
-  )
+  @UseMiddleware()
+  // resolveTime
+  // rateLimit({
+  //   limitAnon: 50,
+  //   limitUser: 0,
+  //   msgAnon: "Too many failed attempts.  Try again in an hour.",
+  //   msgUser: "You are already logged in.",
+  //   time: "hour",
+  //   multiplier: 1,
+  // })
   async login(
     @Arg("usernameOrEmail") usernameOrEmail: string,
     @Arg("password") password: string,
@@ -290,12 +288,12 @@ export class UserResolver {
   }
 
   @Mutation(() => Boolean)
-  @UseMiddleware(resolveTime)
+  // @UseMiddleware(resolveTime)
   async logout(@Ctx() { redis, req, res }: MyContext) {
     await removeUserFromRedis(redis, req.session.username)
 
     return new Promise(resolve =>
-      req.session.destroy(err => {
+      req.session.destroy((err: any) => {
         res.clearCookie(COOKIE_NAME)
         if (err) {
           console.log(err)

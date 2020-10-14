@@ -3,55 +3,73 @@
 
 import "reflect-metadata"
 
-import { redis, redisSession } from "./redis"
-
 import { ApolloServer } from "apollo-server-express"
-import { Comment } from "./entities/Comment"
-import { Course } from "./entities/Course"
-import { Message } from "./entities/Message"
-import { Notification } from "./entities/Notification"
-import { Post } from "./entities/Post"
-import { Profile } from "./entities/Profile"
-import { Resource } from "./entities/Resource"
-import { Updoot } from "./entities/Updoot"
-import { User } from "./entities/User"
-import { Zone } from "./entities/Zone"
 import { __prod__ } from "./constants"
-import { config } from "./config"
 import cors from "cors"
-import { createConnection } from "typeorm"
 import { createSchema } from "./utils/createSchema"
 import { createUpdootLoader } from "./utils/createUpdootLoader"
 import { createUserLoader } from "./utils/createUserLoader"
 import express from "express"
 import http from "http"
-import path from "path"
+
+// import { Comment } from "./entities/Comment"
+// import { Course } from "./entities/Course"
+// import { Message } from "./entities/Message"
+// import { Notification } from "./entities/Notification"
+// import { Post } from "./entities/Post"
+// import { Profile } from "./entities/Profile"
+// import { Resource } from "./entities/Resource"
+// import { Updoot } from "./entities/Updoot"
+// import { User } from "./entities/User"
+// import { Zone } from "./entities/Zone"
+
+// import { config } from "./config"
+
+// import { createConnection } from "typeorm"
+
+// import path from "path"
+
+// import { redis, redisSession } from "./redis"
 
 require("dotenv").config()
 
 const main = async () => {
   const schema = await createSchema()
 
-  const conn = await createConnection({
-    type: "postgres",
-    url: config.DB_URL,
-    logging: false,
-    synchronize: true,
-    migrations: [path.join(__dirname, "./migrations/*")],
-    entities: [
-      Comment,
-      Course,
-      Message,
-      Notification,
-      Profile,
-      Post,
-      Resource,
-      User,
-      Updoot,
-      Zone,
-    ],
-  })
-  await conn.runMigrations()
+  // let retries = 5
+  // while (retries) {
+  //   try {
+  //     const conn = await createConnection({
+  //       host: process.env.DB_HOST || "localhost", // dependent on docker-compose.yml
+  //       type: "postgres",
+  //       url: config.DB_URL,
+  //       logging: false,
+  //       synchronize: true,
+  //       migrations: [path.join(__dirname, "./migrations/*")],
+  //       entities: [
+  //         Comment,
+  //         Course,
+  //         Message,
+  //         Notification,
+  //         Profile,
+  //         Post,
+  //         Resource,
+  //         User,
+  //         Updoot,
+  //         Zone,
+  //       ],
+  //     })
+
+  //     await conn.runMigrations()
+  //     break
+  //   } catch (err) {
+  //     console.log(err)
+  //     retries -= 1
+  //     console.log(`retries left: ${retries}`)
+  //     // wait 5 secs
+  //     await new Promise(res => setTimeout(res, 5000))
+  //   }
+  // }
 
   // await Post.delete({});
 
@@ -66,7 +84,7 @@ const main = async () => {
     })
   )
 
-  app.use(redisSession)
+  // app.use(redisSession)
 
   const apolloServer = new ApolloServer({
     schema,
@@ -89,7 +107,7 @@ const main = async () => {
     context: ({ req, res }) => ({
       req,
       res,
-      redis,
+      // redis,
       userLoader: createUserLoader(),
       updootLoader: createUpdootLoader(),
     }),

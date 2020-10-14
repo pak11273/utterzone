@@ -1,0 +1,50 @@
+version: "3.7"
+
+services:
+  server:
+    image: pak11273/utterzone-server:latest
+    ports:
+      - "4000:4000"
+    networks:
+      - webnet
+    environment:
+      DB_HOST: db
+      # REDIS_HOST: redis
+    command: node dist/index.js
+    # depends_on:
+    #   - db
+  app:
+    image: pak11273/utterzone-client:latest
+    ports:
+      - "3000:3000"
+      - "80:80"
+    networks:
+      - webnet
+    command: npm run start:prod 
+    depends_on:
+      - server 
+    # command: ["./wait-for-it.sh", "server:4000/grahql", "--timeout=1000", "--", "echo", "graphql is up"]
+    restart: on-failure
+
+
+  # db:
+  #   image: postgres
+  #   networks:
+  #     - webnet
+  #   environment:
+  #     - NODE_ENV=production
+  #     - POSTGRES_PASSWORD=redeemer
+  #     - POSTGRES_USER=isaac
+  #     - POSTGRES_DB=utterzone-prod
+  #   volumes:
+  #     - ./pgdata:/var/lib/postgresql/data
+  #   ports:
+  #     - "5432:5432"
+  # redis:
+  #   image: redis
+  #   networks:
+  #     - webnet
+  #   ports:
+  #     - "6379:6379"
+networks:
+  webnet:

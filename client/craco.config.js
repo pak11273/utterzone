@@ -18,6 +18,15 @@ module.exports = {
       },
     },
   ],
+  webpack: {
+    configure: {
+      devServer: {
+        historyApiFallback: true,
+        contentBase: '/',
+        hot: true
+      }
+    }
+  },
   jest: {
     configure: {
       /* Any Jest configuration options: https://jestjs.io/docs/en/configuration. */

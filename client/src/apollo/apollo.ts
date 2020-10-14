@@ -3,8 +3,11 @@ import { HttpLink } from "@apollo/client/link/http/HttpLink"
 import { InMemoryCache } from "@apollo/client/cache/inmemory/inMemoryCache"
 import { WebSocketLink } from "@apollo/client/link/ws"
 import { apolloPolicies } from "./apolloPolicies"
+import  dotenv  from 'dotenv'
 import { getMainDefinition } from "@apollo/client/utilities"
 import { split } from "@apollo/client/link/core/split"
+
+dotenv.config()
 
 // import { loader } from "graphql.macro"
 
@@ -16,12 +19,12 @@ export const cache = new InMemoryCache({
 })
 
 const httpLink = new HttpLink({
-  uri: "http://localhost:5000/graphql",
+  uri: process.env.NODE_ENV==="development" ? "http://localhost:4000/graphql" : "http://192.168.99.100:4000/graphql",
   credentials: "include",
 })
 
 const wsLink = new WebSocketLink({
-  uri: `ws://localhost:5000/graphql`,
+  uri: process.env.NODE_ENV==="development" ? "ws://localhost:4000/graphql" : "ws://192.168.99.100:4000/graphql",
   options: {
     reconnect: true,
     // connectionParams: {
@@ -49,7 +52,7 @@ const splitLink = split(
 
 export const client = new ApolloClient({
   link: splitLink,
-  // uri: "http://localhost:5000/graphql",
+  // uri: "http://localhost:4000/graphql",
   cache,
   // credentials: "include",
   // typeDefs,

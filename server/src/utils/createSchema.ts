@@ -7,7 +7,8 @@ import { UserResolver } from "../resolvers/user"
 import { ZoneResolver } from "../resolvers/zone"
 import { buildSchema } from "type-graphql"
 import { customAuthChecker } from "../decorators/auth/custom-auth-checker"
-import { pubSub } from "../redis"
+
+// import { pubSub } from "../redis"
 
 export const createSchema = () =>
   buildSchema({
@@ -23,5 +24,5 @@ export const createSchema = () =>
     ],
     authChecker: customAuthChecker,
     validate: false, // set true for speedier dev testing
-    pubSub, // provide redis-based instance of PubSub
+    // pubSub, // provide redis-based instance of PubSub
   })

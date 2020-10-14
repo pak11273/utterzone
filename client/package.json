@@ -36,7 +36,8 @@
     "start": "craco start",
     "build": "craco build",
     "test": "craco test",
-    "gen": "graphql-codegen --config codegen.yml"
+    "gen": "graphql-codegen --config codegen.yml",
+    "start:prod": "node nodeServer.js"
   },
   "eslintConfig": {
     "extends": "react-app"
