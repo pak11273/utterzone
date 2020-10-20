@@ -188,6 +188,7 @@ export class UserResolver {
   ): Promise<UserResponse> {
     const errors = validateCreateUser(input)
     if (errors) {
+      console.log('validation: ', errors)
       return { errors }
     }
 
@@ -231,8 +232,11 @@ export class UserResolver {
           }
         }
       }
+      console.log('err: ', err)
       return err
     }
+
+    console.log('user: ', user)
 
     req.session.userId = user.id
     req.session.userName = user.username
